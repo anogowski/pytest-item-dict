@@ -1,0 +1,53 @@
+#############################################
+#	Dual License: BSD-3-Clause AND MPL-2.0	#
+#	Copyright (c) 2024, Adam Nogowski		#
+#############################################
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel>=0.44.0", "setuptools_scm[toml]>=3.4"]
+build-backend = "setuptools.build_meta"
+[tool.setuptools_scm]
+write_to = "src/pytest_mark_count/version.py"
+
+[project]
+dynamic = ["version"]
+name = "pytest-item-dict"
+description = "Get a hierarchical dict of session.items"
+keywords = [
+	"pytest",
+	"items",
+	"dict",
+	"session.items",
+	"session",
+	"hierarchical",
+	"hierarchy",
+	"tree",
+]
+readme = { file = "README.rst", content-type = "text/x-rst" }
+requires-python = ">=3.11"
+authors = [{ name = "Adam Nogowski", email = "anogowski@live.com" }]
+maintainers = [{ name = "Adam Nogowski", email = "anogowski@live.com" }]
+license = { file = "LICENSE" }
+classifiers = [
+	"Framework :: Pytest",
+	"Development Status :: 4 - Beta",
+	"Intended Audience :: Developers",
+	"Operating System :: OS Independent",
+	"Programming Language :: Python",
+	"Programming Language :: Python :: 3.11",
+	"Programming Language :: Python :: 3.12",
+	"Programming Language :: Python :: 3.13",
+	"Programming Language :: Python :: 3 :: Only",
+	"Programming Language :: Python :: Implementation :: CPython",
+	"Programming Language :: Python :: Implementation :: PyPy",
+	"License :: OSI Approved :: BSD License",
+	"License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+	"Topic :: Software Development :: Quality Assurance",
+	"Topic :: Software Development :: Testing",
+	"Topic :: Utilities",
+]
+dependencies = ["pytest>=8.3.0"]
+[project.urls]
+Repository = "https://github.com/anogowski/pytest-item-dict"
+[project.entry-points.pytest11]
+item-dict = "pytest_item_dict.plugin"

@@ -1,0 +1,10 @@
+site_name: pytest-item-dict
+site_description: Get a hierarchical dict of session.items
+site_author: Adam Nogowski
+
+theme: readthedocs
+
+repo_url: https://github.com/anogowski/pytest-item-dict
+
+pages:
+- Home: index.md
