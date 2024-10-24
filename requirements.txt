@@ -1,0 +1,15 @@
+cachetools==5.5.0
+chardet==5.2.0
+colorama==0.4.6
+dict2xml==1.7.6
+distlib==0.3.9
+filelock==3.16.1
+iniconfig==2.0.0
+packaging==24.1
+platformdirs==4.3.6
+pluggy==1.5.0
+pyproject-api==1.8.0
+pytest==8.3.3
+-e git+https://github.com/anogowski/pytest-item-dict.git@de70b5fff0b26526f16de2d2ecfd796325a16501#egg=pytest_item_dict
+tox==4.23.2
+virtualenv==20.27.0

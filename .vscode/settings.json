@@ -70,7 +70,7 @@
 	"python.analysis.inlayHints.variableTypes": true,
 	"python.analysis.typeCheckingMode": "basic",
 	"python.testing.pytestArgs": [
-		"tests"
+		"suites"
 	],
 	"python.testing.pytestEnabled": true,
 	"python.testing.unittestEnabled": false,
