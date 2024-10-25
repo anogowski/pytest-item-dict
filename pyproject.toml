@@ -58,7 +58,7 @@ item-dict = "pytest_item_dict.plugin"
 # Cached Files
 cache_dir = "./output/.pycache"
 # Example Files
-pytester_example_dir = "./test_examples"
+pytester_example_dir = "./suites"
 
 # Test Directories
 testpaths = ["./suites"]      #root testing directories
@@ -73,8 +73,6 @@ norecursedirs = [
 	".venv",
 	".github",
 ] #do not check these directories
-
-generate_report_on_test = true
 
 # Reports
 log_level = "INFO"

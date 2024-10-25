@@ -5,99 +5,83 @@
 
 # Python Includes
 from pathlib import Path
+import os
+from typing import Callable
 
 # Pip Includes
-from dict2xml import dict2xml
+from dict2xml import dict2xml, DataSorter
+
 # PyTest Includes
 import pytest
 
-
-def check_parent(item, item_data):
-	if type(item).__name__ not in ["Session", "Instance"]:
-		item_data = {hash(type(item).__name__ + item.name): {"type": type(item).__name__, "title": item.name, "children": item_data}}
-	if item.parent is not None:
-		item_data = check_parent(item.parent, item_data)
-	return item_data
+# Plugin Includes
+from pytest_item_dict.items_dict import ItemsDict
+from pytest_item_dict.attributes_dict import AttributesDict
+from pytest_item_dict.dict_2_xml import XML_Converter
 
 
-def check_children(hierarchy, l):
-	for data in l:
-		if data in hierarchy:
-			hierarchy[data]['children'] = check_children(hierarchy[data].get('children', {}), l[data].get('children', {}))
-		else:
-			return {**hierarchy, **l}
-	return hierarchy
+def _to_xml(data: dict) -> str:
+	return dict2xml(data=data, indent="	", data_sorter=DataSorter.never(), iterables_repeat_wrap=False)
 
 
-def remove_keys_and_make_lists(hierarchy):
-	array = []
-	for k, v in hierarchy.items():
-		v['children'] = remove_keys_and_make_lists(v['children'])
-		if v['type'] == "Function":  # since Function is the minimal unit in pytest
-			array.append({'type': v['type'], 'title': v['title']})
-		else:
-			array.append({'type': v['type'], 'title': v['title'], 'children': v['children']})
-	return array
+def pytest_collection_finish(session: pytest.Session):
+
+	items_dict: ItemsDict = ItemsDict(session=session)
+	attr_dict: AttributesDict = AttributesDict(session=session)
+
+	write_file(append_name="hierarchy_dict", values=items_dict.hierarchy_dict)
+	write_file(append_name="hierarchy_list", values=items_dict.hierarchy_list)
+	# write_file(append_name="temp_dict", values=items_dict._temp_dict)
+	# write_file(append_name="path_dict", values=items_dict.path_dict)
+
+	write_file(append_name='attr_h_dict', values=attr_dict.hierarchy_dict)
+	write_file(append_name='attr_h_list', values=attr_dict.hierarchy_list)
+	# write_file(append_name='attr_a_dict', values=attr_dict._attr_dict)
+	# write_file(append_name='attr_t_dict', values=attr_dict._temp_attr)
+
+	test_xml()
 
 
-def classic_collection(session):
-	hierarchy = {}
-	for item in session.items:
-		l = check_parent(item, {})
-		if hierarchy:
-			hierarchy = check_children(hierarchy, l)
-		else:
-			hierarchy = l
-	return hierarchy
+def write_file(append_name: str, values: dict | list):
+	output_file: str = Path(f"{__file__}/../../../output/reports/collect_{append_name}.xml").as_posix()
+	xml: XML_Converter = XML_Converter(my_dict=values, root_node="test")
+	Path(output_file).parent.mkdir(mode=764, parents=True, exist_ok=True)
+	with open(file=output_file, mode="w+") as f:
+		f.writelines(xml.formatted_xml)
 
 
-def path_collection(session):
-	hierarchy = {}
-	for item in session.items:
-		l = {}
-		cur_h = {}
-		parameterized = item.nodeid.find('[')
-		if parameterized < 0:
-			path = item.nodeid.split('/')
-		else:
-			path = item.nodeid[0:parameterized].split('/')
-			path[-1] = path[-1] + item.nodeid[parameterized:]
-		pytest_items = path[-1].split('::')
-		path[-1] = pytest_items[0]
-		pytest_items = pytest_items[1:]
-		pytest_items.reverse()
-		path.reverse()
-		for p in pytest_items:
-			l = {"pytest_unit" + p: {"type": "pytest_unit", "title": p, "children": cur_h}}
-			cur_h = l
-		for p in path:
-			l = {"path" + p: {"type": "path", "title": p, "children": cur_h}}
-			cur_h = l
-
-		if hierarchy:
-			hierarchy = check_children(hierarchy, l)
-		else:
-			hierarchy = l
-
-	return hierarchy
-
-
-def pytest_collection_finish(session):
-	collect_type = "classic"
-	hierarchy = {}
-	if collect_type == 'classic':
-		hierarchy = classic_collection(session)
-	elif collect_type == 'path':
-		hierarchy = path_collection(session)
-
-	hierarchy = remove_keys_and_make_lists(hierarchy)
-
-	output_file: str = Path(f"{__file__}/../../../output/reports/collection.xml").as_posix()
-	with open(output_file, "w+") as f:
-		xml_lines: list[str] = [
-		    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' + '\n',
-		    '<collection-report>',
-		    dict2xml(data=hierarchy, indent="\t", data_sorter=None),
-		    '\n' + '</collection-report>',
-		]
-		f.writelines(xml_lines)
+def test_xml():
+	output_file: str = Path(f"{__file__}/../../../output/reports/test_{XML_Converter.dict2xml.__qualname__}.xml").as_posix()
+	mydict = {
+	    'name': 'The Andersson\'s',
+	    'size': 4,
+	    'children': {
+	        'total-age': 62,
+	        'child': [
+	            {
+	                '@name': 'Tom',
+	                '@sex': 'male',
+	            },
+	            {
+	                '@name': 'Betty',
+	                '@sex': 'female',
+	                'grandchildren': {
+	                    'grandchild': [
+	                        {
+	                            '@name': 'herbert',
+	                            '@sex': 'male',
+	                        },
+	                        {
+	                            '@name': 'lisa',
+	                            '@sex': 'female',
+	                        },
+	                    ]
+	                },
+	            },
+	        ]
+	    },
+	}
+	xml: XML_Converter = XML_Converter(mydict, root_node='family')
+	Path(output_file).parent.mkdir(mode=764, parents=True, exist_ok=True)
+	with open(file=output_file, mode="w+") as f:
+		f.writelines(xml.formatted_xml)
