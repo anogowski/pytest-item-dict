@@ -87,10 +87,20 @@ class ItemsDict:
 			pytest_items.reverse()
 			path.reverse()
 			for p in pytest_items:
-				l = {"pytest_unit" + p: {"type": "pytest_unit", "title": p, "children": cur_h}}
+				l = {
+				    p: {
+				        "@type": "test",
+				        "children": cur_h,
+				    },
+				}
 				cur_h = l
 			for p in path:
-				l = {"path" + p: {"type": "path", "title": p, "children": cur_h}}
+				l = {
+				    p: {
+				        "@type": "path",
+				        "children": cur_h,
+				    },
+				}
 				cur_h = l
 
 			if hierarchy:

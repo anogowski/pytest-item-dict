@@ -30,7 +30,7 @@ class XML_Converter:
 
 	def dict2xml(self, my_dict, root_node=None):
 		wrap: bool = False if None == root_node or isinstance(my_dict, list) else True
-		root: None | Any | Literal['objects'] = 'objects' if None == root_node else root_node
+		root: None | Any | Literal['objects'] = "objects" if None == root_node else root_node
 		root_singular: Any | str | None = root[:-1] if 's' == root[-1] and None == root_node else root
 		xml: str = ''
 		attr: str = ''

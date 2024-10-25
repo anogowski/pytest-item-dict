@@ -31,8 +31,8 @@ def pytest_collection_finish(session: pytest.Session):
 
 	write_file(append_name="hierarchy_dict", values=items_dict.hierarchy_dict)
 	write_file(append_name="hierarchy_list", values=items_dict.hierarchy_list)
-	# write_file(append_name="temp_dict", values=items_dict._temp_dict)
-	# write_file(append_name="path_dict", values=items_dict.path_dict)
+	write_file(append_name="temp_dict", values=items_dict._temp_dict)
+	write_file(append_name="path_dict", values=items_dict.path_dict)
 
 	write_file(append_name='attr_h_dict', values=attr_dict.hierarchy_dict)
 	write_file(append_name='attr_h_list', values=attr_dict.hierarchy_list)
@@ -55,7 +55,7 @@ def test_xml():
 	mydict = {
 	    'name': 'The Andersson\'s',
 	    'size': 4,
-	    'children': {
+	    'members': {
 	        'total-age': 62,
 	        'child': [
 	            {
@@ -65,18 +65,16 @@ def test_xml():
 	            {
 	                '@name': 'Betty',
 	                '@sex': 'female',
-	                'grandchildren': {
-	                    'grandchild': [
-	                        {
-	                            '@name': 'herbert',
-	                            '@sex': 'male',
-	                        },
-	                        {
-	                            '@name': 'lisa',
-	                            '@sex': 'female',
-	                        },
-	                    ]
-	                },
+	                'grandchild': [
+	                    {
+	                        '@name': 'herbert',
+	                        '@sex': 'male',
+	                    },
+	                    {
+	                        '@name': 'lisa',
+	                        '@sex': 'female',
+	                    },
+	                ]
 	            },
 	        ]
 	    },
