@@ -9,7 +9,7 @@ import os
 from typing import Callable
 
 # Pip Includes
-from dict2xml import dict2xml, DataSorter
+from dict_to_xml.xml_converter import XMLConverter
 
 # PyTest Includes
 import pytest
@@ -17,11 +17,6 @@ import pytest
 # Plugin Includes
 from pytest_item_dict.items_dict import ItemsDict
 from pytest_item_dict.attributes_dict import AttributesDict
-from pytest_item_dict.dict_2_xml import XML_Converter
-
-
-def _to_xml(data: dict) -> str:
-	return dict2xml(data=data, indent="	", data_sorter=DataSorter.never(), iterables_repeat_wrap=False)
 
 
 def pytest_collection_finish(session: pytest.Session):
@@ -44,14 +39,14 @@ def pytest_collection_finish(session: pytest.Session):
 
 def write_file(append_name: str, values: dict | list):
 	output_file: str = Path(f"{__file__}/../../../output/reports/collect_{append_name}.xml").as_posix()
-	xml: XML_Converter = XML_Converter(my_dict=values, root_node="test")
+	xml: XMLConverter = XMLConverter(my_dict=values, root_node="test")
 	Path(output_file).parent.mkdir(mode=764, parents=True, exist_ok=True)
 	with open(file=output_file, mode="w+") as f:
 		f.writelines(xml.formatted_xml)
 
 
 def test_xml():
-	output_file: str = Path(f"{__file__}/../../../output/reports/test_{XML_Converter.dict2xml.__qualname__}.xml").as_posix()
+	output_file: str = Path(f"{__file__}/../../../output/reports/test.xml").as_posix()
 	mydict = {
 	    'name': 'The Andersson\'s',
 	    'size': 4,
@@ -79,7 +74,7 @@ def test_xml():
 	        ]
 	    },
 	}
-	xml: XML_Converter = XML_Converter(mydict, root_node='family')
+	xml: XMLConverter = XMLConverter(my_dict=mydict, root_node='family')
 	Path(output_file).parent.mkdir(mode=764, parents=True, exist_ok=True)
 	with open(file=output_file, mode="w+") as f:
 		f.writelines(xml.formatted_xml)
