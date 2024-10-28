@@ -15,6 +15,7 @@
 		"fixturenames",
 		"getgroup",
 		"getini",
+		"getplugin",
 		"getreports",
 		"itemcollected",
 		"logreport",
@@ -28,6 +29,7 @@
 		"pytester",
 		"runpytest",
 		"showlocals",
+		"unconfigure",
 		"UNMARK"
 	],
 	"editor.bracketPairColorization.enabled": true, //Cycle through colors for different brackets
