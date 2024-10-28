@@ -4,77 +4,43 @@
 #############################################
 
 # Python Includes
+import json
 from pathlib import Path
-import os
-from typing import Callable
 
 # Pip Includes
-from dict_to_xml.xml_converter import XMLConverter
+from data_to_xml.xml_converter import XMLConverter
 
 # PyTest Includes
 import pytest
+from pytest import Session, Config
 
 # Plugin Includes
 from pytest_item_dict.items_dict import ItemsDict
-from pytest_item_dict.attributes_dict import AttributesDict
 
 
-def pytest_collection_finish(session: pytest.Session):
-
+def pytest_collection_finish(session: Session):
 	items_dict: ItemsDict = ItemsDict(session=session)
-	attr_dict: AttributesDict = AttributesDict(session=session)
-
-	write_file(append_name="hierarchy_dict", values=items_dict.hierarchy_dict)
-	write_file(append_name="hierarchy_list", values=items_dict.hierarchy_list)
-	write_file(append_name="temp_dict", values=items_dict._temp_dict)
-	write_file(append_name="path_dict", values=items_dict.path_dict)
-
-	write_file(append_name='attr_h_dict', values=attr_dict.hierarchy_dict)
-	write_file(append_name='attr_h_list', values=attr_dict.hierarchy_list)
-	# write_file(append_name='attr_a_dict', values=attr_dict._attr_dict)
-	# write_file(append_name='attr_t_dict', values=attr_dict._temp_attr)
-
-	test_xml()
+	write_json_file(name="items", json_str=json.dumps(obj=items_dict.collect_dict))
+	write_xml_file(name="items", items_dict=items_dict.collect_dict)
+	session.config.pluginmanager.register(plugin=items_dict, name="items_dict")
 
 
-def write_file(append_name: str, values: dict | list):
-	output_file: str = Path(f"{__file__}/../../../output/reports/collect_{append_name}.xml").as_posix()
-	xml: XMLConverter = XMLConverter(my_dict=values, root_node="test")
+def pytest_unconfigure(config: Config):
+	items_dict: object | None = config.pluginmanager.getplugin(name="items_dict")
+	if items_dict is not None:
+		config.pluginmanager.unregister(plugin=items_dict)
+
+
+def write_json_file(name: str, json_str: str):
+	output_file: str = Path(f"{__file__}/../../../output/reports/collect_{name}.json").as_posix()
 	Path(output_file).parent.mkdir(mode=764, parents=True, exist_ok=True)
 	with open(file=output_file, mode="w+") as f:
-		f.writelines(xml.formatted_xml)
+		f.write(json_str + "\n")
 
 
-def test_xml():
-	output_file: str = Path(f"{__file__}/../../../output/reports/test.xml").as_posix()
-	mydict = {
-	    'name': 'The Andersson\'s',
-	    'size': 4,
-	    'members': {
-	        'total-age': 62,
-	        'child': [
-	            {
-	                '@name': 'Tom',
-	                '@sex': 'male',
-	            },
-	            {
-	                '@name': 'Betty',
-	                '@sex': 'female',
-	                'grandchild': [
-	                    {
-	                        '@name': 'herbert',
-	                        '@sex': 'male',
-	                    },
-	                    {
-	                        '@name': 'lisa',
-	                        '@sex': 'female',
-	                    },
-	                ]
-	            },
-	        ]
-	    },
-	}
-	xml: XMLConverter = XMLConverter(my_dict=mydict, root_node='family')
+def write_xml_file(name: str, items_dict: dict):
+	output_file: str = Path(f"{__file__}/../../../output/reports/collect_{name}.xml").as_posix()
+	xml: XMLConverter = XMLConverter(my_dict=items_dict, root_node="pytest")
 	Path(output_file).parent.mkdir(mode=764, parents=True, exist_ok=True)
 	with open(file=output_file, mode="w+") as f:
 		f.writelines(xml.formatted_xml)

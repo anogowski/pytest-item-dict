@@ -1,111 +1,110 @@
-from collections import Counter
-import json
-from dataclasses import dataclass
-from pytest import CollectReport, Item, Session
-from _pytest.nodes import Node
+#############################################
+#	Dual License: BSD-3-Clause AND MPL-2.0	#
+#	Copyright (c) 2024, Adam Nogowski		#
+#############################################
+
 from typing import Any
 from collections import defaultdict
 
+from pytest import Session
+
 
 class ItemsDict:
-	_items: list[Item]
-	_hierarchy_dict = defaultdict()
-	_path_dict = defaultdict()
-	_hierarchy_list: list[Any] = list()
-	_temp_dict = defaultdict()
 
 	def __init__(self, session: Session):
-		self._items = session.items
-		self._hierarchy_dict = self.get_hierarchy_dict(session.items)
-		self._path_dict = self.path_collection(session)
-		self._hierarchy_list = self.remove_keys_and_make_lists(self._hierarchy_dict)
+		self.session: Session = session
+		self.collect_dict: dict[Any, Any] = self.create_hierarchy_dict()
+		self.report_dict: dict[Any, Any] = self.collect_dict.copy()
+		self.add_markers(hierarchy=self.collect_dict)
 
-	@property
-	def hierarchy_list(self) -> list[Any]:
-		return self._hierarchy_list
+	def create_hierarchy_dict(self) -> dict:
+		"""Create the hierarchical dictionary for tests
 
-	@property
-	def hierarchy_dict(self) -> dict[Any, Any]:
-		return self._hierarchy_dict
+		Returns:
+			dict: hierarchical dictionary of tests
+		"""
+		hierarchy: dict[Any, Any] = {}
+		for item in self.session.items:
+			current: dict[Any, Any] = hierarchy
+			full_path: list[str] = self.convert_path_to_key_list(path=item.nodeid)
 
-	@property
-	def path_dict(self) -> dict[Any, Any]:
-		return self._path_dict
-
-	def get_hierarchy_dict(self, items: list[Item]) -> dict[Any, Any] | Any | dict[int, dict[str, Any]]:
-		hierarchy = {}
-		for item in items:
-			l = self.check_parent(item, {})
-			if hierarchy:
-				hierarchy = self.check_children(hierarchy, l)
-			else:
-				hierarchy = l
+			self.set_default(current, full_path)
 		return hierarchy
 
-	def check_parent(self, item, item_data) -> Any | dict[int, dict[str, Any]]:
-		if type(item).__name__ not in ["Session", "Instance"]:
-			if isinstance(item.parent, Session):
-				item_data = {item.name: {"@type": type(item).__name__, "@name": item.name, "children": item_data}}
-			else:
-				item_data = {item.name: {"@parent": item.parent.name, "@type": type(item).__name__, "@name": item.name, "children": item_data}}
-		if item.parent is not None:
-			item_data = self.check_parent(item.parent, item_data)
-		return item_data
+	def convert_path_to_key_list(self, path: str) -> list[str]:
+		"""Split a path or nodeid into a list of keys to access the dictionary
 
-	def check_children(self, hierarchy, l) -> dict[Any, Any] | Any:
-		for data in l:
-			if data in hierarchy:
-				hierarchy[data]['children'] = self.check_children(hierarchy[data].get('children', {}), l[data].get('children', {}))
-			else:
-				return {**hierarchy, **l}
-		return hierarchy
+		Args:
+			path (str): a path or nodeid
 
-	def remove_keys_and_make_lists(self, hierarchy: dict) -> list[Any]:
-		array = []
-		for k, v in hierarchy.items():
-			v['children'] = self.remove_keys_and_make_lists(v['children'])
-			if v['@type'] == "Function":  # since Function is the minimal unit in pytest
-				v.pop("children", None)
-			array.append(v)
-			self._temp_dict.update(v)
-		return array
+		Returns:
+			list[str]: keys in hierarchical order to access dictionary
+		"""
+		full_path: list[str] = []
 
-	def path_collection(self, session: Session):
-		hierarchy = {}
-		for item in session.items:
-			l = {}
-			cur_h = {}
-			parameterized = item.nodeid.find('[')
-			if parameterized < 0:
-				path = item.nodeid.split('/')
-			else:
-				path = item.nodeid[0:parameterized].split('/')
-				path[-1] = path[-1] + item.nodeid[parameterized:]
-			pytest_items = path[-1].split('::')
-			path[-1] = pytest_items[0]
-			pytest_items = pytest_items[1:]
-			pytest_items.reverse()
-			path.reverse()
-			for p in pytest_items:
-				l = {
-				    p: {
-				        "@type": "test",
-				        "children": cur_h,
-				    },
-				}
-				cur_h = l
-			for p in path:
-				l = {
-				    p: {
-				        "@type": "path",
-				        "children": cur_h,
-				    },
-				}
-				cur_h = l
+		paths: list[str] = path.split(sep="/")
+		full_path += paths[:-1]
 
-			if hierarchy:
-				hierarchy = self.check_children(hierarchy, l)
-			else:
-				hierarchy = l
+		if '::' in paths[-1]:
+			full_path += path.split(sep="/")[-1].split(sep="::")
+		else:
+			full_path += paths[-1]
 
-		return hierarchy
+		return full_path
+
+	def set_default(self, hierarchy: dict, key_path: list[str]) -> None:
+		"""Set the default value of each key to an empty dictionary
+
+		Args:
+			hierarchy (dict): hierarchical dictionary of tests
+			key_path (list[str]): keys in hierarchical order to access dictionary
+		"""
+		for part in key_path:
+			hierarchy = hierarchy.setdefault(part, defaultdict(dict))
+
+	def add_attribute(self, hierarchy: dict, key_path: list[str], key: str, value: Any) -> None:
+		"""Add an attribute to the key_path in the hierarchy dictionary \n hierarchy[key_path][key] = value
+		
+		Args:
+			hierarchy (dict): hierarchical dictionary of tests
+			key_path (list[str]): keys in hierarchical order to access dictionary
+			key (str): new key to add, if key does not start with '@' it will be pre-appended
+			value (Any): new value to add
+		"""
+		if key[0] != "@":
+			key = f"@{key}"
+		key_path += [key]
+
+		self.set_new_value(hierarchy, key_path, value)
+
+	def add_markers(self, hierarchy: dict) -> None:
+		"""Add markers attribute to tests in hierarchy
+
+		Args:
+			hierarchy (dict): add item.own_markers as an attribute to each test
+		"""
+		for item in self.session.items:
+			current: dict[Any, Any] = hierarchy
+			key_path: list[str] = self.convert_path_to_key_list(path=item.nodeid)
+			if len(item.own_markers) > 0:
+
+				markers: list[str] = [marker.name for marker in item.own_markers]
+				self.add_attribute(hierarchy=current, key_path=key_path, key="@markers", value=markers)
+
+	def set_new_value(self, data: dict, path: list[str], value: Any) -> None:
+		"""Sets a value in a hierarchical dictionary using a list as the key path."""
+		current: dict[str, Any] = data
+		for key in path[:-1]:
+			if key not in current:
+				current.setdefault(key, defaultdict(dict))
+			current = current[key]
+		current[path[-1]] = value
+
+	def get_value(self, data, path) -> None | Any:
+		"""Gets a value from a hierarchical dictionary using a list as the key path."""
+		current = data
+		for key in path:
+			if key not in current:
+				return None
+			current = current[key]
+		return current
