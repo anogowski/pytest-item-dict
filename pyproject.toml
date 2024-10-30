@@ -61,7 +61,7 @@ cache_dir = "./output/.pycache"
 pytester_example_dir = "./suites"
 
 # Test Directories
-testpaths = ["./suites"]        #root testing directories
+testpaths = [".examples/suites"] #root testing directories
 junit_duration_report = "total"
 junit_suite_name = "pytest"
 junit_family = "xunit2"
@@ -104,3 +104,7 @@ markers = [
 	"linux: Linux OS",
 	"windows: Windows OS",
 ]
+
+# pytest-item-dict
+set_collect_dict_markers = true
+set_test_dict_durations = true

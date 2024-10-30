@@ -2,7 +2,7 @@ build==1.2.2.post1
 cachetools==5.5.0
 chardet==5.2.0
 colorama==0.4.6
-data-to-xml==1.0.5
+data-to-xml==1.0.7
 distlib==0.3.9
 filelock==3.16.1
 iniconfig==2.0.0
@@ -12,6 +12,5 @@ pluggy==1.5.0
 pyproject-api==1.8.0
 pyproject_hooks==1.2.0
 pytest==8.3.3
--e git+https://github.com/anogowski/pytest-item-dict.git@eba0c87b177a6019ac6473e8e03eff916ee985c9#egg=pytest_item_dict
 tox==4.23.2
 virtualenv==20.27.0

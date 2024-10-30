@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<pytest>
+	<suites passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+		<it passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+			<linux passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+				<test_linux.py passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+					<Test_Linux passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+						<test_i_linux outcome="unexecuted" duration="0:00:00" />
+					</Test_Linux>
+					<tests>0</tests>
+					<executed>0</executed>
+				</test_linux.py>
+			</linux>
+			<windows passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+				<test_windows.py passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+					<Test_Windows passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+						<test_i_windows outcome="unexecuted" duration="0:00:00" />
+					</Test_Windows>
+					<tests>0</tests>
+					<executed>0</executed>
+				</test_windows.py>
+			</windows>
+		</it>
+		<vt passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+			<linux passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+				<test_v_linux.py passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+					<Test_Linux passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+						<test_v_linux outcome="unexecuted" duration="0:00:00" />
+						<test_v_linux_2 outcome="unexecuted" duration="0:00:00" />
+						<test_v_linux_3 outcome="unexecuted" duration="0:00:00" />
+					</Test_Linux>
+					<tests>0</tests>
+					<executed>0</executed>
+				</test_v_linux.py>
+				<test_v_posix.py passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+					<Test_Linux passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+						<test_v_posix outcome="unexecuted" duration="0:00:00" />
+						<test_v_posix_2 outcome="unexecuted" duration="0:00:00" />
+					</Test_Linux>
+					<tests>0</tests>
+					<executed>0</executed>
+				</test_v_posix.py>
+			</linux>
+			<windows passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+				<test_v_windows.py passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+					<Test_Windows passed="0" failed="0" skipped="0" expected_fail="0" unexpected_pass="0" errors="0" reruns="0">
+						<test_v_windows_10 outcome="unexecuted" duration="0:00:00" />
+						<test_v_windows_11 outcome="unexecuted" duration="0:00:00" />
+					</Test_Windows>
+					<tests>0</tests>
+					<executed>0</executed>
+				</test_v_windows.py>
+			</windows>
+		</vt>
+	</suites>
+</pytest>

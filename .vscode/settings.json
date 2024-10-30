@@ -17,18 +17,24 @@
 		"getini",
 		"getplugin",
 		"getreports",
+		"hookwrapper",
 		"itemcollected",
 		"logreport",
 		"makeini",
 		"makepyfile",
+		"makereport",
 		"metafunc",
+		"modifyitems",
 		"nodeid",
 		"Nogowski",
 		"pluginmanager",
 		"pytest",
+		"pytest_sessionfinish",
 		"pytester",
 		"runpytest",
 		"showlocals",
+		"tryfirst",
+		"trylast",
 		"unconfigure",
 		"UNMARK"
 	],
@@ -73,7 +79,7 @@
 	"python.analysis.inlayHints.variableTypes": true,
 	"python.analysis.typeCheckingMode": "basic",
 	"python.testing.pytestArgs": [
-		"suites"
+		"examples/suites"
 	],
 	"python.testing.pytestEnabled": true,
 	"python.testing.unittestEnabled": false,
