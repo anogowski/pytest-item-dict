@@ -61,7 +61,7 @@ cache_dir = "./output/.pycache"
 pytester_example_dir = "./suites"
 
 # Test Directories
-testpaths = [".examples/suites"] #root testing directories
+testpaths = [".test_dev"]       #root testing directories
 junit_duration_report = "total"
 junit_suite_name = "pytest"
 junit_family = "xunit2"
@@ -69,11 +69,14 @@ junit_logging = "no"
 
 # Non-Test Directories
 norecursedirs = [
-	"src",
-	"docs",
-	".vscode",
-	".venv",
 	".github",
+	".venv",
+	".vscode",
+	"dist",
+	"docs",
+	"examples",
+	"output",
+	"src",
 ] #do not check these directories
 
 # Reports
