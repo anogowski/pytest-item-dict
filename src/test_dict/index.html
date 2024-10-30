@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Adam Nogowski" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>TestDict - pytest-item-dict</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "TestDict";
+        var mkdocs_page_input_path = "src\\test_dict.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> pytest-item-dict
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../examples/">Examples</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Src</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../plugin/">ItemDictPlugin</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../collect_dict/">CollectionDict</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">TestDict</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#test_dict.TestDict">TestDict</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#test_dict.TestDict.set_durations">set_durations</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#test_dict.TestDict.set_outcomes">set_outcomes</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#test_dict.TestDict.update_on_test">update_on_test</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#test_dict.TestDict.run_ini_options">run_ini_options</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#test_dict.TestDict.set_duration_attribute">set_duration_attribute</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#test_dict.TestDict.set_outcome_attribute">set_outcome_attribute</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#test_dict.TestDict.set_test_outcomes">set_test_outcomes</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#test_dict.TestDict.set_unexecuted_test_outcomes">set_unexecuted_test_outcomes</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../item_dict_enums/">ItemDictEnums</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">pytest-item-dict</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Src</li>
+      <li class="breadcrumb-item active">TestDict</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/anogowski/pytest-item-dict/edit/master/docs/src/test_dict.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="testdict">TestDict</h1>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<a id="test_dict.TestDict"></a>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pytest_item_dict.collect_dict.CollectionDict">CollectionDict</span></code></p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src\pytest_item_dict\test_dict.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 18</span>
+<span class="normal"> 19</span>
+<span class="normal"> 20</span>
+<span class="normal"> 21</span>
+<span class="normal"> 22</span>
+<span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TestDict</span><span class="p">(</span><span class="n">CollectionDict</span><span class="p">):</span>
+	<span class="n">_set_outcomes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">False</span>
+	<span class="n">_set_durations</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">False</span>
+	<span class="n">_update_on_test</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">False</span>
+
+	<span class="n">UNEXECUTED</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unexecuted&quot;</span>
+
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_add_markers</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getini</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">INIOptions</span><span class="o">.</span><span class="n">SET_TEST_MARKERS</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_set_durations</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getini</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">INIOptions</span><span class="o">.</span><span class="n">SET_TEST_DURATIONS</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_set_outcomes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">getini</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">INIOptions</span><span class="o">.</span><span class="n">SET_TEST_OUTCOMES</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_update_on_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">getini</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">INIOptions</span><span class="o">.</span><span class="n">UPDATE_DICT_ON_TEST</span><span class="p">)</span>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">set_outcomes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;Add test outcome to session.items and hierarchy dict</span>
+
+<span class="sd">		Returns:</span>
+<span class="sd">			bool: INI Option for setting test outcomes</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_outcomes</span>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">set_durations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;Add test duration to session.items and hierarchy dict</span>
+
+<span class="sd">		Returns:</span>
+<span class="sd">			bool: INI Option for setting test duration</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_durations</span>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">update_on_test</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;Update test outcome in hierarchy dict after every test</span>
+
+<span class="sd">		Returns:</span>
+<span class="sd">			bool: INI Option for updating test outcome after every test</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_on_test</span>
+
+	<span class="k">def</span> <span class="nf">set_unexecuted_test_outcomes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;Create/Overwrite each item.outcome in session.items to &#39;self.UNEXECUTED&#39;</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_outcomes</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+				<span class="nb">setattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">TestProperties</span><span class="o">.</span><span class="n">OUTCOME</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">UNEXECUTED</span><span class="p">)</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">set_outcome_attribute</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">run_ini_options</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;Run functions to set attributes for options store in ini/toml/yaml file</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_markers</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_durations</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">set_marker_attribute</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">set_duration_attribute</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">set_test_outcomes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;Set test outcome in hierarchy dict for every test based on item.outcome</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_outcomes</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">set_outcome_attribute</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">set_outcome_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;Update test outcome in hierarchy dict from item.outcome</span>
+
+<span class="sd">		Args:</span>
+<span class="sd">			item (Item): pytest.Item - test to update</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_outcomes</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">TestProperties</span><span class="o">.</span><span class="n">OUTCOME</span><span class="p">):</span>
+			<span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_key_path</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">nodeid</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">TestProperties</span><span class="o">.</span><span class="n">OUTCOME</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">TestProperties</span><span class="o">.</span><span class="n">OUTCOME</span><span class="p">))</span>
+
+	<span class="k">def</span> <span class="nf">set_duration_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">):</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;Update test duration in hierarchy dict from item.duration</span>
+
+<span class="sd">		Args:</span>
+<span class="sd">			item (Item): pytest.Item - test to update</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_durations</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">TestProperties</span><span class="o">.</span><span class="n">DURATION</span><span class="p">):</span>
+			<span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_key_path</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">nodeid</span><span class="p">)</span>
+			<span class="n">td</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">TestProperties</span><span class="o">.</span><span class="n">DURATION</span><span class="p">))</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">TestProperties</span><span class="o">.</span><span class="n">DURATION</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="nb">object</span><span class="o">=</span><span class="n">td</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h2 id="test_dict.TestDict.set_durations" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">set_durations</span><span class="p">:</span> <span class="nb">bool</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Add test duration to session.items and hierarchy dict</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>bool</code></b>(                  <code>bool</code>
+)              –
+              <div class="doc-md-description">
+                <p>INI Option for setting test duration</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h2 id="test_dict.TestDict.set_outcomes" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">set_outcomes</span><span class="p">:</span> <span class="nb">bool</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Add test outcome to session.items and hierarchy dict</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>bool</code></b>(                  <code>bool</code>
+)              –
+              <div class="doc-md-description">
+                <p>INI Option for setting test outcomes</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h2 id="test_dict.TestDict.update_on_test" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">update_on_test</span><span class="p">:</span> <span class="nb">bool</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Update test outcome in hierarchy dict after every test</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>bool</code></b>(                  <code>bool</code>
+)              –
+              <div class="doc-md-description">
+                <p>INI Option for updating test outcome after every test</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>    </div>
+
+</div>
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="test_dict.TestDict.run_ini_options" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run_ini_options</span><span class="p">()</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Run functions to set attributes for options store in ini/toml/yaml file</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src\pytest_item_dict\test_dict.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run_ini_options</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;Run functions to set attributes for options store in ini/toml/yaml file</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_markers</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_durations</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">set_marker_attribute</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">set_duration_attribute</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="test_dict.TestDict.set_duration_attribute" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">set_duration_attribute</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Update test duration in hierarchy dict from item.duration</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>item</code></b>
+                  (<code><span title="pytest.Item">Item</span></code>)
+              –
+              <div class="doc-md-description">
+                <p>pytest.Item - test to update</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+            <details class="quote">
+              <summary>Source code in <code>src\pytest_item_dict\test_dict.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_duration_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">):</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;Update test duration in hierarchy dict from item.duration</span>
+
+<span class="sd">	Args:</span>
+<span class="sd">		item (Item): pytest.Item - test to update</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_durations</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">TestProperties</span><span class="o">.</span><span class="n">DURATION</span><span class="p">):</span>
+		<span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_key_path</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">nodeid</span><span class="p">)</span>
+		<span class="n">td</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">TestProperties</span><span class="o">.</span><span class="n">DURATION</span><span class="p">))</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">TestProperties</span><span class="o">.</span><span class="n">DURATION</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="nb">object</span><span class="o">=</span><span class="n">td</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="test_dict.TestDict.set_outcome_attribute" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">set_outcome_attribute</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Update test outcome in hierarchy dict from item.outcome</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>item</code></b>
+                  (<code><span title="pytest.Item">Item</span></code>)
+              –
+              <div class="doc-md-description">
+                <p>pytest.Item - test to update</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+            <details class="quote">
+              <summary>Source code in <code>src\pytest_item_dict\test_dict.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_outcome_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;Update test outcome in hierarchy dict from item.outcome</span>
+
+<span class="sd">	Args:</span>
+<span class="sd">		item (Item): pytest.Item - test to update</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_outcomes</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">TestProperties</span><span class="o">.</span><span class="n">OUTCOME</span><span class="p">):</span>
+		<span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_key_path</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">nodeid</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">TestProperties</span><span class="o">.</span><span class="n">OUTCOME</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">TestProperties</span><span class="o">.</span><span class="n">OUTCOME</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="test_dict.TestDict.set_test_outcomes" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">set_test_outcomes</span><span class="p">()</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Set test outcome in hierarchy dict for every test based on item.outcome</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src\pytest_item_dict\test_dict.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_test_outcomes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;Set test outcome in hierarchy dict for every test based on item.outcome</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_outcomes</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">set_outcome_attribute</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="test_dict.TestDict.set_unexecuted_test_outcomes" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">set_unexecuted_test_outcomes</span><span class="p">()</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Create/Overwrite each item.outcome in session.items to 'self.UNEXECUTED'</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src\pytest_item_dict\test_dict.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_unexecuted_test_outcomes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;Create/Overwrite each item.outcome in session.items to &#39;self.UNEXECUTED&#39;</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_outcomes</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+			<span class="nb">setattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">TestProperties</span><span class="o">.</span><span class="n">OUTCOME</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">UNEXECUTED</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">set_outcome_attribute</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../collect_dict/" class="btn btn-neutral float-left" title="CollectionDict"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../item_dict_enums/" class="btn btn-neutral float-right" title="ItemDictEnums">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/anogowski/pytest-item-dict" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../collect_dict/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../item_dict_enums/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
