@@ -16,8 +16,8 @@ import pytest
 from pytest import Session, Config
 
 # Plugin Imports
-from pytest_item_dict.plugin import ItemDictPlugin, PLUGIN_NAME
-from pytest_item_dict.pytest_enums import CollectTypes
+from pytest_item_dict.plugin import ItemDictPlugin, ITEM_DICT_PLUGIN_NAME
+from pytest_item_dict.item_dict_enums import CollectTypes
 
 attr_dict: dict[str, str] = {
     "passed": "0",
@@ -48,14 +48,14 @@ def write_xml_file(items_dict: dict, prefix: str = "collect", name: str = "hiera
 
 
 def pytest_collection_finish(session: Session):
-	item_dict: ItemDictPlugin | Any | None = session.config.pluginmanager.get_plugin(name=PLUGIN_NAME)
+	item_dict: ItemDictPlugin | Any | None = session.config.pluginmanager.get_plugin(name=ITEM_DICT_PLUGIN_NAME)
 	if item_dict:
 		write_xml_file(items_dict=item_dict.collect_dict.hierarchy, prefix="collect")
 		write_json_file(json_str=json.dumps(obj=item_dict.collect_dict.hierarchy), prefix="collect")
 
 
 def pytest_sessionfinish(session: Session):
-	item_dict: ItemDictPlugin | Any | None = session.config.pluginmanager.get_plugin(name=PLUGIN_NAME)
+	item_dict: ItemDictPlugin | Any | None = session.config.pluginmanager.get_plugin(name=ITEM_DICT_PLUGIN_NAME)
 	if item_dict:
 		item_dict.test_dict.set_attribute_dict_to_types([CollectTypes.DIR, CollectTypes.MODULE, CollectTypes.CLASS], attr_dict)
 		item_dict.test_dict.set_sub_element_dict_to_types([CollectTypes.MODULE], sub_element_dict)

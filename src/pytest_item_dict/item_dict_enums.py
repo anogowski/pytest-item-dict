@@ -5,11 +5,10 @@
 
 from enum import StrEnum
 
-from pytest import Module
-
 
 class INIOptions(StrEnum):
 	CREATE_ITEM_DICT = "create_item_dict"
+	UPDATE_DICT_ON_TEST = "update_dict_on_test"
 	SET_COLLECT_MARKERS = "set_collect_dict_markers"
 	SET_TEST_OUTCOMES = "set_test_dict_outcomes"
 	SET_TEST_DURATIONS = "set_test_dict_durations"

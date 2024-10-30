@@ -4,19 +4,19 @@
 #############################################
 
 # Python Includes
-from sre_constants import IN
-from typing import Any, Callable, Self
+from typing import Any, Callable
 from collections import defaultdict
 
 from pytest import Config, Item
 
-from pytest_item_dict.pytest_enums import INIOptions, CollectTypes
+from pytest_item_dict.item_dict_enums import INIOptions, CollectTypes
 
 
 class CollectionDict:
-	_hierarchy: dict[Any, Any]
 	_total_duration: float = 0
 	_add_markers: bool | Any = False
+	_hierarchy: dict[Any, Any] = {}
+	_items: list[Item] = []
 
 	def __init__(self, config: Config):
 		self._config: Config = config
@@ -46,22 +46,14 @@ class CollectionDict:
 	def total_duration(self, duration: float) -> None:
 		self._total_duration = duration
 
-	def create_hierarchy_dict(self, items: list[Item]) -> dict:
+	def create_hierarchy_dict(self, items: list[Item]) -> None:
 		self._items: list[Item] = items
 		"""Create the hierarchical dictionary for tests
-
-		Returns:
-			dict: hierarchical dictionary of tests
 		"""
-		hierarchy: dict[Any, Any] = {}
 		for item in self._items:
-			current: dict[Any, Any] = hierarchy
-			full_path: list[str] = self.get_key_path(path=item.nodeid)
+			key_path: list[str] = self.get_key_path(path=item.nodeid)
 
-			self._set_default(current, full_path)
-
-		self._hierarchy = hierarchy
-		return hierarchy
+			self._set_default(key_path=key_path)
 
 	def get_key_path(self, path: str) -> list[str]:
 		"""Split a path or nodeid into a list of keys to access the dictionary
@@ -72,35 +64,33 @@ class CollectionDict:
 		Returns:
 			list[str]: keys in hierarchical order to access dictionary
 		"""
-		full_path: list[str] = path.split(sep="/")
+		key_path: list[str] = path.split(sep="/")
 
-		if '::' in full_path[-1]:
-			temp_path: str = full_path[-1]
-			full_path = full_path[:-1]
-			full_path += temp_path.split(sep="::")
+		if '::' in key_path[-1]:
+			temp_path: str = key_path[-1]
+			key_path = key_path[:-1]
+			key_path += temp_path.split(sep="::")
 
-		return full_path
+		return key_path
 
-	def _set_default(self, hierarchy: dict, key_path: list[str]) -> None:
+	def _set_default(self, key_path: list[str]) -> None:
 		"""Set the default value of each key to an empty dictionary
 
 		Args:
-			hierarchy (dict): hierarchical dictionary of tests
 			key_path (list[str]): keys in hierarchical order to access dictionary
 		"""
 		for part in key_path:
-			hierarchy = hierarchy.setdefault(part, defaultdict(dict))
+			self._hierarchy = self._hierarchy.setdefault(part, defaultdict(dict))
 
-	def _set_new_value(self, hierarchy: dict[Any, Any], key_path: list[str], value: Any) -> None:
+	def _set_new_value(self, key_path: list[str], value: Any) -> None:
 		"""Sets a value in a hierarchical dictionary using a list as the key path.
 
 		Args:
-			hierarchy (dict[Any, Any]): hierarchical dictionary of tests
 			key_path (list[str]): keys in hierarchical order to access dictionary
 			value (Any): new value to add/overwrite
 		"""
 
-		current: dict[str, Any] = hierarchy
+		current: dict[str, Any] = self._hierarchy
 		for key in key_path[:-1]:
 			if key not in current:
 				current.setdefault(key, defaultdict(dict))
@@ -108,28 +98,26 @@ class CollectionDict:
 		key: str = key_path[-1]
 		current[key] = value
 
-	def get_value_from_key_path(self, hierarchy: dict[Any, Any], key_path: list[str]) -> None | Any:
+	def get_value_from_key_path(self, key_path: list[str]) -> None | Any:
 		"""Gets a value from a hierarchical dictionary using a list as the key path.
 
 		Args:
-			hierarchy (dict[Any, Any]): hierarchical dictionary of tests
 			key_path (list[str]): keys in hierarchical order to access dictionary
 
 		Returns:
 			None | Any: value of key_path if present
 		"""
-		current: Any = hierarchy
+		current: Any = self._hierarchy
 		for key in key_path:
 			if key not in current:
 				return None
 			current = current[key]
 		return current
 
-	def set_attribute(self, hierarchy: dict, key_path: list[str], key: str, value: Any) -> None:
-		"""Add an attribute to the key_path in the hierarchy dictionary \n hierarchy[key_path][key] = value
+	def set_attribute(self, key_path: list[str], key: str, value: Any) -> None:
+		"""Add/Overwrite an attribute to the key_path in the hierarchy dictionary \n hierarchy[key_path][key] = value
 		
 		Args:
-			hierarchy (dict): hierarchical dictionary of tests
 			key_path (list[str]): keys in hierarchical order to access dictionary
 			key (str): new key to add/overwrite, if key does not start with '@' it will be pre-appended
 			value (Any): new value to add/overwrite
@@ -138,34 +126,40 @@ class CollectionDict:
 			key = f"@{key}"
 		key_path.append(key)
 
-		self._set_new_value(hierarchy=hierarchy, key_path=key_path, value=value)
+		self._set_new_value(key_path=key_path, value=value)
 
 		key_path.pop()
 
-	def set_marker(self, item: Item) -> None:
-		"""Add item.own_markers as an attribute to each test in hierarchy \n 
+	def set_marker_attribute(self, item: Item) -> None:
+		"""Add/Overwrite item.own_markers as an attribute to each test in hierarchy \n 
 
 		Args:
 			item (Item): Item to check for markers 
 		"""
 		if self._add_markers:
-			current: dict[Any, Any] = self.hierarchy
 			key_path: list[str] = self.get_key_path(path=item.nodeid)
 			if len(item.own_markers) > 0:
 				markers: list[str] = [marker.name for marker in item.own_markers]
-				self.set_attribute(hierarchy=current, key_path=key_path, key="@markers", value=markers)
+				self.set_attribute(key_path=key_path, key="@markers", value=markers)
 
-	def _dict_on_parent_types(self, search_type: list[str | CollectTypes], property_dict: dict[Any, Any], func: Callable[[dict, list[str], str, Any], None]):
+	def _dict_on_parent_types(self, search_type: list[str | CollectTypes], property_dict: dict[Any, Any], func: Callable[[list[str], str, Any], None]) -> None:
+		"""Add/Overwrite an attribute or sub element in the hierarchy dict based on provided parent types
+
+		Args:
+			search_type (list[str  |  CollectTypes]): list of type(parent).__name__
+			property_dict (dict[Any, Any]): dict to use
+			func (Callable[[list[str], str, Any], None]): set_attribute OR set_sub_element
+		"""
 		for item in self.items:
 			parents = list(item.iter_parents())
 			for parent in parents:
 				if type(parent).__name__ in search_type and type(parent).__name__ != "Session" and parent.nodeid != ".":
 					key_path: list[str] = self.get_key_path(path=parent.nodeid)
 					for key, value in property_dict.items():
-						func(hierarchy=self.hierarchy, key_path=key_path, key=key, value=value)
+						func(key_path=key_path, key=key, value=value)
 
 	def set_attribute_on_parent_types(self, search_type: list[str | CollectTypes], key: str, value: Any) -> None:
-		"""Add an attribute to the hierarchy dict based on provided parent types
+		"""Add/Overwrite an attribute in the hierarchy dict based on provided parent types
 		Excludes Session type
 
 		Args:
@@ -178,10 +172,10 @@ class CollectionDict:
 			for parent in parents:
 				if type(parent).__name__ in search_type and type(parent).__name__ != "Session" and parent.nodeid != ".":
 					key_path: list[str] = self.get_key_path(path=parent.nodeid)
-					self.set_attribute(hierarchy=self.hierarchy, key_path=key_path, key=key, value=value)
+					self.set_attribute(key_path=key_path, key=key, value=value)
 
 	def set_attribute_dict_to_types(self, search_type: list[str | CollectTypes], attr_dict: dict[Any, Any]) -> None:
-		"""Add an attribute to the hierarchy dict based on provided parent types
+		"""Add/Overwrite an attribute in the hierarchy dict based on provided parent types
 		Excludes Session type
 
 		Args:
@@ -190,11 +184,10 @@ class CollectionDict:
 		"""
 		self._dict_on_parent_types(search_type=search_type, property_dict=attr_dict, func=self.set_attribute)
 
-	def set_sub_element(self, hierarchy: dict, key_path: list[str], key: str, value: Any) -> None:
-		"""Add an sub element to the key_path in the hierarchy dictionary \n hierarchy[key_path][key] = value
+	def set_sub_element(self, key_path: list[str], key: str, value: Any) -> None:
+		"""Add/Overwrite an sub element in the key_path in the hierarchy dictionary \n hierarchy[key_path][key] = value
 		
 		Args:
-			hierarchy (dict): hierarchical dictionary of tests
 			key_path (list[str]): keys in hierarchical order to access dictionary
 			key (str): new key to add/overwrite, if key starts with '@' it will be removed
 			value (Any): new value to add/overwrite
@@ -203,37 +196,64 @@ class CollectionDict:
 			key = key[1:]
 		key_path.append(key)
 
-		self._set_new_value(hierarchy=hierarchy, key_path=key_path, value=value)
+		self._set_new_value(key_path=key_path, value=value)
 
 		key_path.pop()
 
-	def set_sub_element_dict(self, hierarchy: dict, key_path: list[str], sub_dict: dict[Any, Any]) -> None:
-		"""Add an sub element dict to the key_path in the hierarchy dictionary \n hierarchy[key_path][sub_dict_key] = sub_dict[sub_dict_key]
+	def set_sub_element_dict(self, key_path: list[str], sub_dict: dict[Any, Any]) -> None:
+		"""Add/Overwrite an sub element dict in the key_path in the hierarchy dictionary \n hierarchy[key_path][sub_dict_key] = sub_dict[sub_dict_key]
 
 		Args:
-			hierarchy (dict): hierarchical dictionary of tests
 			key_path (list[str]): keys in hierarchical order to access dictionary
 			sub_dict (dict[Any, Any]): Key, Value pair to add/overwrite. If the key does starts with '@' it will be removed
 		"""
 		for key, value in sub_dict.items():
-			self.set_sub_element(hierarchy=hierarchy, key_path=key_path, key=key, value=value)
+			self.set_sub_element(key_path=key_path, key=key, value=value)
 
 	def set_sub_element_dict_to_types(self, search_type: list[str | CollectTypes], sub_dict: dict[Any, Any]):
-		"""Add a sub element dict to the hierarchy dict based on provided parent types
+		"""Add/Overwrite a sub element dict in the hierarchy dict based on provided parent types
 
 		Args:
-			hierarchy (dict): hierarchical dictionary of tests
 			key_path (list[str]): keys in hierarchical order to access dictionary
 			sub_dict (dict[Any, Any]): Key, Value pair to add/overwrite. If the key does starts with '@' it will be removed
 		"""
 		self._dict_on_parent_types(search_type=search_type, property_dict=sub_dict, func=self.set_sub_element)
+
+	def _set_item_attribute_per_item(self, attributes: list[str], func: Callable[[list[str], str, Any], None]):
+		"""Set a pre-existing attribute of pytest.Item per item to the hierarchy dict
+
+		Args:
+			attributes (list[str]): attributes (list[str]): name of attributes
+			func (Callable[[list[str], str, Any], None]): set_attribute OR set_sub_element
+		"""
+		for item in self.items:
+			key_path: list[str] = self.get_key_path(path=item.nodeid)
+			for attribute in attributes:
+				if hasattr(item, attribute):
+					func(key_path, attribute, getattr(item, attribute))
+
+	def set_item_attributes_as_attribute(self, attributes: list[str]):
+		"""Set a pre-existing attribute of pytest.Item per item to the hierarchy dict as an attribute
+
+		Args:
+			attributes (list[str]): name of attributes
+		"""
+		self._set_item_attribute_per_item(attributes=attributes, func=self.set_attribute)
+
+	def set_item_attributes_as_sub_element(self, attributes: list[str]):
+		"""Set a pre-existing attribute of pytest.Item per item to the hierarchy dict as a sub element
+
+		Args:
+			attributes (list[str]): name of attributes
+		"""
+		self._set_item_attribute_per_item(attributes=attributes, func=self.set_sub_element)
 
 	def run_ini_options(self):
 		"""Run functions based on stored ini values
 		"""
 		if self._add_markers:
 			for item in self.items:
-				self.set_marker(item=item)
+				self.set_marker_attribute(item=item)
 
 	def run_hooks(self):
 		"""Run hook functions

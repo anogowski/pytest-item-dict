@@ -14,29 +14,35 @@ import time
 from data_to_xml.xml_converter import XMLConverter
 
 # PyTest Includes
+from pluggy import PluginManager
 import pytest
 from pytest import Item, Session, Config, Parser, CallInfo, TestReport
 
 # Plugin Includes
-from pytest_item_dict.pytest_enums import INIOptions, CollectTypes, TestProperties
+from pytest_item_dict.item_dict_enums import INIOptions, CollectTypes, TestProperties
 from pytest_item_dict.collect_dict import CollectionDict
 from pytest_item_dict.test_dict import TestDict
 
-PLUGIN_NAME: Final[str] = 'item_dict'
+ITEM_DICT_PLUGIN_NAME: Final[str] = 'item_dict'
 
+# def pytest_addhooks(pluginmanager: PluginManager) -> None:
+# 	"""Register Pytest hooks
 
-def pytest_addhooks(pluginmanager) -> None:
-	from pytest_item_dict import hooks
+# 	Args:
+# 		pluginmanager (PluginManager): pluggy.PluginManager
+# 	"""
+# 	from pytest_item_dict import hooks
 
-	pluginmanager.add_hookspecs(hooks)
+# 	pluginmanager.add_hookspecs(hooks)
 
 
 def pytest_addoption(parser: Parser):
-	group: pytest.OptionGroup = parser.getgroup(name=PLUGIN_NAME)
+	group: pytest.OptionGroup = parser.getgroup(name=ITEM_DICT_PLUGIN_NAME)
 	parser.addini(name=INIOptions.CREATE_ITEM_DICT, type='bool', default=True, help='create collection and test hierarchical dicts')
 	parser.addini(name=INIOptions.SET_COLLECT_MARKERS, type='bool', default=False, help='set test markers in collection hierarchical dict')
 	parser.addini(name=INIOptions.SET_TEST_MARKERS, type='bool', default=False, help='set test markers in test hierarchical dict')
 	parser.addini(name=INIOptions.SET_TEST_OUTCOMES, type='bool', default=True, help='set test outcomes in test hierarchical dict')
+	parser.addini(name=INIOptions.UPDATE_DICT_ON_TEST, type='bool', default=True, help='update the test outcomes after each test in test hierarchical dict')
 	parser.addini(name=INIOptions.SET_TEST_DURATIONS, type='bool', default=False, help='set test durations in test hierarchical dict')
 
 
@@ -49,7 +55,7 @@ def pytest_configure(config: Config) -> None:
 	create_item_dict: bool | Any = config.getini(name="create_item_dict")
 	if create_item_dict:
 		item_dict_plugin: ItemDictPlugin = ItemDictPlugin(config=config)
-		config.pluginmanager.register(plugin=item_dict_plugin, name=PLUGIN_NAME)
+		config.pluginmanager.register(plugin=item_dict_plugin, name=ITEM_DICT_PLUGIN_NAME)
 
 
 def pytest_unconfigure(config: Config) -> None:
@@ -58,21 +64,35 @@ def pytest_unconfigure(config: Config) -> None:
 	Args:
 		config (Config): Pytest Config
 	"""
-	item_dict_plugin: object | None = config.pluginmanager.getplugin(name=PLUGIN_NAME)
+	item_dict_plugin: object | None = config.pluginmanager.getplugin(name=ITEM_DICT_PLUGIN_NAME)
 	if item_dict_plugin is not None:
 		config.pluginmanager.unregister(plugin=item_dict_plugin)
 
 
-def write_json_file(json_str: str, prefix: str = "collect", name: str = "hierarchy"):
+def write_json_file(hierarchy: dict, prefix: str = "collect", name: str = "hierarchy") -> None:
+	"""Serialize hierarchy dict as json file
+
+	Args:
+		hierarchy (dict): hierarchial dict of session.items
+		prefix (str, optional): file name prefix. Defaults to "collect".
+		name (str, optional): file name. Defaults to "hierarchy".
+	"""
 	output_file: str = Path(f"{__file__}/../../../output/reports/{prefix}_{name}.json").as_posix()
 	Path(output_file).parent.mkdir(mode=764, parents=True, exist_ok=True)
 	with open(file=output_file, mode="w+") as f:
-		f.write(json_str + "\n")
+		f.write(json.dumps(obj=hierarchy) + "\n")
 
 
-def write_xml_file(items_dict: dict, prefix: str = "collect", name: str = "hierarchy"):
+def write_xml_file(hierarchy: dict, prefix: str = "collect", name: str = "hierarchy") -> None:
+	"""Serialize hierarchy dict as xml file
+
+	Args:
+		hierarchy (dict): hierarchial dict of session.items
+		prefix (str, optional): file name prefix. Defaults to "collect".
+		name (str, optional): file name. Defaults to "hierarchy".
+	"""
 	output_file: str = Path(f"{__file__}/../../../output/reports/{prefix}_{name}.xml").as_posix()
-	xml: XMLConverter = XMLConverter(my_dict=items_dict, root_node="pytest")
+	xml: XMLConverter = XMLConverter(my_dict=hierarchy, root_node="pytest")
 	Path(output_file).parent.mkdir(mode=764, parents=True, exist_ok=True)
 	with open(file=output_file, mode="w+") as f:
 		f.writelines(xml.formatted_xml)
@@ -86,7 +106,14 @@ class ItemDictPlugin:
 		self.test_dict: TestDict = TestDict(config=config)
 		self._suite_start_time: float = time.time()
 
-	def pytest_collection_modifyitems(self, session: Session, config: Config, items: list[Item]):
+	def pytest_collection_modifyitems(self, session: Session, config: Config, items: list[Item]) -> None:
+		"""Called after collection has been performed. May filter or re-order the items in-place.
+
+		Args:
+			session (pytest.Session): The pytest session object
+			config (pytest.Config): The pytest config object.
+			items (list[pytest.Item]): List of item objects.
+		"""
 		for item in items:
 			setattr(item, TestProperties.DURATION, 0)
 			setattr(item, TestProperties.OUTCOME, "unexecuted")
@@ -96,20 +123,33 @@ class ItemDictPlugin:
 		self.test_dict.items = items
 
 		self.collect_dict.run_ini_options()
-		self.test_dict.set_outcomes()
+		self.test_dict.set_unexecuted_test_outcomes()
 
 	def pytest_collection_finish(self, session: Session) -> dict[Any, Any]:
+		"""Called after collection has been performed and modified.
+
+		Args:
+			session (pytest.Session): The pytest session object
+
+		Returns:
+			dict[Any, Any]: hierarchial dict of session.items
+		"""
 		self.collect_dict._total_duration = self._suite_start_time - time.time()
-		write_json_file(json_str=json.dumps(obj=self.collect_dict.hierarchy))
-		write_xml_file(items_dict=self.collect_dict.hierarchy)
+		# write_json_file(hierarchy=self.collect_dict.hierarchy)
+		# write_xml_file(hierarchy=self.collect_dict.hierarchy)
 		return self.collect_dict.hierarchy
 
-	def pytest_sessionfinish(self, session: Session):
+	def pytest_sessionfinish(self, session: Session) -> None:
+		"""Called after whole test run finished, right before returning the exit status to the system.
+
+		Args:
+			session (pytest.Session): The pytest session object
+		"""
 		self.test_dict._total_duration = self._suite_start_time - time.time()
 		self.test_dict.run_ini_options()
 
-		write_xml_file(items_dict=self.test_dict.hierarchy, prefix="test")
-		write_json_file(json_str=json.dumps(obj=self.test_dict.hierarchy), prefix="test")
+		# write_xml_file(hierarchy=self.test_dict.hierarchy, prefix="test")
+		# write_json_file(hierarchy=self.test_dict.hierarchy, prefix="test")
 
 	@pytest.hookimpl(tryfirst=True, hookwrapper=True)
 	def pytest_runtest_makereport(self, item: Item, call: CallInfo) -> Generator[None, Any, None]:
@@ -139,8 +179,10 @@ class ItemDictPlugin:
 		match report.when:
 
 			case "call":
-				setattr(item, TestProperties.OUTCOME, report.outcome)
-				self.test_dict.set_outcome(item=item, outcome=report.outcome)
+				if self.test_dict.set_outcomes:
+					setattr(item, TestProperties.OUTCOME, report.outcome)
+					if self.test_dict.update_on_test:
+						self.test_dict.set_outcome_attribute(item=item)
 
 			case _:
 				pass
