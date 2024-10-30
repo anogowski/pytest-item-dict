@@ -3,7 +3,7 @@ import pytest
 
 class Test_Windows:
 
-	@pytest.mark.vt
+	@pytest.mark.it
 	@pytest.mark.windows
-	def test_v_windows(self) -> None:
+	def test_i_windows(self) -> None:
 		pass

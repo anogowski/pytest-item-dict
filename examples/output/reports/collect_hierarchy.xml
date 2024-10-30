@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<pytest>
+	<examples>
+		<suites>
+			<it>
+				<linux>
+					<test_linux.py>
+						<Test_Linux>
+							<test_i_linux markers="['linux', 'it']" />
+						</Test_Linux>
+					</test_linux.py>
+				</linux>
+				<windows>
+					<test_windows.py>
+						<Test_Windows>
+							<test_i_windows markers="['windows', 'it']" />
+						</Test_Windows>
+					</test_windows.py>
+				</windows>
+			</it>
+			<vt>
+				<linux>
+					<test_v_linux.py>
+						<Test_Linux>
+							<test_v_linux markers="['linux', 'vt']" />
+							<test_v_linux_2 markers="['linux', 'vt']" />
+							<test_v_linux_3 markers="['linux', 'vt']" />
+						</Test_Linux>
+					</test_v_linux.py>
+					<test_v_posix.py>
+						<Test_Linux>
+							<test_v_posix markers="['linux', 'vt']" />
+							<test_v_posix_2 markers="['linux', 'vt']" />
+						</Test_Linux>
+					</test_v_posix.py>
+				</linux>
+				<windows>
+					<test_v_windows.py>
+						<Test_Windows>
+							<test_v_windows_10 markers="['windows', 'vt']" />
+							<test_v_windows_11 markers="['windows', 'vt']" />
+						</Test_Windows>
+					</test_v_windows.py>
+				</windows>
+			</vt>
+		</suites>
+	</examples>
+</pytest>
