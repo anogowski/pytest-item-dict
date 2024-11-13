@@ -13,6 +13,8 @@ class INIOptions(StrEnum):
 	SET_TEST_OUTCOMES = "set_test_dict_outcomes"
 	SET_TEST_DURATIONS = "set_test_dict_durations"
 	SET_TEST_MARKERS = "set_test_dict_markers"
+	SET_TEST_HIERARCHY_OUTCOMES = "set_test_hierarchy_dict_outcomes"
+	SET_TEST_HIERARCHY_DURATIONS = "set_test_hierarchy_dict_durations"
 
 
 class CollectTypes(StrEnum):

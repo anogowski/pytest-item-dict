@@ -1,5 +1,5 @@
 {
-	"examples": {
+	"test_dev": {
 		"suites": {
 			"it": {
 				"linux": {
@@ -7,74 +7,77 @@
 						"Test_Linux": {
 							"test_i_linux": {
 								"@outcome": "passed",
-								"@duration": "0:00:00.000227"
+								"@duration": "0:00:00.000481"
 							},
-							"@passed": "0",
+							"@passed": 1,
 							"@failed": "0",
 							"@skipped": "0",
 							"@expected_fail": "0",
 							"@unexpected_pass": "0",
 							"@errors": "0",
-							"@reruns": "0"
+							"@reruns": "0",
+							"@duration": "0:00:00.000481"
 						},
-						"@passed": "0",
+						"@passed": 1,
 						"@failed": "0",
 						"@skipped": "0",
 						"@expected_fail": "0",
 						"@unexpected_pass": "0",
 						"@errors": "0",
 						"@reruns": "0",
-						"tests": "0",
-						"executed": 0
+						"@duration": "0:00:00.000481"
 					},
-					"@passed": "0",
+					"@passed": 1,
 					"@failed": "0",
 					"@skipped": "0",
 					"@expected_fail": "0",
 					"@unexpected_pass": "0",
 					"@errors": "0",
-					"@reruns": "0"
+					"@reruns": "0",
+					"@duration": "0:00:00.000481"
 				},
 				"windows": {
 					"test_windows.py": {
 						"Test_Windows": {
 							"test_i_windows": {
 								"@outcome": "passed",
-								"@duration": "0:00:00.000212"
+								"@duration": "0:00:00.000280"
 							},
-							"@passed": "0",
+							"@passed": 1,
 							"@failed": "0",
 							"@skipped": "0",
 							"@expected_fail": "0",
 							"@unexpected_pass": "0",
 							"@errors": "0",
-							"@reruns": "0"
+							"@reruns": "0",
+							"@duration": "0:00:00.000280"
 						},
-						"@passed": "0",
+						"@passed": 1,
 						"@failed": "0",
 						"@skipped": "0",
 						"@expected_fail": "0",
 						"@unexpected_pass": "0",
 						"@errors": "0",
 						"@reruns": "0",
-						"tests": "0",
-						"executed": 0
+						"@duration": "0:00:00.000280"
 					},
-					"@passed": "0",
+					"@passed": 1,
 					"@failed": "0",
 					"@skipped": "0",
 					"@expected_fail": "0",
 					"@unexpected_pass": "0",
 					"@errors": "0",
-					"@reruns": "0"
+					"@reruns": "0",
+					"@duration": "0:00:00.000280"
 				},
-				"@passed": "0",
+				"@passed": 2,
 				"@failed": "0",
 				"@skipped": "0",
 				"@expected_fail": "0",
 				"@unexpected_pass": "0",
 				"@errors": "0",
-				"@reruns": "0"
+				"@reruns": "0",
+				"@duration": "00:00:00.000761"
 			},
 			"vt": {
 				"linux": {
@@ -82,129 +85,134 @@
 						"Test_Linux": {
 							"test_v_linux": {
 								"@outcome": "passed",
-								"@duration": "0:00:00.000205"
+								"@duration": "0:00:00.000220"
 							},
 							"test_v_linux_2": {
 								"@outcome": "passed",
-								"@duration": "0:00:00.000169"
+								"@duration": "0:00:00.000189"
 							},
 							"test_v_linux_3": {
 								"@outcome": "passed",
-								"@duration": "0:00:00.000192"
+								"@duration": "0:00:00.000171"
 							},
-							"@passed": "0",
+							"@passed": 3,
 							"@failed": "0",
 							"@skipped": "0",
 							"@expected_fail": "0",
 							"@unexpected_pass": "0",
 							"@errors": "0",
-							"@reruns": "0"
+							"@reruns": "0",
+							"@duration": "00:00:00.000580"
 						},
-						"@passed": "0",
+						"@passed": 3,
 						"@failed": "0",
 						"@skipped": "0",
 						"@expected_fail": "0",
 						"@unexpected_pass": "0",
 						"@errors": "0",
 						"@reruns": "0",
-						"tests": "0",
-						"executed": 0
+						"@duration": "00:00:00.000580"
 					},
 					"test_v_posix.py": {
 						"Test_Linux": {
 							"test_v_posix": {
 								"@outcome": "passed",
-								"@duration": "0:00:00.000137"
+								"@duration": "0:00:00.000168"
 							},
 							"test_v_posix_2": {
 								"@outcome": "passed",
-								"@duration": "0:00:00.000124"
+								"@duration": "0:00:00.000196"
 							},
-							"@passed": "0",
+							"@passed": 2,
 							"@failed": "0",
 							"@skipped": "0",
 							"@expected_fail": "0",
 							"@unexpected_pass": "0",
 							"@errors": "0",
-							"@reruns": "0"
+							"@reruns": "0",
+							"@duration": "00:00:00.000364"
 						},
-						"@passed": "0",
+						"@passed": 2,
 						"@failed": "0",
 						"@skipped": "0",
 						"@expected_fail": "0",
 						"@unexpected_pass": "0",
 						"@errors": "0",
 						"@reruns": "0",
-						"tests": "0",
-						"executed": 0
+						"@duration": "00:00:00.000364"
 					},
-					"@passed": "0",
+					"@passed": 5,
 					"@failed": "0",
 					"@skipped": "0",
 					"@expected_fail": "0",
 					"@unexpected_pass": "0",
 					"@errors": "0",
-					"@reruns": "0"
+					"@reruns": "0",
+					"@duration": "00:00:00.000944"
 				},
 				"windows": {
 					"test_v_windows.py": {
 						"Test_Windows": {
 							"test_v_windows_10": {
 								"@outcome": "passed",
-								"@duration": "0:00:00.000132"
+								"@duration": "0:00:00.000350"
 							},
 							"test_v_windows_11": {
 								"@outcome": "passed",
-								"@duration": "0:00:00.000126"
+								"@duration": "0:00:00.000201"
 							},
-							"@passed": "0",
+							"@passed": 2,
 							"@failed": "0",
 							"@skipped": "0",
 							"@expected_fail": "0",
 							"@unexpected_pass": "0",
 							"@errors": "0",
-							"@reruns": "0"
+							"@reruns": "0",
+							"@duration": "00:00:00.000551"
 						},
-						"@passed": "0",
+						"@passed": 2,
 						"@failed": "0",
 						"@skipped": "0",
 						"@expected_fail": "0",
 						"@unexpected_pass": "0",
 						"@errors": "0",
 						"@reruns": "0",
-						"tests": "0",
-						"executed": 0
+						"@duration": "00:00:00.000551"
 					},
-					"@passed": "0",
+					"@passed": 2,
 					"@failed": "0",
 					"@skipped": "0",
 					"@expected_fail": "0",
 					"@unexpected_pass": "0",
 					"@errors": "0",
-					"@reruns": "0"
+					"@reruns": "0",
+					"@duration": "00:00:00.000551"
 				},
-				"@passed": "0",
+				"@passed": 7,
 				"@failed": "0",
 				"@skipped": "0",
 				"@expected_fail": "0",
 				"@unexpected_pass": "0",
 				"@errors": "0",
-				"@reruns": "0"
+				"@reruns": "0",
+				"@duration": "00:00:00.001495"
 			},
-			"@passed": "0",
+			"@passed": 9,
 			"@failed": "0",
 			"@skipped": "0",
 			"@expected_fail": "0",
 			"@unexpected_pass": "0",
 			"@errors": "0",
-			"@reruns": "0"
+			"@reruns": "0",
+			"@duration": "00:00:00.002256"
 		},
-		"@passed": "0",
+		"@passed": 9,
 		"@failed": "0",
 		"@skipped": "0",
 		"@expected_fail": "0",
 		"@unexpected_pass": "0",
 		"@errors": "0",
-		"@reruns": "0"
+		"@reruns": "0",
+		"@duration": "00:00:00.002256"
 	}
 }

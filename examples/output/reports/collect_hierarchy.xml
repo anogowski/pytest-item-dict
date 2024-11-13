@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <pytest>
-	<examples>
+	<test_dev>
 		<suites>
 			<it>
 				<linux>
@@ -44,5 +44,5 @@
 				</windows>
 			</vt>
 		</suites>
-	</examples>
+	</test_dev>
 </pytest>

@@ -17,6 +17,7 @@ from data_to_xml.xml_converter import XMLConverter
 from pluggy import PluginManager
 import pytest
 from pytest import Item, Session, Config, Parser, CallInfo, TestReport
+from _pytest.config import Notset
 
 # Plugin Includes
 from pytest_item_dict.item_dict_enums import INIOptions, CollectTypes, TestProperties
@@ -44,6 +45,8 @@ def pytest_addoption(parser: Parser):
 	parser.addini(name=INIOptions.SET_TEST_OUTCOMES, type='bool', default=True, help='set test outcomes in test hierarchical dict')
 	parser.addini(name=INIOptions.UPDATE_DICT_ON_TEST, type='bool', default=True, help='update the test outcomes after each test in test hierarchical dict')
 	parser.addini(name=INIOptions.SET_TEST_DURATIONS, type='bool', default=False, help='set test durations in test hierarchical dict')
+	parser.addini(name=INIOptions.SET_TEST_HIERARCHY_OUTCOMES, type='bool', default=False, help='count test outcomes in test hierarchical dict')
+	parser.addini(name=INIOptions.SET_TEST_HIERARCHY_DURATIONS, type='bool', default=False, help='calculate test durations in test hierarchical dict')
 
 
 def pytest_configure(config: Config) -> None:
@@ -99,12 +102,39 @@ def write_xml_file(hierarchy: dict, prefix: str = "collect", name: str = "hierar
 
 
 class ItemDictPlugin:
+	test_outcomes_dict: dict[str, str] = {
+	    "unexecuted": "0",
+	    "passed": "0",
+	    "failed": "0",
+	    "skipped": "0",
+	    "expected_fail": "0",
+	    "unexpected_pass": "0",
+	    "errors": "0",
+	    "reruns": "0",
+	}
+	test_durations_dict: dict[str, str] = {
+	    "duration": "00:00:00.0000",
+	}
 
 	def __init__(self, config: Config):
 		self.config: Config = config
 		self.collect_dict: CollectionDict = CollectionDict(config=config)
 		self.test_dict: TestDict = TestDict(config=config)
 		self._suite_start_time: float = time.time()
+
+	@property
+	def collect_only(self) -> bool:
+		"""Was pytest ran with '--collect-only'
+
+		Returns:
+			bool: _collect_only - Is pytest only collecting tests
+		"""
+		_collect_only: bool | Notset = self.config.getoption(name="--collect-only")
+
+		if isinstance(_collect_only, Notset):
+			_collect_only = False
+
+		return _collect_only
 
 	def pytest_collection_modifyitems(self, session: Session, config: Config, items: list[Item]) -> None:
 		"""Called after collection has been performed. May filter or re-order the items in-place.
@@ -145,7 +175,15 @@ class ItemDictPlugin:
 		Args:
 			session (pytest.Session): The pytest session object
 		"""
+
 		self.test_dict._total_duration = self._suite_start_time - time.time()
+
+		if self.test_dict.count_test_outcomes:
+			self.test_dict.set_attribute_dict_to_types(search_type=[CollectTypes.DIR, CollectTypes.MODULE, CollectTypes.CLASS], attr_dict=self.test_outcomes_dict)
+
+		if self.test_dict.calculate_test_durations:
+			self.test_dict.set_attribute_dict_to_types(search_type=[CollectTypes.DIR, CollectTypes.MODULE, CollectTypes.CLASS], attr_dict=self.test_durations_dict)
+
 		self.test_dict.run_ini_options()
 
 		# write_xml_file(hierarchy=self.test_dict.hierarchy, prefix="test")
@@ -170,6 +208,7 @@ class ItemDictPlugin:
 		files in the item's directory and its parent directories are consulted.
 		"""
 		outcome = yield
+
 		report: TestReport = outcome.get_result()
 
 		if hasattr(item, TestProperties.DURATION):

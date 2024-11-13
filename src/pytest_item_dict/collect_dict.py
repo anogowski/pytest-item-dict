@@ -7,8 +7,11 @@
 from typing import Any, Callable
 from collections import defaultdict
 
+# Pytest Imports
 from pytest import Config, Item
+from _pytest.nodes import Node
 
+# Plugin Imports
 from pytest_item_dict.item_dict_enums import INIOptions, CollectTypes
 
 
@@ -21,6 +24,15 @@ class CollectionDict:
 	def __init__(self, config: Config):
 		self._config: Config = config
 		self._add_markers = config.getini(name=INIOptions.SET_COLLECT_MARKERS)
+
+	@property
+	def add_markers(self) -> bool:
+		"""Add test markers to hierarchy dict
+
+		Returns:
+			bool: INI Option for setting test markers
+		"""
+		return self._add_markers
 
 	@property
 	def hierarchy(self) -> dict[Any, Any]:
@@ -108,11 +120,15 @@ class CollectionDict:
 			None | Any: value of key_path if present
 		"""
 		current: Any = self._hierarchy
-		for key in key_path:
-			if key not in current:
-				return None
-			current = current[key]
-		return current
+
+		try:
+			for key in key_path:
+				if key not in current:
+					return None
+				current = current[key]
+			return current
+		except KeyError:
+			return None
 
 	def set_attribute(self, key_path: list[str], key: str, value: Any) -> None:
 		"""Add/Overwrite an attribute to the key_path in the hierarchy dictionary \n hierarchy[key_path][key] = value
@@ -142,6 +158,9 @@ class CollectionDict:
 				markers: list[str] = [marker.name for marker in item.own_markers]
 				self.set_attribute(key_path=key_path, key="@markers", value=markers)
 
+	def _check_parent(self, parent: Node) -> bool:
+		return type(parent).__name__ != "Session" and parent.nodeid != "."
+
 	def _dict_on_parent_types(self, search_type: list[str | CollectTypes], property_dict: dict[Any, Any], func: Callable[[list[str], str, Any], None]) -> None:
 		"""Add/Overwrite an attribute or sub element in the hierarchy dict based on provided parent types
 
@@ -153,7 +172,7 @@ class CollectionDict:
 		for item in self.items:
 			parents = list(item.iter_parents())
 			for parent in parents:
-				if type(parent).__name__ in search_type and type(parent).__name__ != "Session" and parent.nodeid != ".":
+				if type(parent).__name__ in search_type and self._check_parent(parent=parent):
 					key_path: list[str] = self.get_key_path(path=parent.nodeid)
 					for key, value in property_dict.items():
 						func(key_path=key_path, key=key, value=value)
@@ -170,7 +189,7 @@ class CollectionDict:
 		for item in self.items:
 			parents = list(item.iter_parents())
 			for parent in parents:
-				if type(parent).__name__ in search_type and type(parent).__name__ != "Session" and parent.nodeid != ".":
+				if type(parent).__name__ in search_type and self._check_parent(parent=parent):
 					key_path: list[str] = self.get_key_path(path=parent.nodeid)
 					self.set_attribute(key_path=key_path, key=key, value=value)
 
