@@ -159,7 +159,7 @@ class CollectionDict:
 				self.set_attribute(key_path=key_path, key="@markers", value=markers)
 
 	def _check_parent(self, parent: Node) -> bool:
-		return type(parent).__name__ != "Session" and parent.nodeid != "."
+		return type(parent).__name__ == "Session" or parent.nodeid == "."
 
 	def _dict_on_parent_types(self, search_type: list[str | CollectTypes], property_dict: dict[Any, Any], func: Callable[[list[str], str, Any], None]) -> None:
 		"""Add/Overwrite an attribute or sub element in the hierarchy dict based on provided parent types
@@ -172,7 +172,7 @@ class CollectionDict:
 		for item in self.items:
 			parents = list(item.iter_parents())
 			for parent in parents:
-				if type(parent).__name__ in search_type and self._check_parent(parent=parent):
+				if type(parent).__name__ in search_type and not self._check_parent(parent=parent):
 					key_path: list[str] = self.get_key_path(path=parent.nodeid)
 					for key, value in property_dict.items():
 						func(key_path=key_path, key=key, value=value)
@@ -189,7 +189,7 @@ class CollectionDict:
 		for item in self.items:
 			parents = list(item.iter_parents())
 			for parent in parents:
-				if type(parent).__name__ in search_type and self._check_parent(parent=parent):
+				if type(parent).__name__ in search_type and not self._check_parent(parent=parent):
 					key_path: list[str] = self.get_key_path(path=parent.nodeid)
 					self.set_attribute(key_path=key_path, key=key, value=value)
 

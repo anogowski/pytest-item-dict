@@ -169,6 +169,7 @@ class ItemDictPlugin:
 		# write_xml_file(hierarchy=self.collect_dict.hierarchy)
 		return self.collect_dict.hierarchy
 
+	@pytest.hookimpl(tryfirst=True)
 	def pytest_sessionfinish(self, session: Session) -> None:
 		"""Called after whole test run finished, right before returning the exit status to the system.
 
