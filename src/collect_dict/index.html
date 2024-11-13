@@ -52,6 +52,8 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#collect_dict.CollectionDict">CollectionDict</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#collect_dict.CollectionDict.add_markers">add_markers</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#collect_dict.CollectionDict.get_key_path">get_key_path</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#collect_dict.CollectionDict.get_value_from_key_path">get_value_from_key_path</a>
@@ -128,10 +130,7 @@
 
               <details class="quote">
                 <summary>Source code in <code>src\pytest_item_dict\collect_dict.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 15</span>
-<span class="normal"> 16</span>
-<span class="normal"> 17</span>
-<span class="normal"> 18</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 18</span>
 <span class="normal"> 19</span>
 <span class="normal"> 20</span>
 <span class="normal"> 21</span>
@@ -374,7 +373,26 @@
 <span class="normal">258</span>
 <span class="normal">259</span>
 <span class="normal">260</span>
-<span class="normal">261</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">CollectionDict</span><span class="p">:</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">CollectionDict</span><span class="p">:</span>
 	<span class="n">_total_duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
 	<span class="n">_add_markers</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">False</span>
 	<span class="n">_hierarchy</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
@@ -383,6 +401,15 @@
 	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">):</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="p">:</span> <span class="n">Config</span> <span class="o">=</span> <span class="n">config</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_add_markers</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getini</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">INIOptions</span><span class="o">.</span><span class="n">SET_COLLECT_MARKERS</span><span class="p">)</span>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">add_markers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;Add test markers to hierarchy dict</span>
+
+<span class="sd">		Returns:</span>
+<span class="sd">			bool: INI Option for setting test markers</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_markers</span>
 
 	<span class="nd">@property</span>
 	<span class="k">def</span> <span class="nf">hierarchy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
@@ -470,11 +497,15 @@
 <span class="sd">			None | Any: value of key_path if present</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="n">current</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hierarchy</span>
-		<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">key_path</span><span class="p">:</span>
-			<span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current</span><span class="p">:</span>
-				<span class="k">return</span> <span class="kc">None</span>
-			<span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-		<span class="k">return</span> <span class="n">current</span>
+
+		<span class="k">try</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">key_path</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current</span><span class="p">:</span>
+					<span class="k">return</span> <span class="kc">None</span>
+				<span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+			<span class="k">return</span> <span class="n">current</span>
+		<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+			<span class="k">return</span> <span class="kc">None</span>
 
 	<span class="k">def</span> <span class="nf">set_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">		</span><span class="sd">&quot;&quot;&quot;Add/Overwrite an attribute to the key_path in the hierarchy dictionary \n hierarchy[key_path][key] = value</span>
@@ -504,6 +535,9 @@
 				<span class="n">markers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">marker</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">marker</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">own_markers</span><span class="p">]</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;@markers&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">markers</span><span class="p">)</span>
 
+	<span class="k">def</span> <span class="nf">_check_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+		<span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">!=</span> <span class="s2">&quot;Session&quot;</span> <span class="ow">and</span> <span class="n">parent</span><span class="o">.</span><span class="n">nodeid</span> <span class="o">!=</span> <span class="s2">&quot;.&quot;</span>
+
 	<span class="k">def</span> <span class="nf">_dict_on_parent_types</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_type</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">CollectTypes</span><span class="p">],</span> <span class="n">property_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">		</span><span class="sd">&quot;&quot;&quot;Add/Overwrite an attribute or sub element in the hierarchy dict based on provided parent types</span>
 
@@ -515,7 +549,7 @@
 		<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
 			<span class="n">parents</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">iter_parents</span><span class="p">())</span>
 			<span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
-				<span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">search_type</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">!=</span> <span class="s2">&quot;Session&quot;</span> <span class="ow">and</span> <span class="n">parent</span><span class="o">.</span><span class="n">nodeid</span> <span class="o">!=</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
+				<span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">search_type</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_parent</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">):</span>
 					<span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_key_path</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">parent</span><span class="o">.</span><span class="n">nodeid</span><span class="p">)</span>
 					<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">property_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 						<span class="n">func</span><span class="p">(</span><span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
@@ -532,7 +566,7 @@
 		<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
 			<span class="n">parents</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">iter_parents</span><span class="p">())</span>
 			<span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
-				<span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">search_type</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">!=</span> <span class="s2">&quot;Session&quot;</span> <span class="ow">and</span> <span class="n">parent</span><span class="o">.</span><span class="n">nodeid</span> <span class="o">!=</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
+				<span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">search_type</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_parent</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">):</span>
 					<span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_key_path</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">parent</span><span class="o">.</span><span class="n">nodeid</span><span class="p">)</span>
 					<span class="bp">self</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
 
@@ -634,6 +668,50 @@
 
 
 
+<div class="doc doc-object doc-attribute">
+
+
+
+<h2 id="collect_dict.CollectionDict.add_markers" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">add_markers</span><span class="p">:</span> <span class="nb">bool</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Add test markers to hierarchy dict</p>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Returns:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+<b><code>bool</code></b>(                  <code>bool</code>
+)              –
+              <div class="doc-md-description">
+                <p>INI Option for setting test markers</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>    </div>
+
+</div>
+
 
 
 <div class="doc doc-object doc-function">
@@ -698,23 +776,23 @@
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\collect_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">70</span>
 <span class="normal">71</span>
 <span class="normal">72</span>
 <span class="normal">73</span>
-<span class="normal">74</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_key_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_key_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Split a path or nodeid into a list of keys to access the dictionary</span>
 
 <span class="sd">	Args:</span>
@@ -799,21 +877,25 @@
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\collect_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">113</span>
 <span class="normal">114</span>
-<span class="normal">115</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_value_from_key_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">Any</span><span class="p">:</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_value_from_key_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Gets a value from a hierarchical dictionary using a list as the key path.</span>
 
 <span class="sd">	Args:</span>
@@ -823,11 +905,15 @@
 <span class="sd">		None | Any: value of key_path if present</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="n">current</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hierarchy</span>
-	<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">key_path</span><span class="p">:</span>
-		<span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current</span><span class="p">:</span>
-			<span class="k">return</span> <span class="kc">None</span>
-		<span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-	<span class="k">return</span> <span class="n">current</span>
+
+	<span class="k">try</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">key_path</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current</span><span class="p">:</span>
+				<span class="k">return</span> <span class="kc">None</span>
+			<span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+		<span class="k">return</span> <span class="n">current</span>
+	<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+		<span class="k">return</span> <span class="kc">None</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -849,10 +935,10 @@
 
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\collect_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">258</span>
-<span class="normal">259</span>
-<span class="normal">260</span>
-<span class="normal">261</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run_hooks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run_hooks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Run hook functions</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">hook</span>
@@ -877,12 +963,12 @@
 
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\collect_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">251</span>
-<span class="normal">252</span>
-<span class="normal">253</span>
-<span class="normal">254</span>
-<span class="normal">255</span>
-<span class="normal">256</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run_ini_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run_ini_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Run functions based on stored ini values</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_markers</span><span class="p">:</span>
@@ -915,21 +1001,21 @@ hierarchy[key_path][key] = value</p>
 
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\collect_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">117</span>
-<span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Add/Overwrite an attribute to the key_path in the hierarchy dictionary \n hierarchy[key_path][key] = value</span>
 
 <span class="sd">	Args:</span>
@@ -998,15 +1084,15 @@ Excludes Session type</p>
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\collect_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">177</span>
-<span class="normal">178</span>
-<span class="normal">179</span>
-<span class="normal">180</span>
-<span class="normal">181</span>
-<span class="normal">182</span>
-<span class="normal">183</span>
-<span class="normal">184</span>
-<span class="normal">185</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_attribute_dict_to_types</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_type</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">CollectTypes</span><span class="p">],</span> <span class="n">attr_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_attribute_dict_to_types</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_type</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">CollectTypes</span><span class="p">],</span> <span class="n">attr_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Add/Overwrite an attribute in the hierarchy dict based on provided parent types</span>
 <span class="sd">	Excludes Session type</span>
 
@@ -1077,21 +1163,21 @@ Excludes Session type</p>
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\collect_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">161</span>
-<span class="normal">162</span>
-<span class="normal">163</span>
-<span class="normal">164</span>
-<span class="normal">165</span>
-<span class="normal">166</span>
-<span class="normal">167</span>
-<span class="normal">168</span>
-<span class="normal">169</span>
-<span class="normal">170</span>
-<span class="normal">171</span>
-<span class="normal">172</span>
-<span class="normal">173</span>
-<span class="normal">174</span>
-<span class="normal">175</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_attribute_on_parent_types</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_type</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">CollectTypes</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_attribute_on_parent_types</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_type</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">CollectTypes</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Add/Overwrite an attribute in the hierarchy dict based on provided parent types</span>
 <span class="sd">	Excludes Session type</span>
 
@@ -1103,7 +1189,7 @@ Excludes Session type</p>
 	<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
 		<span class="n">parents</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">iter_parents</span><span class="p">())</span>
 		<span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
-			<span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">search_type</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">!=</span> <span class="s2">&quot;Session&quot;</span> <span class="ow">and</span> <span class="n">parent</span><span class="o">.</span><span class="n">nodeid</span> <span class="o">!=</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
+			<span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">search_type</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_parent</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">):</span>
 				<span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_key_path</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">parent</span><span class="o">.</span><span class="n">nodeid</span><span class="p">)</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -1151,13 +1237,13 @@ Excludes Session type</p>
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\collect_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">235</span>
-<span class="normal">236</span>
-<span class="normal">237</span>
-<span class="normal">238</span>
-<span class="normal">239</span>
-<span class="normal">240</span>
-<span class="normal">241</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_item_attributes_as_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_item_attributes_as_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Set a pre-existing attribute of pytest.Item per item to the hierarchy dict as an attribute</span>
 
 <span class="sd">	Args:</span>
@@ -1209,13 +1295,13 @@ Excludes Session type</p>
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\collect_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">243</span>
-<span class="normal">244</span>
-<span class="normal">245</span>
-<span class="normal">246</span>
-<span class="normal">247</span>
-<span class="normal">248</span>
-<span class="normal">249</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_item_attributes_as_sub_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_item_attributes_as_sub_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Set a pre-existing attribute of pytest.Item per item to the hierarchy dict as a sub element</span>
 
 <span class="sd">	Args:</span>
@@ -1267,17 +1353,17 @@ Excludes Session type</p>
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\collect_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span>
-<span class="normal">138</span>
-<span class="normal">139</span>
-<span class="normal">140</span>
-<span class="normal">141</span>
-<span class="normal">142</span>
-<span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_marker_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_marker_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Add/Overwrite item.own_markers as an attribute to each test in hierarchy \n </span>
 
 <span class="sd">	Args:</span>
@@ -1315,21 +1401,21 @@ hierarchy[key_path][key] = value</p>
 
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\collect_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">187</span>
-<span class="normal">188</span>
-<span class="normal">189</span>
-<span class="normal">190</span>
-<span class="normal">191</span>
-<span class="normal">192</span>
-<span class="normal">193</span>
-<span class="normal">194</span>
-<span class="normal">195</span>
-<span class="normal">196</span>
-<span class="normal">197</span>
-<span class="normal">198</span>
-<span class="normal">199</span>
-<span class="normal">200</span>
-<span class="normal">201</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_sub_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_sub_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Add/Overwrite an sub element in the key_path in the hierarchy dictionary \n hierarchy[key_path][key] = value</span>
 
 <span class="sd">	Args:</span>
@@ -1370,15 +1456,15 @@ hierarchy[key_path][sub_dict_key] = sub_dict[sub_dict_key]</p>
 
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\collect_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">203</span>
-<span class="normal">204</span>
-<span class="normal">205</span>
-<span class="normal">206</span>
-<span class="normal">207</span>
-<span class="normal">208</span>
-<span class="normal">209</span>
-<span class="normal">210</span>
-<span class="normal">211</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_sub_element_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">sub_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_sub_element_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">sub_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Add/Overwrite an sub element dict in the key_path in the hierarchy dictionary \n hierarchy[key_path][sub_dict_key] = sub_dict[sub_dict_key]</span>
 
 <span class="sd">	Args:</span>
@@ -1440,14 +1526,14 @@ hierarchy[key_path][sub_dict_key] = sub_dict[sub_dict_key]</p>
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\collect_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">213</span>
-<span class="normal">214</span>
-<span class="normal">215</span>
-<span class="normal">216</span>
-<span class="normal">217</span>
-<span class="normal">218</span>
-<span class="normal">219</span>
-<span class="normal">220</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_sub_element_dict_to_types</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_type</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">CollectTypes</span><span class="p">],</span> <span class="n">sub_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_sub_element_dict_to_types</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_type</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">CollectTypes</span><span class="p">],</span> <span class="n">sub_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Add/Overwrite a sub element dict in the hierarchy dict based on provided parent types</span>
 
 <span class="sd">	Args:</span>
