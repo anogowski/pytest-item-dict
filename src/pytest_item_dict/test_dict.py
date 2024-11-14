@@ -87,21 +87,26 @@ class TestDict(CollectionDict):
 
 		return self._calculate_test_durations
 
-	def get_value_from_key_path_temp_key(self, new_key: str, key_path: list[str]) -> None | Any:
-		"""1. Add a temporary key to the key_path.
-		2. Check if self.hierarchy[key_path][new_key] has a value.
-		3. Pop the temporary key.
-		4. return the value from self.hierarchy[key_path][new_key].
+	def get_value_from_key_path_temp_key(self, temp_key: str, key_path: list[str]) -> Any | None:
+		"""Add a temporary key to the key_path.
+		.. code-block:: python
+			value: Any | None = self.hierarchy[key_path][temp_key]
+		Pop the temporary key.
+		.. code-block:: python
+			return value
 
 		Args:
-			new_key (str): key to temporarily add to key_path.
+			temp_key (str): key to temporarily add to key_path.
 			key_path (list[str]): keys in hierarchical order to access dictionary.
 
 		Returns:
-			None | Any: value of self.hierarchy[key_path][new_key]
+			Any|None: 
+
+			.. code-block:: python
+				value: Any | None = self.hierarchy[key_path][temp_key]
 		"""
-		key_path.append(new_key)
-		value: None | Any = super().get_value_from_key_path(key_path)
+		key_path.append(temp_key)
+		value: Any | None = super().get_value_from_key_path(key_path=key_path)
 		key_path.pop()
 		return value
 
@@ -194,9 +199,9 @@ class TestDict(CollectionDict):
 				self.set_attribute(key_path=key_path, key=dict_key, value=num_outcome)
 
 				if prop_value != self.UNEXECUTED:
-					unexecuted: Any | None = self.get_value_from_key_path_temp_key(new_key=self._KEY_UNEXECUTED, key_path=key_path)
+					unexecuted: Any | None = self.get_value_from_key_path_temp_key(temp_key=self._KEY_UNEXECUTED, key_path=key_path)
 
-					executed: Any | None = self.get_value_from_key_path_temp_key(new_key=self._KEY_EXECUTED, key_path=key_path)
+					executed: Any | None = self.get_value_from_key_path_temp_key(temp_key=self._KEY_EXECUTED, key_path=key_path)
 					if unexecuted is not None:
 						num_unexecuted: int = int(unexecuted) - 1
 						self.set_attribute(key_path=key_path, key=self._KEY_UNEXECUTED, value=num_unexecuted)

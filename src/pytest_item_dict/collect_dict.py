@@ -131,7 +131,10 @@ class CollectionDict:
 			return None
 
 	def set_attribute(self, key_path: list[str], key: str, value: Any) -> None:
-		"""Add/Overwrite an attribute to the key_path in the hierarchy dictionary \n hierarchy[key_path][key] = value
+		"""Add/Overwrite an attribute to the key_path in the hierarchy dictionary.
+
+		.. code-block:: python
+			hierarchy[key_path][key] = value
 		
 		Args:
 			key_path (list[str]): keys in hierarchical order to access dictionary
@@ -182,7 +185,7 @@ class CollectionDict:
 		Excludes Session type
 
 		Args:
-			search_type (list[str  |  CollectTypes]): list of type(parent).__name__
+			search_type (list[str | CollectTypes]): list of type(parent).__name__
 			key (str): new key to add/overwrite, if key does not start with '@' it will be pre-appended
 			value (Any): new value to add/overwrite
 		"""
@@ -198,18 +201,21 @@ class CollectionDict:
 		Excludes Session type
 
 		Args:
-			search_type (list[str  |  CollectTypes]): list of type(parent).__name__
+			search_type (list[str | CollectTypes]): list of type(parent).__name__
 			attr_dict (dict[Any, Any]): Key, Value pair to add/overwrite. If the key does not start with '@' it will be pre-appended
 		"""
 		self._dict_on_parent_types(search_type=search_type, property_dict=attr_dict, func=self.set_attribute)
 
 	def set_sub_element(self, key_path: list[str], key: str, value: Any) -> None:
-		"""Add/Overwrite an sub element in the key_path in the hierarchy dictionary \n hierarchy[key_path][key] = value
+		"""Add/Overwrite an sub element in the key_path in the hierarchy dictionary.
+
+		.. code-block:: python
+			hierarchy[key_path][key] = value
 		
 		Args:
-			key_path (list[str]): keys in hierarchical order to access dictionary
-			key (str): new key to add/overwrite, if key starts with '@' it will be removed
-			value (Any): new value to add/overwrite
+			key_path (list[str]): keys in hierarchical order to access dictionary.
+			key (str): new key to add/overwrite, if key starts with '@' it will be removed.
+			value (Any): new value to add/overwrite.
 		"""
 		if key[0] == "@":
 			key = key[1:]
@@ -220,11 +226,14 @@ class CollectionDict:
 		key_path.pop()
 
 	def set_sub_element_dict(self, key_path: list[str], sub_dict: dict[Any, Any]) -> None:
-		"""Add/Overwrite an sub element dict in the key_path in the hierarchy dictionary \n hierarchy[key_path][sub_dict_key] = sub_dict[sub_dict_key]
+		"""Add/Overwrite an sub element dict in the key_path in the hierarchy dictionary.
+
+		.. code-block:: python
+			hierarchy[key_path][sub_dict_key] = sub_dict[sub_dict_key]
 
 		Args:
-			key_path (list[str]): keys in hierarchical order to access dictionary
-			sub_dict (dict[Any, Any]): Key, Value pair to add/overwrite. If the key does starts with '@' it will be removed
+			key_path (list[str]): keys in hierarchical order to access dictionary.
+			sub_dict (dict[Any, Any]): Key, Value pair to add/overwrite. If the key does starts with '@' it will be removed.
 		"""
 		for key, value in sub_dict.items():
 			self.set_sub_element(key_path=key_path, key=key, value=value)
@@ -233,7 +242,7 @@ class CollectionDict:
 		"""Add/Overwrite a sub element dict in the hierarchy dict based on provided parent types
 
 		Args:
-			key_path (list[str]): keys in hierarchical order to access dictionary
+			search_type (list[str | CollectTypes]): list of type(parent).__name__
 			sub_dict (dict[Any, Any]): Key, Value pair to add/overwrite. If the key does starts with '@' it will be removed
 		"""
 		self._dict_on_parent_types(search_type=search_type, property_dict=sub_dict, func=self.set_sub_element)
