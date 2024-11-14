@@ -239,8 +239,20 @@
 <span class="normal">224</span>
 <span class="normal">225</span>
 <span class="normal">226</span>
-<span class="normal">227</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ItemDictPlugin</span><span class="p">:</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ItemDictPlugin</span><span class="p">:</span>
 	<span class="n">test_outcomes_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+	    <span class="s2">&quot;executed&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
 	    <span class="s2">&quot;unexecuted&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
 	    <span class="s2">&quot;passed&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
 	    <span class="s2">&quot;failed&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
@@ -291,7 +303,16 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">items</span>
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">collect_dict</span><span class="o">.</span><span class="n">run_ini_options</span><span class="p">()</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">count_test_outcomes</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">set_attribute_dict_to_types</span><span class="p">(</span><span class="n">search_type</span><span class="o">=</span><span class="p">[</span><span class="n">CollectTypes</span><span class="o">.</span><span class="n">DIR</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">MODULE</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">CLASS</span><span class="p">],</span> <span class="n">attr_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_outcomes_dict</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">calculate_test_durations</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">set_attribute_dict_to_types</span><span class="p">(</span><span class="n">search_type</span><span class="o">=</span><span class="p">[</span><span class="n">CollectTypes</span><span class="o">.</span><span class="n">DIR</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">MODULE</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">CLASS</span><span class="p">],</span> <span class="n">attr_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_durations_dict</span><span class="p">)</span>
+
 		<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">set_unexecuted_test_outcomes</span><span class="p">()</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span>
 
 	<span class="k">def</span> <span class="nf">pytest_collection_finish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">		</span><span class="sd">&quot;&quot;&quot;Called after collection has been performed and modified.</span>
@@ -307,6 +328,7 @@
 		<span class="c1"># write_xml_file(hierarchy=self.collect_dict.hierarchy)</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_dict</span><span class="o">.</span><span class="n">hierarchy</span>
 
+	<span class="nd">@pytest</span><span class="o">.</span><span class="n">hookimpl</span><span class="p">(</span><span class="n">tryfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 	<span class="k">def</span> <span class="nf">pytest_sessionfinish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">		</span><span class="sd">&quot;&quot;&quot;Called after whole test run finished, right before returning the exit status to the system.</span>
 
@@ -316,11 +338,11 @@
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">_total_duration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_suite_start_time</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
-		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">count_test_outcomes</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">set_attribute_dict_to_types</span><span class="p">(</span><span class="n">search_type</span><span class="o">=</span><span class="p">[</span><span class="n">CollectTypes</span><span class="o">.</span><span class="n">DIR</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">MODULE</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">CLASS</span><span class="p">],</span> <span class="n">attr_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_outcomes_dict</span><span class="p">)</span>
+		<span class="c1"># if self.test_dict.count_test_outcomes:</span>
+		<span class="c1"># 	self.test_dict.set_attribute_dict_to_types(search_type=[CollectTypes.DIR, CollectTypes.MODULE, CollectTypes.CLASS], attr_dict=self.test_outcomes_dict)</span>
 
-		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">calculate_test_durations</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">set_attribute_dict_to_types</span><span class="p">(</span><span class="n">search_type</span><span class="o">=</span><span class="p">[</span><span class="n">CollectTypes</span><span class="o">.</span><span class="n">DIR</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">MODULE</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">CLASS</span><span class="p">],</span> <span class="n">attr_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_durations_dict</span><span class="p">)</span>
+		<span class="c1"># if self.test_dict.calculate_test_durations:</span>
+		<span class="c1"># 	self.test_dict.set_attribute_dict_to_types(search_type=[CollectTypes.DIR, CollectTypes.MODULE, CollectTypes.CLASS], attr_dict=self.test_durations_dict)</span>
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">run_ini_options</span><span class="p">()</span>
 
@@ -484,19 +506,19 @@
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\plugin.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">158</span>
-<span class="normal">159</span>
-<span class="normal">160</span>
-<span class="normal">161</span>
-<span class="normal">162</span>
-<span class="normal">163</span>
-<span class="normal">164</span>
-<span class="normal">165</span>
-<span class="normal">166</span>
-<span class="normal">167</span>
-<span class="normal">168</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">168</span>
 <span class="normal">169</span>
-<span class="normal">170</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pytest_collection_finish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pytest_collection_finish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Called after collection has been performed and modified.</span>
 
 <span class="sd">	Args:</span>
@@ -570,8 +592,7 @@
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\plugin.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">139</span>
-<span class="normal">140</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">140</span>
 <span class="normal">141</span>
 <span class="normal">142</span>
 <span class="normal">143</span>
@@ -587,7 +608,17 @@
 <span class="normal">153</span>
 <span class="normal">154</span>
 <span class="normal">155</span>
-<span class="normal">156</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pytest_collection_modifyitems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pytest_collection_modifyitems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Called after collection has been performed. May filter or re-order the items in-place.</span>
 
 <span class="sd">	Args:</span>
@@ -604,7 +635,16 @@
 	<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">items</span>
 
 	<span class="bp">self</span><span class="o">.</span><span class="n">collect_dict</span><span class="o">.</span><span class="n">run_ini_options</span><span class="p">()</span>
+
+	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">count_test_outcomes</span><span class="p">:</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">set_attribute_dict_to_types</span><span class="p">(</span><span class="n">search_type</span><span class="o">=</span><span class="p">[</span><span class="n">CollectTypes</span><span class="o">.</span><span class="n">DIR</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">MODULE</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">CLASS</span><span class="p">],</span> <span class="n">attr_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_outcomes_dict</span><span class="p">)</span>
+
+	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">calculate_test_durations</span><span class="p">:</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">set_attribute_dict_to_types</span><span class="p">(</span><span class="n">search_type</span><span class="o">=</span><span class="p">[</span><span class="n">CollectTypes</span><span class="o">.</span><span class="n">DIR</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">MODULE</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">CLASS</span><span class="p">],</span> <span class="n">attr_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_durations_dict</span><span class="p">)</span>
+
 	<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">set_unexecuted_test_outcomes</span><span class="p">()</span>
+
+	<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -634,18 +674,7 @@ files in the item's directory and its parent directories are consulted.</p>
 
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\plugin.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">192</span>
-<span class="normal">193</span>
-<span class="normal">194</span>
-<span class="normal">195</span>
-<span class="normal">196</span>
-<span class="normal">197</span>
-<span class="normal">198</span>
-<span class="normal">199</span>
-<span class="normal">200</span>
-<span class="normal">201</span>
-<span class="normal">202</span>
-<span class="normal">203</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">203</span>
 <span class="normal">204</span>
 <span class="normal">205</span>
 <span class="normal">206</span>
@@ -669,7 +698,18 @@ files in the item's directory and its parent directories are consulted.</p>
 <span class="normal">224</span>
 <span class="normal">225</span>
 <span class="normal">226</span>
-<span class="normal">227</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">hookimpl</span><span class="p">(</span><span class="n">tryfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">hookwrapper</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">hookimpl</span><span class="p">(</span><span class="n">tryfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">hookwrapper</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">pytest_runtest_makereport</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">,</span> <span class="n">call</span><span class="p">:</span> <span class="n">CallInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Called to create a :class:`~pytest.TestReport` for each of</span>
 <span class="sd">	the setup, call and teardown runtest phases of a test item.</span>
@@ -750,22 +790,24 @@ files in the item's directory and its parent directories are consulted.</p>
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\plugin.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">172</span>
-<span class="normal">173</span>
-<span class="normal">174</span>
-<span class="normal">175</span>
-<span class="normal">176</span>
-<span class="normal">177</span>
-<span class="normal">178</span>
-<span class="normal">179</span>
-<span class="normal">180</span>
-<span class="normal">181</span>
-<span class="normal">182</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">182</span>
 <span class="normal">183</span>
 <span class="normal">184</span>
 <span class="normal">185</span>
 <span class="normal">186</span>
-<span class="normal">187</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">pytest_sessionfinish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">hookimpl</span><span class="p">(</span><span class="n">tryfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">pytest_sessionfinish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">Session</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Called after whole test run finished, right before returning the exit status to the system.</span>
 
 <span class="sd">	Args:</span>
@@ -774,11 +816,11 @@ files in the item's directory and its parent directories are consulted.</p>
 
 	<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">_total_duration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_suite_start_time</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
-	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">count_test_outcomes</span><span class="p">:</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">set_attribute_dict_to_types</span><span class="p">(</span><span class="n">search_type</span><span class="o">=</span><span class="p">[</span><span class="n">CollectTypes</span><span class="o">.</span><span class="n">DIR</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">MODULE</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">CLASS</span><span class="p">],</span> <span class="n">attr_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_outcomes_dict</span><span class="p">)</span>
+	<span class="c1"># if self.test_dict.count_test_outcomes:</span>
+	<span class="c1"># 	self.test_dict.set_attribute_dict_to_types(search_type=[CollectTypes.DIR, CollectTypes.MODULE, CollectTypes.CLASS], attr_dict=self.test_outcomes_dict)</span>
 
-	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">calculate_test_durations</span><span class="p">:</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">set_attribute_dict_to_types</span><span class="p">(</span><span class="n">search_type</span><span class="o">=</span><span class="p">[</span><span class="n">CollectTypes</span><span class="o">.</span><span class="n">DIR</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">MODULE</span><span class="p">,</span> <span class="n">CollectTypes</span><span class="o">.</span><span class="n">CLASS</span><span class="p">],</span> <span class="n">attr_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_durations_dict</span><span class="p">)</span>
+	<span class="c1"># if self.test_dict.calculate_test_durations:</span>
+	<span class="c1"># 	self.test_dict.set_attribute_dict_to_types(search_type=[CollectTypes.DIR, CollectTypes.MODULE, CollectTypes.CLASS], attr_dict=self.test_durations_dict)</span>
 
 	<span class="bp">self</span><span class="o">.</span><span class="n">test_dict</span><span class="o">.</span><span class="n">run_ini_options</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
