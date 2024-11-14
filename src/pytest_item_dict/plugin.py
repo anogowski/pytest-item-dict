@@ -103,6 +103,7 @@ def write_xml_file(hierarchy: dict, prefix: str = "collect", name: str = "hierar
 
 class ItemDictPlugin:
 	test_outcomes_dict: dict[str, str] = {
+	    "executed": "0",
 	    "unexecuted": "0",
 	    "passed": "0",
 	    "failed": "0",
@@ -153,7 +154,16 @@ class ItemDictPlugin:
 		self.test_dict.items = items
 
 		self.collect_dict.run_ini_options()
+
+		if self.test_dict.count_test_outcomes:
+			self.test_dict.set_attribute_dict_to_types(search_type=[CollectTypes.DIR, CollectTypes.MODULE, CollectTypes.CLASS], attr_dict=self.test_outcomes_dict)
+
+		if self.test_dict.calculate_test_durations:
+			self.test_dict.set_attribute_dict_to_types(search_type=[CollectTypes.DIR, CollectTypes.MODULE, CollectTypes.CLASS], attr_dict=self.test_durations_dict)
+
 		self.test_dict.set_unexecuted_test_outcomes()
+
+		self.test_dict
 
 	def pytest_collection_finish(self, session: Session) -> dict[Any, Any]:
 		"""Called after collection has been performed and modified.
@@ -179,11 +189,11 @@ class ItemDictPlugin:
 
 		self.test_dict._total_duration = self._suite_start_time - time.time()
 
-		if self.test_dict.count_test_outcomes:
-			self.test_dict.set_attribute_dict_to_types(search_type=[CollectTypes.DIR, CollectTypes.MODULE, CollectTypes.CLASS], attr_dict=self.test_outcomes_dict)
+		# if self.test_dict.count_test_outcomes:
+		# 	self.test_dict.set_attribute_dict_to_types(search_type=[CollectTypes.DIR, CollectTypes.MODULE, CollectTypes.CLASS], attr_dict=self.test_outcomes_dict)
 
-		if self.test_dict.calculate_test_durations:
-			self.test_dict.set_attribute_dict_to_types(search_type=[CollectTypes.DIR, CollectTypes.MODULE, CollectTypes.CLASS], attr_dict=self.test_durations_dict)
+		# if self.test_dict.calculate_test_durations:
+		# 	self.test_dict.set_attribute_dict_to_types(search_type=[CollectTypes.DIR, CollectTypes.MODULE, CollectTypes.CLASS], attr_dict=self.test_durations_dict)
 
 		self.test_dict.run_ini_options()
 

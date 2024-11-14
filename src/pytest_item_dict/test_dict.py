@@ -24,6 +24,10 @@ class TestDict(CollectionDict):
 	_calculate_test_durations: bool | Any = False
 
 	UNEXECUTED: Final[str] = "unexecuted"
+	EXECUTED: Final[str] = "executed"
+	_KEY_UNEXECUTED: Final[str] = f"@{UNEXECUTED}"
+	_KEY_EXECUTED: Final[str] = f"@{EXECUTED}"
+
 	MILLISECONDS_TIME_FORMAT: Final[str] = r"%H:%M:%S.%f"
 	SECONDS_TIME_FORMAT: Final[str] = r"%H:%M:%S"
 
@@ -83,6 +87,24 @@ class TestDict(CollectionDict):
 
 		return self._calculate_test_durations
 
+	def get_value_from_key_path_temp_key(self, new_key: str, key_path: list[str]) -> None | Any:
+		"""1. Add a temporary key to the key_path.
+		2. Check if self.hierarchy[key_path][new_key] has a value.
+		3. Pop the temporary key.
+		4. return the value from self.hierarchy[key_path][new_key].
+
+		Args:
+			new_key (str): key to temporarily add to key_path.
+			key_path (list[str]): keys in hierarchical order to access dictionary.
+
+		Returns:
+			None | Any: value of self.hierarchy[key_path][new_key]
+		"""
+		key_path.append(new_key)
+		value: None | Any = super().get_value_from_key_path(key_path)
+		key_path.pop()
+		return value
+
 	def set_unexecuted_test_outcomes(self) -> None:
 		"""Create/Overwrite each item.outcome in session.items to 'self.UNEXECUTED'
 		"""
@@ -90,6 +112,13 @@ class TestDict(CollectionDict):
 			for item in self.items:
 				setattr(item, TestProperties.OUTCOME, self.UNEXECUTED)
 				self.set_outcome_attribute(item=item)
+				if self._count_test_outcomes:
+					for parent in item.iter_parents():
+						if self._check_parent(parent=parent):
+							break
+						if isinstance(parent, Function):
+							continue
+						self.update_parent_outcome_attribute(item=item, parent=parent)
 
 	def run_ini_options(self) -> None:
 		"""Run functions to set attributes for options store in ini/toml/yaml file
@@ -161,18 +190,19 @@ class TestDict(CollectionDict):
 			prop_value, key_path, dict_value = self.get_parent_attribute(item=item, parent=parent, test_prop=TestProperties.OUTCOME, key=dict_key)
 
 			if dict_value is not None:
-				num_outcome: int = int(dict_value)
-				num_outcome += 1
+				num_outcome: int = int(dict_value) + 1
 				self.set_attribute(key_path=key_path, key=dict_key, value=num_outcome)
-				if prop_value != self.UNEXECUTED:
-					key_path.append(f"@{self.UNEXECUTED}")
-					unexecuted: Any | None = self.get_value_from_key_path(key_path=key_path)
-					key_path.pop()
-					if unexecuted is not None:
-						num_unexecuted: int = int(unexecuted)
-						num_unexecuted -= 1
-						self.set_attribute(key_path=key_path, key=f"@{self.UNEXECUTED}", value=num_unexecuted)
 
+				if prop_value != self.UNEXECUTED:
+					unexecuted: Any | None = self.get_value_from_key_path_temp_key(new_key=self._KEY_UNEXECUTED, key_path=key_path)
+
+					executed: Any | None = self.get_value_from_key_path_temp_key(new_key=self._KEY_EXECUTED, key_path=key_path)
+					if unexecuted is not None:
+						num_unexecuted: int = int(unexecuted) - 1
+						self.set_attribute(key_path=key_path, key=self._KEY_UNEXECUTED, value=num_unexecuted)
+					if executed is not None:
+						num_executed: int = int(executed) + 1
+						self.set_attribute(key_path=key_path, key=self._KEY_EXECUTED, value=num_executed)
 			else:
 				self.set_attribute(key_path=key_path, key=dict_key, value=1)
 
