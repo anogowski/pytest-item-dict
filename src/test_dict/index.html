@@ -359,7 +359,12 @@
 <span class="normal">243</span>
 <span class="normal">244</span>
 <span class="normal">245</span>
-<span class="normal">246</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TestDict</span><span class="p">(</span><span class="n">CollectionDict</span><span class="p">):</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TestDict</span><span class="p">(</span><span class="n">CollectionDict</span><span class="p">):</span>
 	<span class="n">_set_outcomes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">False</span>
 	<span class="n">_set_durations</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">False</span>
 	<span class="n">_update_on_test</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">False</span>
@@ -430,21 +435,26 @@
 
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_test_durations</span>
 
-	<span class="k">def</span> <span class="nf">get_value_from_key_path_temp_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">		</span><span class="sd">&quot;&quot;&quot;1. Add a temporary key to the key_path.</span>
-<span class="sd">		2. Check if self.hierarchy[key_path][new_key] has a value.</span>
-<span class="sd">		3. Pop the temporary key.</span>
-<span class="sd">		4. return the value from self.hierarchy[key_path][new_key].</span>
+	<span class="k">def</span> <span class="nf">get_value_from_key_path_temp_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temp_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">		</span><span class="sd">&quot;&quot;&quot;Add a temporary key to the key_path.</span>
+<span class="sd">		.. code-block:: python</span>
+<span class="sd">			value: Any | None = self.hierarchy[key_path][temp_key]</span>
+<span class="sd">		Pop the temporary key.</span>
+<span class="sd">		.. code-block:: python</span>
+<span class="sd">			return value</span>
 
 <span class="sd">		Args:</span>
-<span class="sd">			new_key (str): key to temporarily add to key_path.</span>
+<span class="sd">			temp_key (str): key to temporarily add to key_path.</span>
 <span class="sd">			key_path (list[str]): keys in hierarchical order to access dictionary.</span>
 
 <span class="sd">		Returns:</span>
-<span class="sd">			None | Any: value of self.hierarchy[key_path][new_key]</span>
+<span class="sd">			Any|None: </span>
+
+<span class="sd">			.. code-block:: python</span>
+<span class="sd">				value: Any | None = self.hierarchy[key_path][temp_key]</span>
 <span class="sd">		&quot;&quot;&quot;</span>
-		<span class="n">key_path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_key</span><span class="p">)</span>
-		<span class="n">value</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">Any</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_value_from_key_path</span><span class="p">(</span><span class="n">key_path</span><span class="p">)</span>
+		<span class="n">key_path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_key</span><span class="p">)</span>
+		<span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_value_from_key_path</span><span class="p">(</span><span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">)</span>
 		<span class="n">key_path</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
 		<span class="k">return</span> <span class="n">value</span>
 
@@ -537,9 +547,9 @@
 				<span class="bp">self</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">dict_key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">num_outcome</span><span class="p">)</span>
 
 				<span class="k">if</span> <span class="n">prop_value</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UNEXECUTED</span><span class="p">:</span>
-					<span class="n">unexecuted</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_value_from_key_path_temp_key</span><span class="p">(</span><span class="n">new_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_KEY_UNEXECUTED</span><span class="p">,</span> <span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">)</span>
+					<span class="n">unexecuted</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_value_from_key_path_temp_key</span><span class="p">(</span><span class="n">temp_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_KEY_UNEXECUTED</span><span class="p">,</span> <span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">)</span>
 
-					<span class="n">executed</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_value_from_key_path_temp_key</span><span class="p">(</span><span class="n">new_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_KEY_EXECUTED</span><span class="p">,</span> <span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">)</span>
+					<span class="n">executed</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_value_from_key_path_temp_key</span><span class="p">(</span><span class="n">temp_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_KEY_EXECUTED</span><span class="p">,</span> <span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">)</span>
 					<span class="k">if</span> <span class="n">unexecuted</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 						<span class="n">num_unexecuted</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">unexecuted</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 						<span class="bp">self</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_KEY_UNEXECUTED</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">num_unexecuted</span><span class="p">)</span>
@@ -908,12 +918,7 @@
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\test_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">159</span>
-<span class="normal">160</span>
-<span class="normal">161</span>
-<span class="normal">162</span>
-<span class="normal">163</span>
-<span class="normal">164</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">164</span>
 <span class="normal">165</span>
 <span class="normal">166</span>
 <span class="normal">167</span>
@@ -926,7 +931,12 @@
 <span class="normal">174</span>
 <span class="normal">175</span>
 <span class="normal">176</span>
-<span class="normal">177</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_parent_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="n">test_prop</span><span class="p">:</span> <span class="n">TestProperties</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_parent_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="n">test_prop</span><span class="p">:</span> <span class="n">TestProperties</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Get the prop_value from the item based on test_prop. Get the dict_value based on key.</span>
 
 <span class="sd">	Args:</span>
@@ -955,19 +965,19 @@
 
 
 <h2 id="test_dict.TestDict.get_value_from_key_path_temp_key" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">get_value_from_key_path_temp_key</span><span class="p">(</span><span class="n">new_key</span><span class="p">,</span> <span class="n">key_path</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">get_value_from_key_path_temp_key</span><span class="p">(</span><span class="n">temp_key</span><span class="p">,</span> <span class="n">key_path</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <ol>
-<li>Add a temporary key to the key_path.</li>
-<li>Check if self.hierarchy[key_path][new_key] has a value.</li>
-<li>Pop the temporary key.</li>
-<li>return the value from self.hierarchy[key_path][new_key].</li>
-</ol>
+        <p>Add a temporary key to the key_path.
+.. code-block:: python
+        value: Any | None = self.hierarchy[key_path][temp_key]
+Pop the temporary key.
+.. code-block:: python
+        return value</p>
 
 
 <table class="field-list">
@@ -981,7 +991,7 @@
       <td class="field-body">
         <ul class="first simple">
             <li>
-              <b><code>new_key</code></b>
+              <b><code>temp_key</code></b>
                   (<code>str</code>)
               –
               <div class="doc-md-description">
@@ -1013,10 +1023,18 @@
       <td class="field-body">
         <ul class="first simple">
             <li>
-                  <code>None | <span title="typing.Any">Any</span></code>
+                  <code><span title="typing.Any">Any</span> | None</code>
               –
               <div class="doc-md-description">
-                <p>None | Any: value of self.hierarchy[key_path][new_key]</p>
+                <p>Any|None: </p>
+              </div>
+            </li>
+            <li>
+                  <code><span title="typing.Any">Any</span> | None</code>
+              –
+              <div class="doc-md-description">
+                <p>.. code-block:: python
+value: Any | None = self.hierarchy[key_path][temp_key]</p>
               </div>
             </li>
         </ul>
@@ -1042,21 +1060,31 @@
 <span class="normal">103</span>
 <span class="normal">104</span>
 <span class="normal">105</span>
-<span class="normal">106</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_value_from_key_path_temp_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">	</span><span class="sd">&quot;&quot;&quot;1. Add a temporary key to the key_path.</span>
-<span class="sd">	2. Check if self.hierarchy[key_path][new_key] has a value.</span>
-<span class="sd">	3. Pop the temporary key.</span>
-<span class="sd">	4. return the value from self.hierarchy[key_path][new_key].</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_value_from_key_path_temp_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temp_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">key_path</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;Add a temporary key to the key_path.</span>
+<span class="sd">	.. code-block:: python</span>
+<span class="sd">		value: Any | None = self.hierarchy[key_path][temp_key]</span>
+<span class="sd">	Pop the temporary key.</span>
+<span class="sd">	.. code-block:: python</span>
+<span class="sd">		return value</span>
 
 <span class="sd">	Args:</span>
-<span class="sd">		new_key (str): key to temporarily add to key_path.</span>
+<span class="sd">		temp_key (str): key to temporarily add to key_path.</span>
 <span class="sd">		key_path (list[str]): keys in hierarchical order to access dictionary.</span>
 
 <span class="sd">	Returns:</span>
-<span class="sd">		None | Any: value of self.hierarchy[key_path][new_key]</span>
+<span class="sd">		Any|None: </span>
+
+<span class="sd">		.. code-block:: python</span>
+<span class="sd">			value: Any | None = self.hierarchy[key_path][temp_key]</span>
 <span class="sd">	&quot;&quot;&quot;</span>
-	<span class="n">key_path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_key</span><span class="p">)</span>
-	<span class="n">value</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">Any</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_value_from_key_path</span><span class="p">(</span><span class="n">key_path</span><span class="p">)</span>
+	<span class="n">key_path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_key</span><span class="p">)</span>
+	<span class="n">value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_value_from_key_path</span><span class="p">(</span><span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">)</span>
 	<span class="n">key_path</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
 	<span class="k">return</span> <span class="n">value</span>
 </code></pre></div></td></tr></table></div>
@@ -1080,12 +1108,7 @@
 
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\test_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">128</span>
 <span class="normal">129</span>
 <span class="normal">130</span>
 <span class="normal">131</span>
@@ -1097,7 +1120,12 @@
 <span class="normal">137</span>
 <span class="normal">138</span>
 <span class="normal">139</span>
-<span class="normal">140</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run_ini_options</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run_ini_options</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Run functions to set attributes for options store in ini/toml/yaml file</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_outcomes</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_durations</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_markers</span><span class="p">:</span>
@@ -1160,16 +1188,16 @@
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\test_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">237</span>
-<span class="normal">238</span>
-<span class="normal">239</span>
-<span class="normal">240</span>
-<span class="normal">241</span>
-<span class="normal">242</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">242</span>
 <span class="normal">243</span>
 <span class="normal">244</span>
 <span class="normal">245</span>
-<span class="normal">246</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_duration_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">):</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_duration_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">):</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Update test duration in hierarchy dict from item.duration</span>
 
 <span class="sd">	Args:</span>
@@ -1224,15 +1252,15 @@
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\test_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">149</span>
-<span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span>
-<span class="normal">153</span>
-<span class="normal">154</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">154</span>
 <span class="normal">155</span>
 <span class="normal">156</span>
-<span class="normal">157</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_outcome_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_outcome_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Update test outcome in hierarchy dict from item.outcome</span>
 
 <span class="sd">	Args:</span>
@@ -1262,12 +1290,12 @@
 
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\test_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">142</span>
-<span class="normal">143</span>
-<span class="normal">144</span>
-<span class="normal">145</span>
-<span class="normal">146</span>
-<span class="normal">147</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_test_outcomes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_test_outcomes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Set test outcome in hierarchy dict for every test based on item.outcome</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_outcomes</span><span class="p">:</span>
@@ -1294,12 +1322,7 @@
 
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\test_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">113</span>
 <span class="normal">114</span>
 <span class="normal">115</span>
 <span class="normal">116</span>
@@ -1307,7 +1330,12 @@
 <span class="normal">118</span>
 <span class="normal">119</span>
 <span class="normal">120</span>
-<span class="normal">121</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_unexecuted_test_outcomes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_unexecuted_test_outcomes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Create/Overwrite each item.outcome in session.items to &#39;self.UNEXECUTED&#39;</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_outcomes</span><span class="p">:</span>
@@ -1374,12 +1402,7 @@
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\test_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">209</span>
-<span class="normal">210</span>
-<span class="normal">211</span>
-<span class="normal">212</span>
-<span class="normal">213</span>
-<span class="normal">214</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">214</span>
 <span class="normal">215</span>
 <span class="normal">216</span>
 <span class="normal">217</span>
@@ -1400,7 +1423,12 @@
 <span class="normal">232</span>
 <span class="normal">233</span>
 <span class="normal">234</span>
-<span class="normal">235</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">update_parent_duration_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">update_parent_duration_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Set or update the duration of child tests for each class, module, and directory</span>
 
 <span class="sd">	Args:</span>
@@ -1480,12 +1508,7 @@
 </table>
             <details class="quote">
               <summary>Source code in <code>src\pytest_item_dict\test_dict.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">179</span>
-<span class="normal">180</span>
-<span class="normal">181</span>
-<span class="normal">182</span>
-<span class="normal">183</span>
-<span class="normal">184</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">184</span>
 <span class="normal">185</span>
 <span class="normal">186</span>
 <span class="normal">187</span>
@@ -1508,7 +1531,12 @@
 <span class="normal">204</span>
 <span class="normal">205</span>
 <span class="normal">206</span>
-<span class="normal">207</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">update_parent_outcome_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">update_parent_outcome_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">	</span><span class="sd">&quot;&quot;&quot;Set or update the outcome of child tests for each class, module, and directory</span>
 
 <span class="sd">	Args:</span>
@@ -1526,9 +1554,9 @@
 			<span class="bp">self</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">dict_key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">num_outcome</span><span class="p">)</span>
 
 			<span class="k">if</span> <span class="n">prop_value</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UNEXECUTED</span><span class="p">:</span>
-				<span class="n">unexecuted</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_value_from_key_path_temp_key</span><span class="p">(</span><span class="n">new_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_KEY_UNEXECUTED</span><span class="p">,</span> <span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">)</span>
+				<span class="n">unexecuted</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_value_from_key_path_temp_key</span><span class="p">(</span><span class="n">temp_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_KEY_UNEXECUTED</span><span class="p">,</span> <span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">)</span>
 
-				<span class="n">executed</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_value_from_key_path_temp_key</span><span class="p">(</span><span class="n">new_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_KEY_EXECUTED</span><span class="p">,</span> <span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">)</span>
+				<span class="n">executed</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_value_from_key_path_temp_key</span><span class="p">(</span><span class="n">temp_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_KEY_EXECUTED</span><span class="p">,</span> <span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">)</span>
 				<span class="k">if</span> <span class="n">unexecuted</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 					<span class="n">num_unexecuted</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">unexecuted</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 					<span class="bp">self</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_KEY_UNEXECUTED</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">num_unexecuted</span><span class="p">)</span>
