@@ -1,3 +1,3 @@
-# ItemDictEnums
+# Enums
 
-::: item_dict_enums
+::: pytest_item_dict.item_dict_enums

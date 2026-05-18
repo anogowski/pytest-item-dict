@@ -1,6 +1,12 @@
+#############################################
+#	Dual License: BSD-3-Clause AND MPL-2.0	#
+#	Copyright (c) 2024, Adam Nogowski		#
+#############################################
+
 site_name: pytest-item-dict
 site_description: Get a hierarchical dict of session.items
 site_author: Adam Nogowski
+site_url: https://anogowski.github.io/pytest-item-dict/
 
 theme: readthedocs
 
@@ -9,14 +15,20 @@ repo_url: https://github.com/anogowski/pytest-item-dict
 nav:
   - Home: index.md
   - Examples: examples.md
-  - Src:
-      - ItemDictPlugin: src/plugin.md
+  - API Reference:
+      - Plugin: src/plugin.md
       - CollectionDict: src/collect_dict.md
       - TestDict: src/test_dict.md
-      - ItemDictEnums: src/item_dict_enums.md
+      - Enums: src/item_dict_enums.md
 
 plugins:
+  - search
   - mkdocstrings:
       handlers:
         python:
-          paths: ["src/pytest_item_dict", "examples"] # Specify the directories to search for Python files
+          paths: ["src"]
+          options:
+            docstring_style: numpy
+            show_source: true
+            show_signature_annotations: true
+            separate_signature: true
