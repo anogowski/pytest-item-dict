@@ -29,15 +29,15 @@ class CollectionDict:
 
 	The hierarchy mirrors the nodeid structure::
 
-	    {
-	        "folder": {
-	            "test_module.py": {
-	                "TestClass": {
-	                    "test_method": {}
-	                }
-	            }
-	        }
-	    }
+		{
+			"folder": {
+				"test_module.py": {
+					"TestClass": {
+						"test_method": {}
+					}
+				}
+			}
+		}
 
 	Attribute keys (e.g. ``@outcome``, ``@markers``) are stored alongside
 	child keys using :meth:`set_attribute`.  Sub-element keys (without the
@@ -46,23 +46,23 @@ class CollectionDict:
 	Parameters
 	----------
 	config : pytest.Config
-	    Active pytest configuration object, used to read ini options.
+		Active pytest configuration object, used to read ini options.
 
 	Attributes
 	----------
 	_config : pytest.Config
-	    Stored reference to the pytest ``Config`` object.
+		Stored reference to the pytest ``Config`` object.
 	_hierarchy : dict[Any, Any]
-	    Root of the hierarchical dict.  Populated by
-	    :meth:`create_hierarchy_dict` and mutated in place by all ``set_*``
-	    methods.  Always anchored at the root; never re-pointed to an inner
-	    node.
+		Root of the hierarchical dict.  Populated by
+		:meth:`create_hierarchy_dict` and mutated in place by all ``set_*``
+		methods.  Always anchored at the root; never re-pointed to an inner
+		node.
 	_items : list[pytest.Item]
-	    Ordered list of collected test items.
+		Ordered list of collected test items.
 	_total_duration : float
-	    Cumulative wall-clock duration of the suite (seconds).
+		Cumulative wall-clock duration of the suite (seconds).
 	_add_markers : bool
-	    Whether to persist pytest markers into the hierarchy.
+		Whether to persist pytest markers into the hierarchy.
 	"""
 
 	def __init__(self, config: Config) -> None:
@@ -85,8 +85,8 @@ class CollectionDict:
 		Returns
 		-------
 		dict[Any, Any]
-		    The root mapping whose keys are top-level directory / module
-		    names derived from collected item nodeids.
+			The root mapping whose keys are top-level directory / module
+			names derived from collected item nodeids.
 		"""
 		return self._hierarchy
 
@@ -97,7 +97,7 @@ class CollectionDict:
 		Parameters
 		----------
 		hierarchy : dict[Any, Any]
-		    New root mapping to use.
+			New root mapping to use.
 		"""
 		self._hierarchy = hierarchy
 
@@ -108,8 +108,8 @@ class CollectionDict:
 		Returns
 		-------
 		list[pytest.Item]
-		    The ordered list set by :meth:`create_hierarchy_dict` or via the
-		    setter.
+			The ordered list set by :meth:`create_hierarchy_dict` or via the
+			setter.
 		"""
 		return self._items
 
@@ -120,7 +120,7 @@ class CollectionDict:
 		Parameters
 		----------
 		items : list[pytest.Item]
-		    New ordered list of collected test items.
+			New ordered list of collected test items.
 		"""
 		self._items = items
 
@@ -131,7 +131,7 @@ class CollectionDict:
 		Returns
 		-------
 		float
-		    Sum of all test durations recorded for this collection.
+			Sum of all test durations recorded for this collection.
 		"""
 		return self._total_duration
 
@@ -142,7 +142,7 @@ class CollectionDict:
 		Parameters
 		----------
 		duration : float
-		    Wall-clock duration in seconds.
+			Wall-clock duration in seconds.
 		"""
 		self._total_duration = duration
 
@@ -160,8 +160,8 @@ class CollectionDict:
 		Parameters
 		----------
 		items : list[pytest.Item]
-		    Ordered list of collected test items from
-		    ``pytest_collection_modifyitems``.
+			Ordered list of collected test items from
+			``pytest_collection_modifyitems``.
 		"""
 		self._items = items
 		for item in self._items:
@@ -179,13 +179,13 @@ class CollectionDict:
 		Parameters
 		----------
 		path : str
-		    A pytest nodeid (e.g. ``"a/b/test_mod.py::MyClass::test_fn[p]"``)
-		    or a plain file-system path.
+			A pytest nodeid (e.g. ``"a/b/test_mod.py::MyClass::test_fn[p]"``)
+			or a plain file-system path.
 
 		Returns
 		-------
 		list[str]
-		    Ordered list of keys suitable for traversing ``_hierarchy``.
+			Ordered list of keys suitable for traversing ``_hierarchy``.
 
 		Examples
 		--------
@@ -210,7 +210,7 @@ class CollectionDict:
 		Parameters
 		----------
 		key_path : list[str]
-		    Ordered sequence of keys from root to leaf.
+			Ordered sequence of keys from root to leaf.
 
 		Notes
 		-----
@@ -232,10 +232,10 @@ class CollectionDict:
 		Parameters
 		----------
 		key_path : list[str]
-		    Ordered sequence of keys; the last key is set to *value*.
+			Ordered sequence of keys; the last key is set to *value*.
 		value : Any
-		    The value to store at
-		    ``_hierarchy[key_path[0]][...][key_path[-1]]``.
+			The value to store at
+			``_hierarchy[key_path[0]][...][key_path[-1]]``.
 		"""
 		current: dict[str, Any] = self._hierarchy
 		for key in key_path[:-1]:
@@ -248,12 +248,12 @@ class CollectionDict:
 		Parameters
 		----------
 		key_path : list[str]
-		    Ordered sequence of keys from root to the target node.
+			Ordered sequence of keys from root to the target node.
 
 		Returns
 		-------
 		Any or None
-		    The stored value, or ``None`` if any key along the path is absent.
+			The stored value, or ``None`` if any key along the path is absent.
 		"""
 		current: Any = self._hierarchy
 		for key in key_path:
@@ -276,11 +276,11 @@ class CollectionDict:
 		Parameters
 		----------
 		key_path : list[str]
-		    Path to the target parent node.
+			Path to the target parent node.
 		key : str
-		    Attribute name; ``"@"`` is prepended if absent.
+			Attribute name; ``"@"`` is prepended if absent.
 		value : Any
-		    Value to store.
+			Value to store.
 		"""
 		if not key.startswith("@"):
 			key = f"@{key}"
@@ -297,7 +297,7 @@ class CollectionDict:
 		Parameters
 		----------
 		item : pytest.Item
-		    The test item whose :attr:`~pytest.Item.own_markers` to persist.
+			The test item whose :attr:`~pytest.Item.own_markers` to persist.
 		"""
 		if self._add_markers and item.own_markers:
 			key_path: list[str] = self.get_key_path(path=item.nodeid)
@@ -318,11 +318,11 @@ class CollectionDict:
 		Parameters
 		----------
 		search_type : list[str or CollectTypes]
-		    Node type names to match (``type(parent).__name__``).
+			Node type names to match (``type(parent).__name__``).
 		property_dict : dict[Any, Any]
-		    Key-value pairs passed individually to *func*.
+			Key-value pairs passed individually to *func*.
 		func : callable
-		    Either :meth:`set_attribute` or :meth:`set_sub_element`.
+			Either :meth:`set_attribute` or :meth:`set_sub_element`.
 		"""
 		for item in self.items:
 			for parent in item.iter_parents():
@@ -343,11 +343,11 @@ class CollectionDict:
 		Parameters
 		----------
 		search_type : list[str or CollectTypes]
-		    Node type names to match.
+			Node type names to match.
 		key : str
-		    Attribute key (``"@"`` prepended if absent).
+			Attribute key (``"@"`` prepended if absent).
 		value : Any
-		    Attribute value.
+			Attribute value.
 		"""
 		for item in self.items:
 			for parent in item.iter_parents():
@@ -366,9 +366,9 @@ class CollectionDict:
 		Parameters
 		----------
 		search_type : list[str or CollectTypes]
-		    Node type names to match.
+			Node type names to match.
 		attr_dict : dict[Any, Any]
-		    Key-value pairs to store; ``"@"`` is prepended to each key if absent.
+			Key-value pairs to store; ``"@"`` is prepended to each key if absent.
 		"""
 		self._dict_on_parent_types(
 		    search_type=search_type,
@@ -385,11 +385,11 @@ class CollectionDict:
 		Parameters
 		----------
 		key_path : list[str]
-		    Path to the target parent node.
+			Path to the target parent node.
 		key : str
-		    Sub-element key; leading ``"@"`` is removed if present.
+			Sub-element key; leading ``"@"`` is removed if present.
 		value : Any
-		    Value to store.
+			Value to store.
 		"""
 		if key.startswith("@"):
 			key = key[1:]
@@ -404,10 +404,10 @@ class CollectionDict:
 		Parameters
 		----------
 		key_path : list[str]
-		    Path to the target parent node.
+			Path to the target parent node.
 		sub_dict : dict[Any, Any]
-		    Mapping of sub-element keys to values; leading ``"@"`` is removed
-		    from each key if present.
+			Mapping of sub-element keys to values; leading ``"@"`` is removed
+			from each key if present.
 		"""
 		for key, value in sub_dict.items():
 			self.set_sub_element(key_path=key_path, key=key, value=value)
@@ -422,9 +422,9 @@ class CollectionDict:
 		Parameters
 		----------
 		search_type : list[str or CollectTypes]
-		    Node type names to match.
+			Node type names to match.
 		sub_dict : dict[Any, Any]
-		    Key-value pairs to store as sub-elements.
+			Key-value pairs to store as sub-elements.
 		"""
 		self._dict_on_parent_types(
 		    search_type=search_type,
@@ -442,9 +442,9 @@ class CollectionDict:
 		Parameters
 		----------
 		attributes : list[str]
-		    Attribute names to look up via :func:`hasattr` / :func:`getattr`.
+			Attribute names to look up via :func:`hasattr` / :func:`getattr`.
 		func : callable
-		    Either :meth:`set_attribute` or :meth:`set_sub_element`.
+			Either :meth:`set_attribute` or :meth:`set_sub_element`.
 		"""
 		for item in self.items:
 			key_path: list[str] = self.get_key_path(path=item.nodeid)
@@ -458,7 +458,7 @@ class CollectionDict:
 		Parameters
 		----------
 		attributes : list[str]
-		    Names of :class:`pytest.Item` attributes to persist.
+			Names of :class:`pytest.Item` attributes to persist.
 		"""
 		self._set_item_attribute_per_item(attributes=attributes, func=self.set_attribute)
 
@@ -468,7 +468,7 @@ class CollectionDict:
 		Parameters
 		----------
 		attributes : list[str]
-		    Names of :class:`pytest.Item` attributes to persist.
+			Names of :class:`pytest.Item` attributes to persist.
 		"""
 		self._set_item_attribute_per_item(attributes=attributes, func=self.set_sub_element)
 

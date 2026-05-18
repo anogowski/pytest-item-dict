@@ -36,20 +36,20 @@ class TestDict(CollectionDict):
 	Parameters
 	----------
 	config : pytest.Config
-	    Active pytest configuration object.
+		Active pytest configuration object.
 
 	Attributes
 	----------
 	UNEXECUTED : str
-	    Sentinel outcome value (``"unexecuted"``) assigned to tests that were
-	    collected but not yet executed.
+		Sentinel outcome value (``"unexecuted"``) assigned to tests that were
+		collected but not yet executed.
 	_set_outcomes : bool
-	    Whether to record individual test outcomes in the hierarchy.
+		Whether to record individual test outcomes in the hierarchy.
 	_set_durations : bool
-	    Whether to record individual and aggregated durations in the hierarchy.
+		Whether to record individual and aggregated durations in the hierarchy.
 	_update_on_test : bool
-	    Whether to update the hierarchy dict after each individual test
-	    (real-time) rather than only at session end.
+		Whether to update the hierarchy dict after each individual test
+		(real-time) rather than only at session end.
 	"""
 
 	__test__: bool = False  # Prevent pytest from collecting this class as a test case
@@ -74,7 +74,7 @@ class TestDict(CollectionDict):
 		Returns
 		-------
 		bool
-		    Value of the ``set_test_dict_outcomes`` ini option.
+			Value of the ``set_test_dict_outcomes`` ini option.
 		"""
 		return self._set_outcomes
 
@@ -85,7 +85,7 @@ class TestDict(CollectionDict):
 		Returns
 		-------
 		bool
-		    Value of the ``set_test_dict_durations`` ini option.
+			Value of the ``set_test_dict_durations`` ini option.
 		"""
 		return self._set_durations
 
@@ -96,7 +96,7 @@ class TestDict(CollectionDict):
 		Returns
 		-------
 		bool
-		    Value of the ``update_dict_on_test`` ini option.
+			Value of the ``update_dict_on_test`` ini option.
 		"""
 		return self._update_on_test
 
@@ -132,7 +132,7 @@ class TestDict(CollectionDict):
 		Parameters
 		----------
 		item : pytest.Item
-		    The test item whose outcome to persist.
+			The test item whose outcome to persist.
 		"""
 		if self._set_outcomes and hasattr(item, TestProperties.OUTCOME):
 			key_path: list[str] = self.get_key_path(path=item.nodeid)
@@ -155,7 +155,7 @@ class TestDict(CollectionDict):
 		Parameters
 		----------
 		item : pytest.Item
-		    The test item whose ``duration`` attribute to persist.
+			The test item whose ``duration`` attribute to persist.
 		"""
 		if self._set_durations and hasattr(item, TestProperties.DURATION):
 			key_path: list[str] = self.get_key_path(path=item.nodeid)
@@ -192,25 +192,25 @@ class TestDict(CollectionDict):
 		--------
 		Given a two-test module hierarchy after the run::
 
-		    {
-		        "test_mod.py": {
-		            "test_pass": {"@outcome": "passed"},
-		            "test_fail": {"@outcome": "failed"},
-		        }
-		    }
+			{
+				"test_mod.py": {
+					"test_pass": {"@outcome": "passed"},
+					"test_fail": {"@outcome": "failed"},
+				}
+			}
 
 		After ``aggregate_counts()``::
 
-		    {
-		        "@counts": {"passed": 1, "failed": 1, "skipped": 0,
-		                    "unexecuted": 0, "total": 2},
-		        "test_mod.py": {
-		            "@counts": {"passed": 1, "failed": 1, "skipped": 0,
-		                        "unexecuted": 0, "total": 2},
-		            "test_pass": {"@outcome": "passed"},
-		            "test_fail": {"@outcome": "failed"},
-		        }
-		    }
+			{
+				"@counts": {"passed": 1, "failed": 1, "skipped": 0,
+							"unexecuted": 0, "total": 2},
+				"test_mod.py": {
+					"@counts": {"passed": 1, "failed": 1, "skipped": 0,
+								"unexecuted": 0, "total": 2},
+					"test_pass": {"@outcome": "passed"},
+					"test_fail": {"@outcome": "failed"},
+				}
+			}
 		"""
 		self._aggregate_node(self._hierarchy)
 
@@ -223,20 +223,20 @@ class TestDict(CollectionDict):
 		Parameters
 		----------
 		node : dict[str, Any]
-		    A node from the test-dict hierarchy.  Attribute keys are prefixed
-		    with ``"@"``; child nodes are plain keys whose values are ``dict``
-		    instances.
+			A node from the test-dict hierarchy.  Attribute keys are prefixed
+			with ``"@"``; child nodes are plain keys whose values are ``dict``
+			instances.
 
 		Returns
 		-------
 		tuple[dict[str, int], float]
-		    A 2-tuple of:
+			A 2-tuple of:
 
-		    counts : dict[str, int]
-		        Outcome label → count for all leaf tests in this subtree, plus
-		        ``"total"`` for the grand total.
-		    total_duration : float
-		        Sum of all ``@duration`` values (seconds) in this subtree.
+			counts : dict[str, int]
+				Outcome label → count for all leaf tests in this subtree, plus
+				``"total"`` for the grand total.
+			total_duration : float
+				Sum of all ``@duration`` values (seconds) in this subtree.
 		"""
 		outcome_key: str = f"@{TestProperties.OUTCOME}"
 		duration_key: str = f"@{TestProperties.DURATION}"

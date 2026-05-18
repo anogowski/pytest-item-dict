@@ -367,8 +367,8 @@ class TestAggregation:
 	Attributes
 	----------
 	_WRITE_TEST : str
-	    Shared conftest snippet (module-level constant) that serialises the
-	    test-dict hierarchy to ``test.json`` in the pytester temp directory.
+		Shared conftest snippet (module-level constant) that serialises the
+		test-dict hierarchy to ``test.json`` in the pytester temp directory.
 	"""
 
 	def test_counts_at_module_level(self, pytester):
@@ -377,8 +377,8 @@ class TestAggregation:
 		Given two passing tests and one failing test in ``test_math.py``, the
 		module node ``test_math.py`` must expose::
 
-		    "@counts": {"passed": 2, "failed": 1, "skipped": 0,
-		                "unexecuted": 0, "total": 3}
+			"@counts": {"passed": 2, "failed": 1, "skipped": 0,
+						"unexecuted": 0, "total": 3}
 		"""
 		pytester.makeconftest(_WRITE_TEST)
 		pytester.makepyfile(test_math="""
@@ -431,7 +431,7 @@ class TestAggregation:
 		Two sibling test files — one passing, one failing — must produce
 		a folder-level ``@counts`` that sums across both files::
 
-		    folder/@counts == {"passed": 1, "failed": 1, "total": 2, ...}
+			folder/@counts == {"passed": 1, "failed": 1, "total": 2, ...}
 		"""
 		pytester.mkpydir("suite")
 		(pytester.path / "suite" / "test_a.py").write_text("def test_pass():\n\tpass\n")

@@ -19,7 +19,7 @@ can serialise either hierarchy to disk on demand.
 Attributes
 ----------
 ITEM_DICT_PLUGIN_NAME : str
-    Canonical name used to register and look up the plugin instance.
+	Canonical name used to register and look up the plugin instance.
 """
 
 from __future__ import annotations
@@ -63,7 +63,7 @@ def pytest_addoption(parser: Parser) -> None:
 	Parameters
 	----------
 	parser : pytest.Parser
-	    The pytest option parser.
+		The pytest option parser.
 	"""
 	group: pytest.OptionGroup = parser.getgroup(name=ITEM_DICT_PLUGIN_NAME)
 	parser.addini(name=INIOptions.CREATE_ITEM_DICT, type='bool', default=True, help='create collection and test hierarchical dicts')
@@ -80,7 +80,7 @@ def pytest_configure(config: Config) -> None:
 	Parameters
 	----------
 	config : pytest.Config
-	    The active pytest configuration object.
+		The active pytest configuration object.
 	"""
 	create_item_dict: bool = bool(config.getini(name=INIOptions.CREATE_ITEM_DICT))
 	if create_item_dict:
@@ -94,7 +94,7 @@ def pytest_unconfigure(config: Config) -> None:
 	Parameters
 	----------
 	config : pytest.Config
-	    The active pytest configuration object.
+		The active pytest configuration object.
 	"""
 	item_dict_plugin: object | None = config.pluginmanager.getplugin(name=ITEM_DICT_PLUGIN_NAME)
 	if item_dict_plugin is not None:
@@ -111,11 +111,11 @@ def write_json_file(
 	Parameters
 	----------
 	hierarchy : dict[str, Any]
-	    The hierarchical dict to serialise.
+		The hierarchical dict to serialise.
 	prefix : str, optional
-	    File-name prefix (default ``"collect"``).
+		File-name prefix (default ``"collect"``).
 	name : str, optional
-	    File-name stem (default ``"hierarchy"``).
+		File-name stem (default ``"hierarchy"``).
 	"""
 	output_file: str = Path(f"{__file__}/../../../output/reports/{prefix}_{name}.json").as_posix()
 	Path(output_file).parent.mkdir(mode=0o764, parents=True, exist_ok=True)
@@ -133,11 +133,11 @@ def write_xml_file(
 	Parameters
 	----------
 	hierarchy : dict[str, Any]
-	    The hierarchical dict to serialise.
+		The hierarchical dict to serialise.
 	prefix : str, optional
-	    File-name prefix (default ``"collect"``).
+		File-name prefix (default ``"collect"``).
 	name : str, optional
-	    File-name stem (default ``"hierarchy"``).
+		File-name stem (default ``"hierarchy"``).
 	"""
 	output_file: str = Path(f"{__file__}/../../../output/reports/{prefix}_{name}.xml").as_posix()
 	xml: XMLConverter = XMLConverter(my_dict=hierarchy, root_node="pytest")
@@ -160,20 +160,20 @@ class ItemDictPlugin:
 	Parameters
 	----------
 	config : pytest.Config
-	    The active pytest configuration object.
+		The active pytest configuration object.
 
 	Attributes
 	----------
 	config : pytest.Config
-	    Stored reference to the pytest ``Config`` object.
+		Stored reference to the pytest ``Config`` object.
 	collect_dict : CollectionDict
-	    Hierarchy built from collected items.
+		Hierarchy built from collected items.
 	test_dict : TestDict
-	    Hierarchy extended with outcomes, durations, markers, and aggregated
-	    counts.
+		Hierarchy extended with outcomes, durations, markers, and aggregated
+		counts.
 	_suite_start_time : float
-	    Wall-clock timestamp captured at plugin instantiation, used to compute
-	    total suite duration.
+		Wall-clock timestamp captured at plugin instantiation, used to compute
+		total suite duration.
 	"""
 
 	def __init__(self, config: Config) -> None:
@@ -193,11 +193,11 @@ class ItemDictPlugin:
 		Parameters
 		----------
 		session : pytest.Session
-		    The pytest session object.
+			The pytest session object.
 		config : pytest.Config
-		    The pytest config object.
+			The pytest config object.
 		items : list[pytest.Item]
-		    Ordered list of collected test items (may be filtered in place).
+			Ordered list of collected test items (may be filtered in place).
 		"""
 		for item in items:
 			setattr(item, TestProperties.DURATION, 0.0)
@@ -216,12 +216,12 @@ class ItemDictPlugin:
 		Parameters
 		----------
 		session : pytest.Session
-		    The pytest session object.
+			The pytest session object.
 
 		Returns
 		-------
 		dict[Any, Any]
-		    The root of the collection hierarchy dict.
+			The root of the collection hierarchy dict.
 		"""
 		self.collect_dict._total_duration = time.time() - self._suite_start_time
 		# write_json_file(hierarchy=self.collect_dict.hierarchy)
@@ -238,7 +238,7 @@ class ItemDictPlugin:
 		Parameters
 		----------
 		session : pytest.Session
-		    The pytest session object.
+			The pytest session object.
 		"""
 		self.test_dict._total_duration = time.time() - self._suite_start_time
 		self.test_dict.run_ini_options()
@@ -261,15 +261,15 @@ class ItemDictPlugin:
 		Parameters
 		----------
 		item : pytest.Item
-		    The test item being reported.
+			The test item being reported.
 		call : pytest.CallInfo
-		    Timing and exception information for the current test phase.
+			Timing and exception information for the current test phase.
 
 		Yields
 		------
 		None
-		    Delegation point; the wrapped hook produces the
-		    :class:`~pytest.TestReport`.
+			Delegation point; the wrapped hook produces the
+			:class:`~pytest.TestReport`.
 		"""
 		outcome = yield
 		report: TestReport = outcome.get_result()
