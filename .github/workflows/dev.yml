@@ -1,0 +1,50 @@
+name: Dev 🧪 Tests
+
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python-version: "3.11"
+            toxenv: "py311"
+          - python-version: "3.12"
+            toxenv: "py312"
+          - python-version: "3.13"
+            toxenv: "py313"
+
+    steps:
+      - uses: actions/checkout@main
+        with:
+          fetch-depth: 0
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@main
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install tox
+        run: python -m pip install tox
+      - name: Run tests
+        run: tox -e ${{ matrix.toxenv }}
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@main
+      - name: Set up Python
+        uses: actions/setup-python@main
+        with:
+          python-version: "3.x"
+      - name: Install tox
+        run: python -m pip install tox
+      - name: Run lint
+        run: tox -e lint
