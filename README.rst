@@ -25,13 +25,32 @@ This `pytest`_ plugin was generated with `Cookiecutter`_ along with `@hackebrot`
 Features
 --------
 
-* TODO
+* Builds a **hierarchical dict** mirroring the pytest collection tree (directory → module → class → test function) from ``session.items``
+* Provides two live dicts:
+
+  * ``collect_dict`` — pure structure populated after collection, with optional marker annotations
+  * ``test_dict`` — populated incrementally during the run; records outcomes, durations, markers, and aggregated ``@counts``
+
+* Every parent node automatically receives a ``@counts`` dict that sums the outcomes of all leaf tests beneath it (``passed``, ``failed``, ``skipped``, ``unexecuted``, ``executed``, ``total``) and a ``@total_duration`` float
+* Configurable via ``pytest.ini`` / ``pyproject.toml`` options:
+
+  * ``create_item_dict`` — enable/disable the plugin entirely (default: ``true``)
+  * ``set_collect_dict_markers`` — annotate ``collect_dict`` nodes with marker names (default: ``false``)
+  * ``set_test_dict_markers`` — annotate ``test_dict`` nodes with marker names (default: ``false``)
+  * ``set_test_dict_outcomes`` — record ``@outcome`` on each test node (default: ``true``)
+  * ``set_test_dict_durations`` — record ``@duration`` per test and ``@total_duration`` on parent nodes (default: ``false``)
+  * ``update_dict_on_test`` — update ``test_dict`` after every individual test in real-time (default: ``true``)
+  * ``set_test_dict_setup_teardown`` — record setup/teardown phase outcomes as separate nodes in ``test_dict`` (default: ``false``)
+
+* Self-registers via the ``pytest11`` entry point — no ``conftest.py`` changes required for basic use
+* Dicts are accessible from any hook via the plugin manager
 
 
 Requirements
 ------------
 
-* TODO
+* Python >= 3.11
+* pytest >= 8.3.0
 
 
 Installation

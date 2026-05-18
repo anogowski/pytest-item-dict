@@ -55,6 +55,7 @@ class INIOptions(StrEnum):
 	SET_TEST_MARKERS = "set_test_dict_markers"
 	SET_TEST_HIERARCHY_OUTCOMES = "set_test_hierarchy_dict_outcomes"
 	SET_TEST_HIERARCHY_DURATIONS = "set_test_hierarchy_dict_durations"
+	SET_SETUP_TEARDOWN = "set_test_dict_setup_teardown"
 
 
 class CollectTypes(StrEnum):
@@ -117,3 +118,15 @@ class TestProperties(StrEnum):
 	DURATION = "duration"
 	COUNTS = "counts"
 	TOTAL_DURATION = "total_duration"
+	SETUP_OUTCOME = "setup_outcome"
+	TEARDOWN_OUTCOME = "teardown_outcome"
+
+
+SETUP_TEARDOWN_KEYS: frozenset[str] = frozenset({
+    "setup_class",
+    "teardown_class",
+    "setup_method",
+    "teardown_method",
+    "setup_function",
+    "teardown_function",
+})

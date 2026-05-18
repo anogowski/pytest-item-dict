@@ -123,6 +123,7 @@ def test_ini_options_in_help(pytester):
 	    f"*{INIOptions.SET_TEST_DURATIONS}*",
 	    f"*{INIOptions.SET_TEST_HIERARCHY_OUTCOMES}*",
 	    f"*{INIOptions.SET_TEST_HIERARCHY_DURATIONS}*",
+	    f"*{INIOptions.SET_SETUP_TEARDOWN}*",
 	])
 
 
@@ -724,3 +725,213 @@ class TestAggregation:
 		h = json.loads((pytester.path / "test.json").read_text())
 		assert "@total_duration" in h["test_hier_dur.py"]
 		assert isinstance(h["test_hier_dur.py"]["@total_duration"], float)
+
+
+# ---------------------------------------------------------------------------
+# Setup / teardown reporting
+# ---------------------------------------------------------------------------
+
+_SETUP_TEARDOWN_INI = """
+[pytest]
+set_test_dict_setup_teardown = true
+"""
+
+
+class TestSetupTeardown:
+	"""Verify optional setup/teardown phase reporting.
+
+	When ``set_test_dict_setup_teardown = true`` the test-dict hierarchy gains
+	extra nodes (``setup_method``, ``teardown_method``, ``setup_function``,
+	``teardown_function``, ``setup_class``, ``teardown_class``) that record
+	the phase outcome but are *excluded* from ``@counts`` aggregation.
+	"""
+
+	def test_not_present_by_default(self, pytester):
+		"""setup_method / teardown_method absent unless the option is enabled."""
+		pytester.makeconftest(_WRITE_TEST)
+		pytester.makepyfile(test_default="""
+			class TestG:
+				def test_one(self):
+					pass
+		""")
+		pytester.runpytest()
+		h = json.loads((pytester.path / "test.json").read_text())
+		test_node = h["test_default.py"]["TestG"]["test_one"]
+		assert "setup_method" not in test_node
+		assert "teardown_method" not in test_node
+
+	def test_setup_method_present_for_class_test(self, pytester):
+		"""setup_method and teardown_method appear inside each class-based test."""
+		pytester.makeini(_SETUP_TEARDOWN_INI)
+		pytester.makeconftest(_WRITE_TEST)
+		pytester.makepyfile(test_cls_setup="""
+			class TestG:
+				def test_one(self):
+					pass
+		""")
+		pytester.runpytest()
+		h = json.loads((pytester.path / "test.json").read_text())
+		test_node = h["test_cls_setup.py"]["TestG"]["test_one"]
+		assert "setup_method" in test_node
+		assert "teardown_method" in test_node
+		assert test_node["setup_method"]["@outcome"] == "passed"
+		assert test_node["teardown_method"]["@outcome"] == "passed"
+
+	def test_setup_function_present_for_module_level_test(self, pytester):
+		"""setup_function / teardown_function appear inside module-level functions."""
+		pytester.makeini(_SETUP_TEARDOWN_INI)
+		pytester.makeconftest(_WRITE_TEST)
+		pytester.makepyfile(test_fn_setup="""
+			def test_standalone():
+				pass
+		""")
+		pytester.runpytest()
+		h = json.loads((pytester.path / "test.json").read_text())
+		test_node = h["test_fn_setup.py"]["test_standalone"]
+		assert "setup_function" in test_node
+		assert "teardown_function" in test_node
+		assert test_node["setup_function"]["@outcome"] == "passed"
+		assert test_node["teardown_function"]["@outcome"] == "passed"
+
+	def test_setup_class_at_class_node(self, pytester):
+		"""setup_class appears at the class node when the class defines it."""
+		pytester.makeini(_SETUP_TEARDOWN_INI)
+		pytester.makeconftest(_WRITE_TEST)
+		pytester.makepyfile(test_sc="""
+			class TestWithSetupClass:
+				@classmethod
+				def setup_class(cls):
+					pass
+
+				@classmethod
+				def teardown_class(cls):
+					pass
+
+				def test_one(self):
+					pass
+
+				def test_two(self):
+					pass
+		""")
+		pytester.runpytest()
+		h = json.loads((pytester.path / "test.json").read_text())
+		class_node = h["test_sc.py"]["TestWithSetupClass"]
+		assert "setup_class" in class_node
+		assert "teardown_class" in class_node
+		assert class_node["setup_class"]["@outcome"] == "passed"
+		assert class_node["teardown_class"]["@outcome"] == "passed"
+		# Test nodes are still siblings of setup_class / teardown_class
+		assert "test_one" in class_node
+		assert "test_two" in class_node
+
+	def test_setup_class_absent_when_class_lacks_it(self, pytester):
+		"""setup_class / teardown_class absent if the class does not define them."""
+		pytester.makeini(_SETUP_TEARDOWN_INI)
+		pytester.makeconftest(_WRITE_TEST)
+		pytester.makepyfile(test_nosc="""
+			class TestNoSetupClass:
+				def test_one(self):
+					pass
+		""")
+		pytester.runpytest()
+		h = json.loads((pytester.path / "test.json").read_text())
+		class_node = h["test_nosc.py"]["TestNoSetupClass"]
+		assert "setup_class" not in class_node
+		assert "teardown_class" not in class_node
+
+	def test_setup_failure_recorded(self, pytester):
+		"""A failing setup_method shows 'failed' for the setup_method outcome."""
+		pytester.makeini(_SETUP_TEARDOWN_INI)
+		pytester.makeconftest(_WRITE_TEST)
+		pytester.makepyfile(test_setup_fail="""
+			class TestG:
+				def setup_method(self):
+					raise RuntimeError("setup boom")
+
+				def test_one(self):
+					pass
+		""")
+		pytester.runpytest()
+		h = json.loads((pytester.path / "test.json").read_text())
+		test_node = h["test_setup_fail.py"]["TestG"]["test_one"]
+		assert test_node["setup_method"]["@outcome"] == "failed"
+
+	def test_teardown_failure_recorded(self, pytester):
+		"""A failing teardown_method shows 'failed' for the teardown_method outcome."""
+		pytester.makeini(_SETUP_TEARDOWN_INI)
+		pytester.makeconftest(_WRITE_TEST)
+		pytester.makepyfile(test_teardown_fail="""
+			class TestG:
+				def teardown_method(self):
+					raise RuntimeError("teardown boom")
+
+				def test_one(self):
+					pass
+		""")
+		pytester.runpytest()
+		h = json.loads((pytester.path / "test.json").read_text())
+		test_node = h["test_teardown_fail.py"]["TestG"]["test_one"]
+		assert test_node["teardown_method"]["@outcome"] == "failed"
+
+	def test_setup_teardown_not_counted_in_hierarchy(self, pytester):
+		"""setup_class, setup_method, teardown_method never count toward @counts.
+
+		With two actual tests in a class that has setup_class, teardown_class,
+		and setup_method / teardown_method defined, the class ``@counts``
+		should reflect only the two test results (total=2) and not inflate
+		due to the extra setup/teardown nodes.
+		"""
+		pytester.makeini("""
+			[pytest]
+			set_test_dict_setup_teardown = true
+			set_test_hierarchy_dict_outcomes = true
+		""")
+		pytester.makeconftest(_WRITE_TEST)
+		pytester.makepyfile(test_no_inflate="""
+			class TestCounted:
+				@classmethod
+				def setup_class(cls):
+					pass
+
+				@classmethod
+				def teardown_class(cls):
+					pass
+
+				def setup_method(self):
+					pass
+
+				def teardown_method(self):
+					pass
+
+				def test_a(self):
+					pass
+
+				def test_b(self):
+					pass
+		""")
+		pytester.runpytest()
+		h = json.loads((pytester.path / "test.json").read_text())
+		counts = h["test_no_inflate.py"]["TestCounted"]["@counts"]
+		assert counts["total"] == 2
+		assert counts["passed"] == 2
+
+	def test_setup_teardown_not_counted_for_functions(self, pytester):
+		"""setup_function / teardown_function do not inflate module @counts."""
+		pytester.makeini("""
+			[pytest]
+			set_test_dict_setup_teardown = true
+			set_test_hierarchy_dict_outcomes = true
+		""")
+		pytester.makeconftest(_WRITE_TEST)
+		pytester.makepyfile(test_fn_inflate="""
+			def test_alpha():
+				pass
+
+			def test_beta():
+				pass
+		""")
+		pytester.runpytest()
+		h = json.loads((pytester.path / "test.json").read_text())
+		counts = h["test_fn_inflate.py"]["@counts"]
+		assert counts["total"] == 2
+		assert counts["passed"] == 2

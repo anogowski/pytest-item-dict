@@ -14,7 +14,10 @@ repo_url: https://github.com/anogowski/pytest-item-dict
 
 nav:
   - Home: index.md
-  - Examples: examples.md
+  - Examples:
+      - Overview: examples.md
+      - JSON: examples/json.md
+      - XML: examples/xml.md
   - API Reference:
       - Plugin: src/plugin.md
       - CollectionDict: src/collect_dict.md

@@ -52,3 +52,6 @@ markers = [
 # pytest-item-dict
 set_collect_dict_markers = true
 set_test_dict_durations = true
+set_test_dict_outcomes = true
+set_test_dict_markers = true
+set_test_dict_setup_teardown = true

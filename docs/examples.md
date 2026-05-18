@@ -18,6 +18,11 @@ This produces six files under `examples/output/reports/`:
 | `test_unexecuted_hierarchy.json/.xml` | `pytest_collection_finish` | All tests initialised to `"unexecuted"` with `@counts` aggregated |
 | `test_hierarchy.json/.xml` | `pytest_sessionfinish` | Final outcomes, `@duration`, and `@counts` bubbled to every parent |
 
+See the sub-pages for annotated output examples:
+
+- [JSON examples](examples/json.md)
+- [XML examples](examples/xml.md)
+
 ## conftest.py walkthrough
 
 The `examples/conftest.py` hooks into pytest to capture and write each snapshot:
@@ -48,70 +53,4 @@ def pytest_sessionfinish(session: Session) -> None:
         # 3. Final outcomes + aggregated @counts (computed inside the plugin)
         write_json_file(hierarchy=item_dict.test_dict.hierarchy, prefix="test")
         write_xml_file(hierarchy=item_dict.test_dict.hierarchy, prefix="test")
-```
-
-## Example output
-
-### collect_hierarchy.json
-
-Pure structure — no `@outcome` or `@counts` keys:
-
-```json
-{
-  "suites": {
-    "it": {
-      "linux": {
-        "test_linux.py": {
-          "Test_Linux": {
-            "test_i_linux": {}
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-### test_unexecuted_hierarchy.json
-
-All tests at `"unexecuted"`, `@counts` fully aggregated before any test runs:
-
-```json
-{
-  "@counts": {"passed": 0, "failed": 0, "skipped": 0, "unexecuted": 9, "total": 9},
-  "suites": {
-    "@counts": {"passed": 0, "failed": 0, "skipped": 0, "unexecuted": 9, "total": 9},
-    "it": {
-      "linux": {
-        "test_linux.py": {
-          "Test_Linux": {
-            "test_i_linux": {"@outcome": "unexecuted"}
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-### test_hierarchy.json
-
-Final state after all tests have run:
-
-```json
-{
-  "@counts": {"passed": 9, "failed": 0, "skipped": 0, "unexecuted": 0, "total": 9},
-  "suites": {
-    "@counts": {"passed": 9, "failed": 0, "skipped": 0, "unexecuted": 0, "total": 9},
-    "it": {
-      "linux": {
-        "test_linux.py": {
-          "Test_Linux": {
-            "test_i_linux": {"@outcome": "passed", "@duration": 0.0003}
-          }
-        }
-      }
-    }
-  }
-}
 ```

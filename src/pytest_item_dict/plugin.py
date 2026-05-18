@@ -74,6 +74,7 @@ def pytest_addoption(parser: Parser) -> None:
 	parser.addini(name=INIOptions.SET_TEST_DURATIONS, type='bool', default=False, help='set test durations in test hierarchical dict')
 	parser.addini(name=INIOptions.SET_TEST_HIERARCHY_OUTCOMES, type='bool', default=False, help='count test outcomes in test hierarchical dict')
 	parser.addini(name=INIOptions.SET_TEST_HIERARCHY_DURATIONS, type='bool', default=False, help='calculate test durations in test hierarchical dict')
+	parser.addini(name=INIOptions.SET_SETUP_TEARDOWN, type='bool', default=False, help='record setup/teardown phase outcomes in test hierarchical dict')
 
 
 def pytest_configure(config: Config) -> None:
@@ -183,6 +184,8 @@ class ItemDictPlugin:
 		self.collect_dict: CollectionDict = CollectionDict(config=config)
 		self.test_dict: TestDict = TestDict(config=config)
 		self._suite_start_time: float = time.time()
+		self._class_first_items: frozenset[Item] = frozenset()
+		self._class_last_items: frozenset[Item] = frozenset()
 
 	def pytest_collection_modifyitems(
 	    self,
@@ -211,6 +214,18 @@ class ItemDictPlugin:
 
 		self.collect_dict.run_ini_options()
 		self.test_dict.set_unexecuted_test_outcomes()
+
+		if self.test_dict.set_setup_teardown:
+			class_first: dict[type, Item] = {}
+			class_last: dict[type, Item] = {}
+			for item in items:
+				item_cls = getattr(item, "cls", None)
+				if item_cls is not None:
+					if item_cls not in class_first:
+						class_first[item_cls] = item
+					class_last[item_cls] = item
+			self._class_first_items = frozenset(class_first.values())
+			self._class_last_items = frozenset(class_last.values())
 
 	def pytest_collection_finish(self, session: Session) -> dict[Any, Any]:
 		"""Return the collection hierarchy after all modifications are applied.
@@ -244,6 +259,11 @@ class ItemDictPlugin:
 		"""
 		self.test_dict._total_duration = time.time() - self._suite_start_time
 		self.test_dict.run_ini_options()
+		if self.test_dict.set_setup_teardown:
+			self.test_dict.run_setup_teardown(
+			    class_first_items=self._class_first_items,
+			    class_last_items=self._class_last_items,
+			)
 		if self.test_dict.set_hierarchy_outcomes or self.test_dict.set_hierarchy_durations:
 			self.test_dict.aggregate_counts()
 
@@ -287,6 +307,24 @@ class ItemDictPlugin:
 					setattr(item, TestProperties.OUTCOME, report.outcome)
 					if self.test_dict.update_on_test:
 						self.test_dict.set_outcome_attribute(item=item)
+
+			case "setup":
+				if self.test_dict.set_setup_teardown:
+					setattr(item, TestProperties.SETUP_OUTCOME, report.outcome)
+					if self.test_dict.update_on_test:
+						self.test_dict.set_setup_attribute(item=item)
+						item_cls = getattr(item, "cls", None)
+						if (item in self._class_first_items and item_cls is not None and hasattr(item_cls, "setup_class")):
+							self.test_dict.set_class_setup_attribute(item=item)
+
+			case "teardown":
+				if self.test_dict.set_setup_teardown:
+					setattr(item, TestProperties.TEARDOWN_OUTCOME, report.outcome)
+					if self.test_dict.update_on_test:
+						self.test_dict.set_teardown_attribute(item=item)
+						item_cls = getattr(item, "cls", None)
+						if (item in self._class_last_items and item_cls is not None and hasattr(item_cls, "teardown_class")):
+							self.test_dict.set_class_teardown_attribute(item=item)
 
 			case _:
 				pass

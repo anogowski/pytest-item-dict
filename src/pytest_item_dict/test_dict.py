@@ -21,7 +21,7 @@ from typing import Any, Final
 from pytest import Config, Item
 
 # Plugin Imports
-from pytest_item_dict.item_dict_enums import TestProperties, INIOptions
+from pytest_item_dict.item_dict_enums import TestProperties, INIOptions, SETUP_TEARDOWN_KEYS
 from pytest_item_dict.collect_dict import CollectionDict
 
 
@@ -73,6 +73,7 @@ class TestDict(CollectionDict):
 		self._update_on_test: bool = bool(config.getini(name=INIOptions.UPDATE_DICT_ON_TEST))
 		self._set_hierarchy_outcomes: bool = bool(config.getini(name=INIOptions.SET_TEST_HIERARCHY_OUTCOMES))
 		self._set_hierarchy_durations: bool = bool(config.getini(name=INIOptions.SET_TEST_HIERARCHY_DURATIONS))
+		self._set_setup_teardown: bool = bool(config.getini(name=INIOptions.SET_SETUP_TEARDOWN))
 
 	# ------------------------------------------------------------------
 	# Properties
@@ -132,6 +133,17 @@ class TestDict(CollectionDict):
 			Value of the ``set_test_hierarchy_dict_durations`` ini option.
 		"""
 		return self._set_hierarchy_durations
+
+	@property
+	def set_setup_teardown(self) -> bool:
+		"""Whether to record setup/teardown phase outcomes in the hierarchy.
+
+		Returns
+		-------
+		bool
+			Value of the ``set_test_dict_setup_teardown`` ini option.
+		"""
+		return self._set_setup_teardown
 
 	# ------------------------------------------------------------------
 	# Outcome tracking
@@ -198,6 +210,103 @@ class TestDict(CollectionDict):
 			    key=TestProperties.DURATION,
 			    value=duration_seconds,
 			)
+
+	# ------------------------------------------------------------------
+	# Setup / teardown tracking
+	# ------------------------------------------------------------------
+
+	def set_setup_attribute(self, item: Item) -> None:
+		"""Write *item*'s setup-phase outcome into the hierarchy.
+
+		Stored as a child node of the test node under the key
+		``setup_method`` (class-based tests) or ``setup_function``
+		(module-level functions).  The child dict contains a single
+		``@outcome`` attribute.  Because the key is listed in
+		:data:`~pytest_item_dict.item_dict_enums.SETUP_TEARDOWN_KEYS` it is
+		never counted by :meth:`_aggregate_node`.
+
+		Parameters
+		----------
+		item : pytest.Item
+			The test item whose ``setup_outcome`` attribute to persist.
+		"""
+		if not self._set_setup_teardown or not hasattr(item, TestProperties.SETUP_OUTCOME):
+			return
+		key_path: list[str] = self.get_key_path(path=item.nodeid)
+		setup_key: str = "setup_method" if getattr(item, "cls", None) is not None else "setup_function"
+		self._set_new_value(
+		    key_path=key_path + [setup_key, f"@{TestProperties.OUTCOME}"],
+		    value=getattr(item, TestProperties.SETUP_OUTCOME),
+		)
+
+	def set_teardown_attribute(self, item: Item) -> None:
+		"""Write *item*'s teardown-phase outcome into the hierarchy.
+
+		Stored as a child node of the test node under the key
+		``teardown_method`` (class-based tests) or ``teardown_function``
+		(module-level functions).  Because the key is listed in
+		:data:`~pytest_item_dict.item_dict_enums.SETUP_TEARDOWN_KEYS` it is
+		never counted by :meth:`_aggregate_node`.
+
+		Parameters
+		----------
+		item : pytest.Item
+			The test item whose ``teardown_outcome`` attribute to persist.
+		"""
+		if not self._set_setup_teardown or not hasattr(item, TestProperties.TEARDOWN_OUTCOME):
+			return
+		key_path: list[str] = self.get_key_path(path=item.nodeid)
+		teardown_key: str = "teardown_method" if getattr(item, "cls", None) is not None else "teardown_function"
+		self._set_new_value(
+		    key_path=key_path + [teardown_key, f"@{TestProperties.OUTCOME}"],
+		    value=getattr(item, TestProperties.TEARDOWN_OUTCOME),
+		)
+
+	def set_class_setup_attribute(self, item: Item) -> None:
+		"""Write the ``setup_class`` outcome to the parent class node.
+
+		Called for the first test item in a class when that class defines
+		``setup_class``.  The outcome recorded is the setup-phase result of
+		that first item (which includes the ``setup_class`` call).  Stored
+		under the key ``setup_class`` at the class-level hierarchy node so
+		that it appears as a sibling to the test methods.
+
+		Parameters
+		----------
+		item : pytest.Item
+			The first test item in the class.
+		"""
+		if not self._set_setup_teardown or not hasattr(item, TestProperties.SETUP_OUTCOME) or getattr(item, "cls", None) is None:
+			return
+		key_path: list[str] = self.get_key_path(path=item.nodeid)
+		class_path: list[str] = key_path[:-1]  # strip the test function name
+		self._set_new_value(
+		    key_path=class_path + ["setup_class", f"@{TestProperties.OUTCOME}"],
+		    value=getattr(item, TestProperties.SETUP_OUTCOME),
+		)
+
+	def set_class_teardown_attribute(self, item: Item) -> None:
+		"""Write the ``teardown_class`` outcome to the parent class node.
+
+		Called for the last test item in a class when that class defines
+		``teardown_class``.  The outcome recorded is the teardown-phase
+		result of that last item (which includes the ``teardown_class``
+		call).  Stored under the key ``teardown_class`` at the class-level
+		hierarchy node.
+
+		Parameters
+		----------
+		item : pytest.Item
+			The last test item in the class.
+		"""
+		if not self._set_setup_teardown or not hasattr(item, TestProperties.TEARDOWN_OUTCOME) or getattr(item, "cls", None) is None:
+			return
+		key_path: list[str] = self.get_key_path(path=item.nodeid)
+		class_path: list[str] = key_path[:-1]  # strip the test function name
+		self._set_new_value(
+		    key_path=class_path + ["teardown_class", f"@{TestProperties.OUTCOME}"],
+		    value=getattr(item, TestProperties.TEARDOWN_OUTCOME),
+		)
 
 	# ------------------------------------------------------------------
 	# Aggregation
@@ -275,7 +384,7 @@ class TestDict(CollectionDict):
 		duration_key: str = f"@{TestProperties.DURATION}"
 
 		# Structural leaf detection: no non-attribute dict children.
-		child_keys: list[str] = [k for k, v in node.items() if not k.startswith("@") and isinstance(v, dict)]
+		child_keys: list[str] = [k for k, v in node.items() if not k.startswith("@") and isinstance(v, dict) and k not in SETUP_TEARDOWN_KEYS]
 
 		if not child_keys:
 			# ── Leaf node ──────────────────────────────────────────────
@@ -320,3 +429,41 @@ class TestDict(CollectionDict):
 			for item in self.items:
 				self.set_marker_attribute(item=item)
 				self.set_duration_attribute(item=item)
+
+	def run_setup_teardown(
+	    self,
+	    class_first_items: frozenset[Item],
+	    class_last_items: frozenset[Item],
+	) -> None:
+		"""Write all setup/teardown outcomes into the hierarchy at session end.
+
+		For every collected item the per-test setup and teardown outcomes are
+		written (``setup_method`` / ``teardown_method`` for class-based tests,
+		``setup_function`` / ``teardown_function`` for module-level tests).
+		For the first item in each class that defines ``setup_class``, the
+		class-level ``setup_class`` outcome is written at the class node.
+		Similarly for ``teardown_class`` at the last item.
+
+		This method is always called at session end so that outcomes are
+		persisted regardless of the ``update_dict_on_test`` setting.
+
+		Parameters
+		----------
+		class_first_items : frozenset[pytest.Item]
+			The first collected item in each test class.
+		class_last_items : frozenset[pytest.Item]
+			The last collected item in each test class.
+		"""
+		if not self._set_setup_teardown:
+			return
+		for item in self.items:
+			self.set_setup_attribute(item=item)
+			self.set_teardown_attribute(item=item)
+		for item in class_first_items:
+			item_cls = getattr(item, "cls", None)
+			if item_cls is not None and hasattr(item_cls, "setup_class"):
+				self.set_class_setup_attribute(item=item)
+		for item in class_last_items:
+			item_cls = getattr(item, "cls", None)
+			if item_cls is not None and hasattr(item_cls, "teardown_class"):
+				self.set_class_teardown_attribute(item=item)

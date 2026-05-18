@@ -4,6 +4,7 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/pytest-item-dict.svg)](https://pypi.org/project/pytest-item-dict)
 
 Get a **hierarchical dict of `session.items`** — a pytest plugin that mirrors your test collection tree into two live Python dicts.
+Outputs in `json` and `xml`
 
 ## How it works
 
@@ -18,12 +19,17 @@ Every **parent node** automatically receives a `@counts` dict that sums the outc
 
 ```json
 {
-  "@counts": {"passed": 2, "failed": 1, "skipped": 0, "unexecuted": 0, "total": 3},
+  "@counts": {"passed": 2, "failed": 1, "skipped": 0, "unexecuted": 0, "executed": 3, "total": 3},
+  "@total_duration": 0.005,
   "suites": {
+    "@counts": {"passed": 2, "failed": 1, "skipped": 0, "unexecuted": 0, "executed": 3, "total": 3},
+    "@total_duration": 0.005,
     "test_api.py": {
-      "@counts": {"passed": 1, "failed": 1, "skipped": 0, "unexecuted": 0, "total": 2},
+      "@counts": {"passed": 1, "failed": 1, "skipped": 0, "unexecuted": 0, "executed": 2, "total": 2},
+      "@total_duration": 0.003,
       "TestEndpoints": {
-        "@counts": {"passed": 1, "failed": 1, "skipped": 0, "unexecuted": 0, "total": 2},
+        "@counts": {"passed": 1, "failed": 1, "skipped": 0, "unexecuted": 0, "executed": 2, "total": 2},
+        "@total_duration": 0.003,
         "test_get_users": {"@outcome": "passed"},
         "test_post_user":  {"@outcome": "failed"}
       }
@@ -50,6 +56,7 @@ The plugin self-registers via the `pytest11` entry point — no `conftest.py` ch
 | `set_test_dict_outcomes` | `true` | Record `@outcome` on each test node |
 | `set_test_dict_durations` | `false` | Record `@duration` (float seconds) per test and `@total_duration` on parent nodes |
 | `update_dict_on_test` | `true` | Update `test_dict` after every individual test (real-time) |
+| `set_test_dict_setup_teardown` | `false` | Record setup/teardown phase outcomes as separate nodes in `test_dict` |
 
 ## Accessing the dicts
 
@@ -63,3 +70,58 @@ def pytest_sessionfinish(session):
     print(plugin.collect_dict.hierarchy)
     print(plugin.test_dict.hierarchy)
 ```
+
+## Setup / teardown reporting
+
+Enable `set_test_dict_setup_teardown = true` to record the outcome of each
+test's setup and teardown phases as separate nodes in `test_dict`.
+
+### Node placement
+
+| Node key | Location in hierarchy | Condition |
+|---|---|---|
+| `setup_method` | inside each test node | always, for class-based tests |
+| `teardown_method` | inside each test node | always, for class-based tests |
+| `setup_function` | inside each test node | always, for module-level functions |
+| `teardown_function` | inside each test node | always, for module-level functions |
+| `setup_class` | at the class node (sibling of test methods) | only when the class defines `setup_class` |
+| `teardown_class` | at the class node (sibling of test methods) | only when the class defines `teardown_class` |
+
+Each node contains a single `@outcome` key whose value is one of
+`"passed"`, `"failed"`, `"skipped"`, or `"error"`.
+
+None of these nodes are counted by `@counts` aggregation — they are
+purely informational and never inflate test totals.
+
+### Example output
+
+```json
+{
+  "test_api.py": {
+    "TestEndpoints": {
+      "setup_class":    { "@outcome": "passed" },
+      "test_get_users": {
+        "@outcome": "passed",
+        "setup_method":    { "@outcome": "passed" },
+        "teardown_method": { "@outcome": "passed" }
+      },
+      "test_post_user": {
+        "@outcome": "failed",
+        "setup_method":    { "@outcome": "passed" },
+        "teardown_method": { "@outcome": "passed" }
+      },
+      "teardown_class": { "@outcome": "passed" }
+    },
+    "test_standalone": {
+      "@outcome": "passed",
+      "setup_function":    { "@outcome": "passed" },
+      "teardown_function": { "@outcome": "passed" }
+    }
+  }
+}
+```
+
+> **Note** — `setup_class` records the setup-phase outcome of the *first*
+> test in the class (which includes the `setup_class` call).  Similarly,
+> `teardown_class` records the teardown-phase outcome of the *last* test
+> in the class.

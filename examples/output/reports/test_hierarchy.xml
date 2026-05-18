@@ -1,87 +1,99 @@
 
-<pytest>
-	<tests>
-		<test_item_dict.py>
-			<TestGetKeyPath>
-				<test_flat_file_and_function outcome="unexecuted" duration="0.0" />
-				<test_nested_dir outcome="unexecuted" duration="0.0" />
-				<test_class_nodeid outcome="unexecuted" duration="0.0" />
-				<test_file_only outcome="unexecuted" duration="0.0" />
-				<test_deep_class_nodeid outcome="unexecuted" duration="0.0" />
-			</TestGetKeyPath>
-			<test_plugin_registered_by_default outcome="unexecuted" duration="0.0" />
-			<test_plugin_disabled_by_ini outcome="unexecuted" duration="0.0" />
-			<test_ini_options_in_help outcome="unexecuted" duration="0.0" />
-			<test_outcome_passed outcome="unexecuted" duration="0.0" />
-			<test_outcome_failed outcome="unexecuted" duration="0.0" />
-			<test_outcome_skipped outcome="unexecuted" duration="0.0" />
-			<test_unexecuted_outcome_set_on_collection outcome="unexecuted" duration="0.0" />
-			<test_outcomes_disabled outcome="unexecuted" duration="0.0" />
-			<test_multiple_outcomes_in_same_file outcome="unexecuted" duration="0.0" />
-			<test_outcome_class_based_tests outcome="unexecuted" duration="0.0" />
-			<test_outcome_nested_directory outcome="unexecuted" duration="0.0" />
-			<test_collect_markers_set outcome="unexecuted" duration="0.0" />
-			<test_collect_markers_not_set_by_default outcome="unexecuted" duration="0.0" />
-			<test_test_dict_markers_set outcome="unexecuted" duration="0.0" />
-			<test_durations_set outcome="unexecuted" duration="0.0" />
-			<test_durations_not_set_by_default outcome="unexecuted" duration="0.0" />
-			<TestAggregation>
-				<test_counts_at_module_level outcome="unexecuted" duration="0.0" />
-				<test_counts_at_class_level outcome="unexecuted" duration="0.0" />
-				<test_counts_at_folder_level outcome="unexecuted" duration="0.0" />
-				<test_counts_bubble_up_through_all_levels outcome="unexecuted" duration="0.0" />
-				<test_counts_parametrized_each_variant_is_leaf outcome="unexecuted" duration="0.0" />
-				<test_counts_mixed_classes_and_functions outcome="unexecuted" duration="0.0" />
-				<test_counts_no_double_counting outcome="unexecuted" duration="0.0" />
-				<test_duration_aggregated_at_module_level outcome="unexecuted" duration="0.0" />
-				<test_duration_not_aggregated_when_disabled outcome="unexecuted" duration="0.0" />
-				<test_hierarchy_counts_absent_by_default outcome="unexecuted" duration="0.0" />
-				<test_hierarchy_counts_enabled outcome="unexecuted" duration="0.0" />
-				<test_executed_count_in_hierarchy_counts outcome="unexecuted" duration="0.0" />
-				<test_hierarchy_durations_absent_by_default outcome="unexecuted" duration="0.0" />
-				<test_hierarchy_durations_enabled outcome="unexecuted" duration="0.0" />
-			</TestAggregation>
-		</test_item_dict.py>
-	</tests>
-	<examples>
-		<suites>
-			<it>
-				<linux>
-					<test_linux.py>
-						<Test_Linux>
-							<test_i_linux outcome="unexecuted" duration="0.0" />
+<pytest counts="{'passed': 13, 'total': 13, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 13}" total_duration="0.0030058000702410936">
+	<examples counts="{'passed': 13, 'total': 13, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 13}" total_duration="0.0030058000702410936">
+		<suites counts="{'passed': 13, 'total': 13, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 13}" total_duration="0.0030058000702410936">
+			<it counts="{'passed': 2, 'total': 2, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 2}" total_duration="0.00047960004303604364">
+				<linux counts="{'passed': 1, 'total': 1, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 1}" total_duration="0.0002831000601872802">
+					<test_linux.py counts="{'passed': 1, 'total': 1, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 1}" total_duration="0.0002831000601872802">
+						<Test_Linux counts="{'passed': 1, 'total': 1, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 1}" total_duration="0.0002831000601872802">
+							<test_i_linux outcome="passed" markers="['linux', 'it']" duration="0.0002831000601872802">
+								<setup_method outcome="passed" />
+								<teardown_method outcome="passed" />
+							</test_i_linux>
 						</Test_Linux>
 					</test_linux.py>
 				</linux>
-				<windows>
-					<test_windows.py>
-						<Test_Windows>
-							<test_i_windows outcome="unexecuted" duration="0.0" />
+				<windows counts="{'passed': 1, 'total': 1, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 1}" total_duration="0.00019649998284876347">
+					<test_windows.py counts="{'passed': 1, 'total': 1, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 1}" total_duration="0.00019649998284876347">
+						<Test_Windows counts="{'passed': 1, 'total': 1, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 1}" total_duration="0.00019649998284876347">
+							<test_i_windows outcome="passed" markers="['windows', 'it']" duration="0.00019649998284876347">
+								<setup_method outcome="passed" />
+								<teardown_method outcome="passed" />
+							</test_i_windows>
 						</Test_Windows>
 					</test_windows.py>
 				</windows>
 			</it>
-			<vt>
-				<linux>
-					<test_v_linux.py>
-						<Test_Linux>
-							<test_v_linux outcome="unexecuted" duration="0.0" />
-							<test_v_linux_2 outcome="unexecuted" duration="0.0" />
-							<test_v_linux_3 outcome="unexecuted" duration="0.0" />
+			<rt counts="{'passed': 4, 'total': 4, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 4}" total_duration="0.0015302000101655722">
+				<test_rt_linux.py counts="{'passed': 2, 'total': 2, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 2}" total_duration="0.0007338001159951091">
+					<Test_RT_Linux counts="{'passed': 2, 'total': 2, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 2}" total_duration="0.0007338001159951091">
+						<test_rt_linux_1 outcome="passed" markers="['linux', 'rt']" duration="0.0004681000718846917">
+							<setup_method outcome="passed" />
+							<teardown_method outcome="passed" />
+						</test_rt_linux_1>
+						<test_rt_linux_2 outcome="passed" markers="['linux', 'rt']" duration="0.00026570004411041737">
+							<setup_method outcome="passed" />
+							<teardown_method outcome="passed" />
+						</test_rt_linux_2>
+						<setup_class outcome="passed" />
+						<teardown_class outcome="passed" />
+					</Test_RT_Linux>
+				</test_rt_linux.py>
+				<test_rt_windows.py counts="{'passed': 2, 'total': 2, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 2}" total_duration="0.0007963998941704631">
+					<Test_RT_Windows counts="{'passed': 2, 'total': 2, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 2}" total_duration="0.0007963998941704631">
+						<test_rt_windows_1 outcome="passed" markers="['windows', 'rt']" duration="0.0004784999182447791">
+							<setup_method outcome="passed" />
+							<teardown_method outcome="passed" />
+						</test_rt_windows_1>
+						<test_rt_windows_2 outcome="passed" markers="['windows', 'rt']" duration="0.000317899975925684">
+							<setup_method outcome="passed" />
+							<teardown_method outcome="passed" />
+						</test_rt_windows_2>
+					</Test_RT_Windows>
+				</test_rt_windows.py>
+			</rt>
+			<vt counts="{'passed': 7, 'total': 7, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 7}" total_duration="0.0009960000170394778">
+				<linux counts="{'passed': 5, 'total': 5, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 5}" total_duration="0.0007232001516968012">
+					<test_v_linux.py counts="{'passed': 3, 'total': 3, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 3}" total_duration="0.00046220002695918083">
+						<Test_Linux counts="{'passed': 3, 'total': 3, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 3}" total_duration="0.00046220002695918083">
+							<test_v_linux outcome="passed" markers="['linux', 'vt']" duration="0.00014949985779821873">
+								<setup_method outcome="passed" />
+								<teardown_method outcome="passed" />
+							</test_v_linux>
+							<test_v_linux_2 outcome="passed" markers="['linux', 'vt']" duration="0.00014600006397813559">
+								<setup_method outcome="passed" />
+								<teardown_method outcome="passed" />
+							</test_v_linux_2>
+							<test_v_linux_3 outcome="passed" markers="['linux', 'vt']" duration="0.00016670010518282652">
+								<setup_method outcome="passed" />
+								<teardown_method outcome="passed" />
+							</test_v_linux_3>
 						</Test_Linux>
 					</test_v_linux.py>
-					<test_v_posix.py>
-						<Test_Linux>
-							<test_v_posix outcome="unexecuted" duration="0.0" />
-							<test_v_posix_2 outcome="unexecuted" duration="0.0" />
+					<test_v_posix.py counts="{'passed': 2, 'total': 2, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 2}" total_duration="0.00026100012473762035">
+						<Test_Linux counts="{'passed': 2, 'total': 2, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 2}" total_duration="0.00026100012473762035">
+							<test_v_posix outcome="passed" markers="['linux', 'vt']" duration="0.00012990005780011415">
+								<setup_method outcome="passed" />
+								<teardown_method outcome="passed" />
+							</test_v_posix>
+							<test_v_posix_2 outcome="passed" markers="['linux', 'vt']" duration="0.0001311000669375062">
+								<setup_method outcome="passed" />
+								<teardown_method outcome="passed" />
+							</test_v_posix_2>
 						</Test_Linux>
 					</test_v_posix.py>
 				</linux>
-				<windows>
-					<test_v_windows.py>
-						<Test_Windows>
-							<test_v_windows_10 outcome="unexecuted" duration="0.0" />
-							<test_v_windows_11 outcome="unexecuted" duration="0.0" />
+				<windows counts="{'passed': 2, 'total': 2, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 2}" total_duration="0.00027279986534267664">
+					<test_v_windows.py counts="{'passed': 2, 'total': 2, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 2}" total_duration="0.00027279986534267664">
+						<Test_Windows counts="{'passed': 2, 'total': 2, 'failed': 0, 'skipped': 0, 'unexecuted': 0, 'executed': 2}" total_duration="0.00027279986534267664">
+							<test_v_windows_10 outcome="passed" markers="['windows', 'vt']" duration="0.0001374998828396201">
+								<setup_method outcome="passed" />
+								<teardown_method outcome="passed" />
+							</test_v_windows_10>
+							<test_v_windows_11 outcome="passed" markers="['windows', 'vt']" duration="0.00013529998250305653">
+								<setup_method outcome="passed" />
+								<teardown_method outcome="passed" />
+							</test_v_windows_11>
 						</Test_Windows>
 					</test_v_windows.py>
 				</windows>
