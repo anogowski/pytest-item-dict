@@ -1,3 +1,3 @@
 # CollectionDict
 
-::: collect_dict.CollectionDict
+::: pytest_item_dict.collect_dict

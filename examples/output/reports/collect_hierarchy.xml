@@ -1,6 +1,49 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
 <pytest>
-	<test_dev>
+	<tests>
+		<test_item_dict.py>
+			<TestGetKeyPath>
+				<test_flat_file_and_function />
+				<test_nested_dir />
+				<test_class_nodeid />
+				<test_file_only />
+				<test_deep_class_nodeid />
+			</TestGetKeyPath>
+			<test_plugin_registered_by_default />
+			<test_plugin_disabled_by_ini />
+			<test_ini_options_in_help />
+			<test_outcome_passed />
+			<test_outcome_failed />
+			<test_outcome_skipped />
+			<test_unexecuted_outcome_set_on_collection />
+			<test_outcomes_disabled />
+			<test_multiple_outcomes_in_same_file />
+			<test_outcome_class_based_tests />
+			<test_outcome_nested_directory />
+			<test_collect_markers_set />
+			<test_collect_markers_not_set_by_default />
+			<test_test_dict_markers_set />
+			<test_durations_set />
+			<test_durations_not_set_by_default />
+			<TestAggregation>
+				<test_counts_at_module_level />
+				<test_counts_at_class_level />
+				<test_counts_at_folder_level />
+				<test_counts_bubble_up_through_all_levels />
+				<test_counts_parametrized_each_variant_is_leaf />
+				<test_counts_mixed_classes_and_functions />
+				<test_counts_no_double_counting />
+				<test_duration_aggregated_at_module_level />
+				<test_duration_not_aggregated_when_disabled />
+				<test_hierarchy_counts_absent_by_default />
+				<test_hierarchy_counts_enabled />
+				<test_executed_count_in_hierarchy_counts />
+				<test_hierarchy_durations_absent_by_default />
+				<test_hierarchy_durations_enabled />
+			</TestAggregation>
+		</test_item_dict.py>
+	</tests>
+	<examples>
 		<suites>
 			<it>
 				<linux>
@@ -44,5 +87,5 @@
 				</windows>
 			</vt>
 		</suites>
-	</test_dev>
+	</examples>
 </pytest>

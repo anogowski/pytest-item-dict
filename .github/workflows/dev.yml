@@ -1,42 +1,50 @@
-name: Dev - Build Python package
+name: Dev 🧪 Tests
 
 on:
   push:
-    branches:
-      - dev
+    branches-ignore:
+      - main
   pull_request:
-    branches:
-      - dev
 
 jobs:
-  build:
-    name: Build Package
-    runs-on: ubuntu-latest   
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python-version: "3.11"
+            toxenv: "py311"
+          - python-version: "3.12"
+            toxenv: "py312"
+          - python-version: "3.13"
+            toxenv: "py313"
+
+    steps:
+      - uses: actions/checkout@main
+        with:
+          fetch-depth: 0
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@main
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install tox
+        run: python -m pip install tox
+      - name: Run tests
+        run: tox -e ${{ matrix.toxenv }}
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@main
       - name: Set up Python
         uses: actions/setup-python@main
         with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-  test:
-    needs:
-        - build
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - python-version: ['3.10', '3.11', '3.12', '3.13', 'pypy-3.10']
-    steps:
-      - uses: actions/checkout@main
-
+          python-version: "3.x"
       - name: Install tox
-        run: pip install tox
-
-      - name: Test
-        run: tox -e py
+        run: python -m pip install tox
+      - name: Run lint
+        run: tox -e lint

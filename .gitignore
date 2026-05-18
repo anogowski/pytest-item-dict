@@ -1,6 +1,6 @@
 # Output
 /output
-/test_dev/output
+!/examples/output/reports
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

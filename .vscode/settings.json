@@ -86,7 +86,8 @@
 	"python.analysis.inlayHints.variableTypes": true,
 	"python.analysis.typeCheckingMode": "basic",
 	"python.testing.pytestArgs": [
-		"test_dev"
+		"tests",
+		"examples"
 	],
 	"python.testing.pytestEnabled": true,
 	"python.testing.unittestEnabled": false,

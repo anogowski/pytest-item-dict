@@ -9,7 +9,9 @@
 cache_dir = "./output/.pycache"
 
 # Test Directories
-testpaths = ["./suites"]        #root testing directories
+testpaths = ["./suites"]                 #root testing directories
+set_test_hierarchy_dict_outcomes = true
+set_test_hierarchy_dict_durations = true
 junit_duration_report = "total"
 junit_suite_name = "pytest"
 junit_family = "xunit2"
@@ -50,5 +52,3 @@ markers = [
 # pytest-item-dict
 set_collect_dict_markers = true
 set_test_dict_durations = true
-set_test_hierarchy_dict_outcomes = true
-set_test_hierarchy_dict_durations = true

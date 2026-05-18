@@ -3,4 +3,5 @@
 #	Copyright (c) 2024, Adam Nogowski		#
 #############################################
 
-pytest_plugins = 'pytester'
+# Activate the pytester plugin so the `pytester` fixture is available in tests/
+pytest_plugins = ["pytester"]

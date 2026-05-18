@@ -1,246 +1,178 @@
 {
-	"test_dev": {
-		"suites": {
-			"it": {
-				"linux": {
-					"test_linux.py": {
-						"Test_Linux": {
-							"test_i_linux": {
-								"@outcome": "unexecuted",
-								"@duration": "0:00:00"
-							},
-							"@unexecuted": "0",
-							"@passed": "0",
-							"@failed": "0",
-							"@skipped": "0",
-							"@expected_fail": "0",
-							"@unexpected_pass": "0",
-							"@errors": "0",
-							"@reruns": "0",
-							"@duration": "00:00:00.0000"
-						},
-						"@unexecuted": "0",
-						"@passed": "0",
-						"@failed": "0",
-						"@skipped": "0",
-						"@expected_fail": "0",
-						"@unexpected_pass": "0",
-						"@errors": "0",
-						"@reruns": "0",
-						"@duration": "00:00:00.0000",
-						"tests": "0",
-						"executed": 0
-					},
-					"@unexecuted": "0",
-					"@passed": "0",
-					"@failed": "0",
-					"@skipped": "0",
-					"@expected_fail": "0",
-					"@unexpected_pass": "0",
-					"@errors": "0",
-					"@reruns": "0",
-					"@duration": "00:00:00.0000"
-				},
-				"windows": {
-					"test_windows.py": {
-						"Test_Windows": {
-							"test_i_windows": {
-								"@outcome": "unexecuted",
-								"@duration": "0:00:00"
-							},
-							"@unexecuted": "0",
-							"@passed": "0",
-							"@failed": "0",
-							"@skipped": "0",
-							"@expected_fail": "0",
-							"@unexpected_pass": "0",
-							"@errors": "0",
-							"@reruns": "0",
-							"@duration": "00:00:00.0000"
-						},
-						"@unexecuted": "0",
-						"@passed": "0",
-						"@failed": "0",
-						"@skipped": "0",
-						"@expected_fail": "0",
-						"@unexpected_pass": "0",
-						"@errors": "0",
-						"@reruns": "0",
-						"@duration": "00:00:00.0000",
-						"tests": "0",
-						"executed": 0
-					},
-					"@unexecuted": "0",
-					"@passed": "0",
-					"@failed": "0",
-					"@skipped": "0",
-					"@expected_fail": "0",
-					"@unexpected_pass": "0",
-					"@errors": "0",
-					"@reruns": "0",
-					"@duration": "00:00:00.0000"
-				},
-				"@unexecuted": "0",
-				"@passed": "0",
-				"@failed": "0",
-				"@skipped": "0",
-				"@expected_fail": "0",
-				"@unexpected_pass": "0",
-				"@errors": "0",
-				"@reruns": "0",
-				"@duration": "00:00:00.0000"
-			},
-			"vt": {
-				"linux": {
-					"test_v_linux.py": {
-						"Test_Linux": {
-							"test_v_linux": {
-								"@outcome": "unexecuted",
-								"@duration": "0:00:00"
-							},
-							"test_v_linux_2": {
-								"@outcome": "unexecuted",
-								"@duration": "0:00:00"
-							},
-							"test_v_linux_3": {
-								"@outcome": "unexecuted",
-								"@duration": "0:00:00"
-							},
-							"@unexecuted": "0",
-							"@passed": "0",
-							"@failed": "0",
-							"@skipped": "0",
-							"@expected_fail": "0",
-							"@unexpected_pass": "0",
-							"@errors": "0",
-							"@reruns": "0",
-							"@duration": "00:00:00.0000"
-						},
-						"@unexecuted": "0",
-						"@passed": "0",
-						"@failed": "0",
-						"@skipped": "0",
-						"@expected_fail": "0",
-						"@unexpected_pass": "0",
-						"@errors": "0",
-						"@reruns": "0",
-						"@duration": "00:00:00.0000",
-						"tests": "0",
-						"executed": 0
-					},
-					"test_v_posix.py": {
-						"Test_Linux": {
-							"test_v_posix": {
-								"@outcome": "unexecuted",
-								"@duration": "0:00:00"
-							},
-							"test_v_posix_2": {
-								"@outcome": "unexecuted",
-								"@duration": "0:00:00"
-							},
-							"@unexecuted": "0",
-							"@passed": "0",
-							"@failed": "0",
-							"@skipped": "0",
-							"@expected_fail": "0",
-							"@unexpected_pass": "0",
-							"@errors": "0",
-							"@reruns": "0",
-							"@duration": "00:00:00.0000"
-						},
-						"@unexecuted": "0",
-						"@passed": "0",
-						"@failed": "0",
-						"@skipped": "0",
-						"@expected_fail": "0",
-						"@unexpected_pass": "0",
-						"@errors": "0",
-						"@reruns": "0",
-						"@duration": "00:00:00.0000",
-						"tests": "0",
-						"executed": 0
-					},
-					"@unexecuted": "0",
-					"@passed": "0",
-					"@failed": "0",
-					"@skipped": "0",
-					"@expected_fail": "0",
-					"@unexpected_pass": "0",
-					"@errors": "0",
-					"@reruns": "0",
-					"@duration": "00:00:00.0000"
-				},
-				"windows": {
-					"test_v_windows.py": {
-						"Test_Windows": {
-							"test_v_windows_10": {
-								"@outcome": "unexecuted",
-								"@duration": "0:00:00"
-							},
-							"test_v_windows_11": {
-								"@outcome": "unexecuted",
-								"@duration": "0:00:00"
-							},
-							"@unexecuted": "0",
-							"@passed": "0",
-							"@failed": "0",
-							"@skipped": "0",
-							"@expected_fail": "0",
-							"@unexpected_pass": "0",
-							"@errors": "0",
-							"@reruns": "0",
-							"@duration": "00:00:00.0000"
-						},
-						"@unexecuted": "0",
-						"@passed": "0",
-						"@failed": "0",
-						"@skipped": "0",
-						"@expected_fail": "0",
-						"@unexpected_pass": "0",
-						"@errors": "0",
-						"@reruns": "0",
-						"@duration": "00:00:00.0000",
-						"tests": "0",
-						"executed": 0
-					},
-					"@unexecuted": "0",
-					"@passed": "0",
-					"@failed": "0",
-					"@skipped": "0",
-					"@expected_fail": "0",
-					"@unexpected_pass": "0",
-					"@errors": "0",
-					"@reruns": "0",
-					"@duration": "00:00:00.0000"
-				},
-				"@unexecuted": "0",
-				"@passed": "0",
-				"@failed": "0",
-				"@skipped": "0",
-				"@expected_fail": "0",
-				"@unexpected_pass": "0",
-				"@errors": "0",
-				"@reruns": "0",
-				"@duration": "00:00:00.0000"
-			},
-			"@unexecuted": "0",
-			"@passed": "0",
-			"@failed": "0",
-			"@skipped": "0",
-			"@expected_fail": "0",
-			"@unexpected_pass": "0",
-			"@errors": "0",
-			"@reruns": "0",
-			"@duration": "00:00:00.0000"
-		},
-		"@unexecuted": "0",
-		"@passed": "0",
-		"@failed": "0",
-		"@skipped": "0",
-		"@expected_fail": "0",
-		"@unexpected_pass": "0",
-		"@errors": "0",
-		"@reruns": "0",
-		"@duration": "00:00:00.0000"
-	}
+  "tests": {
+    "test_item_dict.py": {
+      "TestGetKeyPath": {
+        "test_flat_file_and_function": {
+          "@outcome": "unexecuted"
+        },
+        "test_nested_dir": {
+          "@outcome": "unexecuted"
+        },
+        "test_class_nodeid": {
+          "@outcome": "unexecuted"
+        },
+        "test_file_only": {
+          "@outcome": "unexecuted"
+        },
+        "test_deep_class_nodeid": {
+          "@outcome": "unexecuted"
+        }
+      },
+      "test_plugin_registered_by_default": {
+        "@outcome": "unexecuted"
+      },
+      "test_plugin_disabled_by_ini": {
+        "@outcome": "unexecuted"
+      },
+      "test_ini_options_in_help": {
+        "@outcome": "unexecuted"
+      },
+      "test_outcome_passed": {
+        "@outcome": "unexecuted"
+      },
+      "test_outcome_failed": {
+        "@outcome": "unexecuted"
+      },
+      "test_outcome_skipped": {
+        "@outcome": "unexecuted"
+      },
+      "test_unexecuted_outcome_set_on_collection": {
+        "@outcome": "unexecuted"
+      },
+      "test_outcomes_disabled": {
+        "@outcome": "unexecuted"
+      },
+      "test_multiple_outcomes_in_same_file": {
+        "@outcome": "unexecuted"
+      },
+      "test_outcome_class_based_tests": {
+        "@outcome": "unexecuted"
+      },
+      "test_outcome_nested_directory": {
+        "@outcome": "unexecuted"
+      },
+      "test_collect_markers_set": {
+        "@outcome": "unexecuted"
+      },
+      "test_collect_markers_not_set_by_default": {
+        "@outcome": "unexecuted"
+      },
+      "test_test_dict_markers_set": {
+        "@outcome": "unexecuted"
+      },
+      "test_durations_set": {
+        "@outcome": "unexecuted"
+      },
+      "test_durations_not_set_by_default": {
+        "@outcome": "unexecuted"
+      },
+      "TestAggregation": {
+        "test_counts_at_module_level": {
+          "@outcome": "unexecuted"
+        },
+        "test_counts_at_class_level": {
+          "@outcome": "unexecuted"
+        },
+        "test_counts_at_folder_level": {
+          "@outcome": "unexecuted"
+        },
+        "test_counts_bubble_up_through_all_levels": {
+          "@outcome": "unexecuted"
+        },
+        "test_counts_parametrized_each_variant_is_leaf": {
+          "@outcome": "unexecuted"
+        },
+        "test_counts_mixed_classes_and_functions": {
+          "@outcome": "unexecuted"
+        },
+        "test_counts_no_double_counting": {
+          "@outcome": "unexecuted"
+        },
+        "test_duration_aggregated_at_module_level": {
+          "@outcome": "unexecuted"
+        },
+        "test_duration_not_aggregated_when_disabled": {
+          "@outcome": "unexecuted"
+        },
+        "test_hierarchy_counts_absent_by_default": {
+          "@outcome": "unexecuted"
+        },
+        "test_hierarchy_counts_enabled": {
+          "@outcome": "unexecuted"
+        },
+        "test_executed_count_in_hierarchy_counts": {
+          "@outcome": "unexecuted"
+        },
+        "test_hierarchy_durations_absent_by_default": {
+          "@outcome": "unexecuted"
+        },
+        "test_hierarchy_durations_enabled": {
+          "@outcome": "unexecuted"
+        }
+      }
+    }
+  },
+  "examples": {
+    "suites": {
+      "it": {
+        "linux": {
+          "test_linux.py": {
+            "Test_Linux": {
+              "test_i_linux": {
+                "@outcome": "unexecuted"
+              }
+            }
+          }
+        },
+        "windows": {
+          "test_windows.py": {
+            "Test_Windows": {
+              "test_i_windows": {
+                "@outcome": "unexecuted"
+              }
+            }
+          }
+        }
+      },
+      "vt": {
+        "linux": {
+          "test_v_linux.py": {
+            "Test_Linux": {
+              "test_v_linux": {
+                "@outcome": "unexecuted"
+              },
+              "test_v_linux_2": {
+                "@outcome": "unexecuted"
+              },
+              "test_v_linux_3": {
+                "@outcome": "unexecuted"
+              }
+            }
+          },
+          "test_v_posix.py": {
+            "Test_Linux": {
+              "test_v_posix": {
+                "@outcome": "unexecuted"
+              },
+              "test_v_posix_2": {
+                "@outcome": "unexecuted"
+              }
+            }
+          }
+        },
+        "windows": {
+          "test_v_windows.py": {
+            "Test_Windows": {
+              "test_v_windows_10": {
+                "@outcome": "unexecuted"
+              },
+              "test_v_windows_11": {
+                "@outcome": "unexecuted"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

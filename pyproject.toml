@@ -6,6 +6,7 @@
 [build-system]
 requires = ["setuptools>=61.0.0", "wheel>=0.44.0", "setuptools_scm[toml]>=3.4"]
 build-backend = "setuptools.build_meta"
+
 [tool.setuptools_scm]
 write_to = "src/pytest_item_dict/version.py"
 
@@ -53,6 +54,20 @@ Repository = "https://github.com/anogowski/pytest-item-dict"
 item-dict = "pytest_item_dict.plugin"
 
 
+[tool.semantic_release]
+# Let setuptools_scm own the version string — PSR only creates the git tag.
+tag_format = "v{version}"
+version_toml = []
+version_variables = []
+build_command = ""        # publishing is handled by the separate publish workflow
+commit_parser = "angular" # conventional commits: feat/fix/chore/etc.
+major_on_zero = false     # feat! or BREAKING CHANGE → major bump
+
+[tool.semantic_release.branches.main]
+match = "main"
+prerelease = false
+
+
 [tool.pytest.ini_options]
 #Directories
 # Cached Files
@@ -61,7 +76,7 @@ cache_dir = "./output/.pycache"
 pytester_example_dir = "./suites"
 
 # Test Directories
-testpaths = ["test_dev"]        #root testing directories
+testpaths = [".tests"]          #root testing directories
 junit_duration_report = "total"
 junit_suite_name = "pytest"
 junit_family = "xunit2"
@@ -111,5 +126,3 @@ markers = [
 # pytest-item-dict
 set_collect_dict_markers = true
 set_test_dict_durations = true
-set_test_hierarchy_dict_outcomes = true
-set_test_hierarchy_dict_durations = true

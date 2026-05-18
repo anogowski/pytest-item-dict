@@ -1,3 +1,3 @@
-# ItemDictPlugin
+# Plugin
 
-::: plugin.ItemDictPlugin
+::: pytest_item_dict.plugin

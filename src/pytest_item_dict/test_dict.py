@@ -2,14 +2,23 @@
 #	Dual License: BSD-3-Clause AND MPL-2.0	#
 #	Copyright (c) 2024, Adam Nogowski		#
 #############################################
+"""Test-run hierarchy dictionary with outcome tracking and metric aggregation.
+
+This module provides :class:`TestDict`, a sub-class of
+:class:`~pytest_item_dict.collect_dict.CollectionDict` that extends the
+collection-time hierarchy with per-test outcomes, durations, and markers, then
+*aggregates* those metrics upward through the hierarchy so that every parent
+node (class, module, folder) exposes summarised counts and total duration.
+"""
 
 # Python Imports
+from __future__ import annotations
+
+from collections import defaultdict
 from typing import Any, Final
-from datetime import datetime, timedelta
 
 # Pytest Imports
-from pytest import Config, Item, Session, Function
-from _pytest.nodes import Node
+from pytest import Config, Item
 
 # Plugin Imports
 from pytest_item_dict.item_dict_enums import TestProperties, INIOptions
@@ -17,235 +26,297 @@ from pytest_item_dict.collect_dict import CollectionDict
 
 
 class TestDict(CollectionDict):
-	_set_outcomes: bool | Any = False
-	_set_durations: bool | Any = False
-	_update_on_test: bool | Any = False
-	_count_test_outcomes: bool | Any = False
-	_calculate_test_durations: bool | Any = False
+	"""Extends :class:`CollectionDict` with per-test metrics and aggregation.
+
+	After a test session completes, calling :meth:`aggregate_counts` populates
+	every non-leaf node with ``@counts`` (outcome breakdown) and, when
+	durations are enabled, ``@total_duration`` (summed child durations in
+	seconds).
+
+	Parameters
+	----------
+	config : pytest.Config
+		Active pytest configuration object.
+
+	Attributes
+	----------
+	UNEXECUTED : str
+		Sentinel outcome value (``"unexecuted"``) assigned to tests that were
+		collected but not yet executed.
+	EXECUTED : str
+		Key used inside ``@counts`` for the number of tests that ran
+		(``total - unexecuted``).
+	_set_outcomes : bool
+		Whether to record individual test outcomes in the hierarchy.
+	_set_durations : bool
+		Whether to record individual and aggregated durations in the hierarchy.
+	_update_on_test : bool
+		Whether to update the hierarchy dict after each individual test
+		(real-time) rather than only at session end.
+	_set_hierarchy_outcomes : bool
+		Whether to aggregate outcome counts (``@counts``) at every non-leaf node.
+	_set_hierarchy_durations : bool
+		Whether to aggregate total durations (``@total_duration``) at every
+		non-leaf node.
+	"""
+
+	__test__: bool = False  # Prevent pytest from collecting this class as a test case
 
 	UNEXECUTED: Final[str] = "unexecuted"
 	EXECUTED: Final[str] = "executed"
-	_KEY_UNEXECUTED: Final[str] = f"@{UNEXECUTED}"
-	_KEY_EXECUTED: Final[str] = f"@{EXECUTED}"
-
-	MILLISECONDS_TIME_FORMAT: Final[str] = r"%H:%M:%S.%f"
-	SECONDS_TIME_FORMAT: Final[str] = r"%H:%M:%S"
 
 	def __init__(self, config: Config) -> None:
 		super().__init__(config=config)
-		self._add_markers = config.getini(name=INIOptions.SET_TEST_MARKERS)
-		self._set_durations = config.getini(name=INIOptions.SET_TEST_DURATIONS)
-		self._set_outcomes = self._config.getini(name=INIOptions.SET_TEST_OUTCOMES)
-		self._update_on_test = self._config.getini(name=INIOptions.UPDATE_DICT_ON_TEST)
-		self._count_test_outcomes = self._config.getini(name=INIOptions.SET_TEST_HIERARCHY_OUTCOMES)
-		self._calculate_test_durations = self._config.getini(name=INIOptions.SET_TEST_HIERARCHY_DURATIONS)
+		self._add_markers: bool = bool(config.getini(name=INIOptions.SET_TEST_MARKERS))
+		self._set_durations: bool = bool(config.getini(name=INIOptions.SET_TEST_DURATIONS))
+		self._set_outcomes: bool = bool(config.getini(name=INIOptions.SET_TEST_OUTCOMES))
+		self._update_on_test: bool = bool(config.getini(name=INIOptions.UPDATE_DICT_ON_TEST))
+		self._set_hierarchy_outcomes: bool = bool(config.getini(name=INIOptions.SET_TEST_HIERARCHY_OUTCOMES))
+		self._set_hierarchy_durations: bool = bool(config.getini(name=INIOptions.SET_TEST_HIERARCHY_DURATIONS))
+
+	# ------------------------------------------------------------------
+	# Properties
+	# ------------------------------------------------------------------
 
 	@property
 	def set_outcomes(self) -> bool:
-		"""Add test outcome to session.items and hierarchy dict
+		"""Whether to record individual test outcomes.
 
-		Returns:
-			bool: INI Option for setting test outcomes
+		Returns
+		-------
+		bool
+			Value of the ``set_test_dict_outcomes`` ini option.
 		"""
 		return self._set_outcomes
 
 	@property
 	def set_durations(self) -> bool:
-		"""Add test duration to session.items and hierarchy dict
+		"""Whether to record individual and aggregated durations.
 
-		Returns:
-			bool: INI Option for setting test duration
+		Returns
+		-------
+		bool
+			Value of the ``set_test_dict_durations`` ini option.
 		"""
 		return self._set_durations
 
 	@property
 	def update_on_test(self) -> bool:
-		"""Update test outcome in hierarchy dict after every test
+		"""Whether to update the hierarchy after every individual test.
 
-		Returns:
-			bool: INI Option for updating test outcome after every test
+		Returns
+		-------
+		bool
+			Value of the ``update_dict_on_test`` ini option.
 		"""
 		return self._update_on_test
 
 	@property
-	def count_test_outcomes(self) -> bool:
-		"""Add test outcome to parents in hierarchy dict
+	def set_hierarchy_outcomes(self) -> bool:
+		"""Whether to aggregate outcome counts at every non-leaf hierarchy node.
 
-		Returns:
-			bool: INI Option for setting test outcomes to parents
+		Returns
+		-------
+		bool
+			Value of the ``set_test_hierarchy_dict_outcomes`` ini option.
 		"""
-
-		return self._count_test_outcomes
+		return self._set_hierarchy_outcomes
 
 	@property
-	def calculate_test_durations(self) -> bool:
-		"""Add test durations to parents in hierarchy dict
+	def set_hierarchy_durations(self) -> bool:
+		"""Whether to aggregate total durations at every non-leaf hierarchy node.
 
-		Returns:
-			bool: INI Option for setting test durations to parents
+		Returns
+		-------
+		bool
+			Value of the ``set_test_hierarchy_dict_durations`` ini option.
 		"""
+		return self._set_hierarchy_durations
 
-		return self._calculate_test_durations
-
-	def get_value_from_key_path_temp_key(self, temp_key: str, key_path: list[str]) -> Any | None:
-		"""Add a temporary key to the key_path.
-		.. code-block:: python
-			value: Any | None = self.hierarchy[key_path][temp_key]
-		Pop the temporary key.
-		.. code-block:: python
-			return value
-
-		Args:
-			temp_key (str): key to temporarily add to key_path.
-			key_path (list[str]): keys in hierarchical order to access dictionary.
-
-		Returns:
-			Any|None: 
-
-			.. code-block:: python
-				value: Any | None = self.hierarchy[key_path][temp_key]
-		"""
-		key_path.append(temp_key)
-		value: Any | None = super().get_value_from_key_path(key_path=key_path)
-		key_path.pop()
-		return value
+	# ------------------------------------------------------------------
+	# Outcome tracking
+	# ------------------------------------------------------------------
 
 	def set_unexecuted_test_outcomes(self) -> None:
-		"""Create/Overwrite each item.outcome in session.items to 'self.UNEXECUTED'
+		"""Initialise every item's ``@outcome`` attribute to ``"unexecuted"``.
+
+		Called immediately after collection so that tests that are never
+		reached (e.g. due to a session-abort) retain a meaningful outcome
+		rather than being absent from the hierarchy.
 		"""
 		if self._set_outcomes:
 			for item in self.items:
 				setattr(item, TestProperties.OUTCOME, self.UNEXECUTED)
 				self.set_outcome_attribute(item=item)
-				if self._count_test_outcomes:
-					for parent in item.iter_parents():
-						if self._check_parent(parent=parent):
-							break
-						if isinstance(parent, Function):
-							continue
-						self.update_parent_outcome_attribute(item=item, parent=parent)
-
-	def run_ini_options(self) -> None:
-		"""Run functions to set attributes for options store in ini/toml/yaml file
-		"""
-		if self._set_outcomes or self._set_durations or self._add_markers:
-			for item in self.items:
-				self.set_outcome_attribute(item=item)
-				self.set_duration_attribute(item=item)
-				self.set_marker_attribute(item=item)
-
-				if self._count_test_outcomes or self._calculate_test_durations:
-					for parent in item.iter_parents():
-						if self._check_parent(parent=parent):
-							break
-						if isinstance(parent, Function):
-							continue
-
-						self.update_parent_outcome_attribute(item=item, parent=parent)
-						self.update_parent_duration_attribute(item=item, parent=parent)
 
 	def set_test_outcomes(self) -> None:
-		"""Set test outcome in hierarchy dict for every test based on item.outcome
+		"""Write each item's current ``outcome`` attribute into the hierarchy.
+
+		Iterates over all items and calls :meth:`set_outcome_attribute` for
+		each.  Useful for a final one-shot sync at session end.
 		"""
 		if self._set_outcomes:
 			for item in self.items:
 				self.set_outcome_attribute(item=item)
 
 	def set_outcome_attribute(self, item: Item) -> None:
-		"""Update test outcome in hierarchy dict from item.outcome
+		"""Write *item*'s ``outcome`` attribute into the test-dict hierarchy.
 
-		Args:
-			item (Item): pytest.Item - test to update
+		Parameters
+		----------
+		item : pytest.Item
+			The test item whose outcome to persist.
 		"""
 		if self._set_outcomes and hasattr(item, TestProperties.OUTCOME):
 			key_path: list[str] = self.get_key_path(path=item.nodeid)
-			self.set_attribute(key_path=key_path, key=TestProperties.OUTCOME, value=getattr(item, TestProperties.OUTCOME))
+			self.set_attribute(
+			    key_path=key_path,
+			    key=TestProperties.OUTCOME,
+			    value=getattr(item, TestProperties.OUTCOME),
+			)
 
-	def get_parent_attribute(self, item: Item, parent: Node, test_prop: TestProperties, key: str) -> tuple[Any, list[str], Any | None]:
-		"""Get the prop_value from the item based on test_prop. Get the dict_value based on key.
+	# ------------------------------------------------------------------
+	# Duration tracking
+	# ------------------------------------------------------------------
 
-		Args:
-			item (Item): pytest.Item
-			parent (Node): pytest.Item.parent
-			test_prop (TestProperties): property to get from item
-			key (str): key in dict to check for dict_value
+	def set_duration_attribute(self, item: Item) -> None:
+		"""Write *item*'s accumulated duration (seconds) into the hierarchy.
 
-		Returns:
-			tuple[Any, list[str], Any | None]: prop_value, key_path, dict_value
-		"""
-		prop_value: Any = getattr(item, test_prop)
-		key_path: list[str] = self.get_key_path(path=parent.nodeid)
-		key_path.append(key)
-		dict_value: Any | None = self.get_value_from_key_path(key_path=key_path)
-		key_path.pop()
+		The duration is stored as a plain :class:`float` (seconds) to
+		facilitate numeric aggregation in :meth:`aggregate_counts`.
 
-		return prop_value, key_path, dict_value
-
-	def update_parent_outcome_attribute(self, item: Item, parent: Node) -> None:
-		"""Set or update the outcome of child tests for each class, module, and directory
-
-		Args:
-			item (Item): pytest.Item
-			parent (Node): pytest.Item.parent
-		"""
-		if self._set_outcomes and self._count_test_outcomes and hasattr(item, TestProperties.OUTCOME):
-			prop_value: str = getattr(item, TestProperties.OUTCOME)
-			dict_key: str = f"@{prop_value}"
-
-			prop_value, key_path, dict_value = self.get_parent_attribute(item=item, parent=parent, test_prop=TestProperties.OUTCOME, key=dict_key)
-
-			if dict_value is not None:
-				num_outcome: int = int(dict_value) + 1
-				self.set_attribute(key_path=key_path, key=dict_key, value=num_outcome)
-
-				if prop_value != self.UNEXECUTED:
-					unexecuted: Any | None = self.get_value_from_key_path_temp_key(temp_key=self._KEY_UNEXECUTED, key_path=key_path)
-
-					executed: Any | None = self.get_value_from_key_path_temp_key(temp_key=self._KEY_EXECUTED, key_path=key_path)
-					if unexecuted is not None:
-						num_unexecuted: int = int(unexecuted) - 1
-						self.set_attribute(key_path=key_path, key=self._KEY_UNEXECUTED, value=num_unexecuted)
-					if executed is not None:
-						num_executed: int = int(executed) + 1
-						self.set_attribute(key_path=key_path, key=self._KEY_EXECUTED, value=num_executed)
-			else:
-				self.set_attribute(key_path=key_path, key=dict_key, value=1)
-
-	def update_parent_duration_attribute(self, item: Item, parent: Node) -> None:
-		"""Set or update the duration of child tests for each class, module, and directory
-
-		Args:
-			item (Item): pytest.Item
-			parent (Node): pytest.Item.parent
-		"""
-		if self._set_durations and self._calculate_test_durations and hasattr(item, TestProperties.DURATION):
-			prop_value: float = 0
-			dict_key: str = f"@{TestProperties.DURATION}"
-
-			prop_value, key_path, dict_value = self.get_parent_attribute(item=item, parent=parent, test_prop=TestProperties.DURATION, key=dict_key)
-
-			if dict_value is not None:
-				td: timedelta = timedelta(seconds=prop_value)
-				dt_value: datetime
-				try:
-					dt_value: datetime = datetime.strptime(dict_value, self.MILLISECONDS_TIME_FORMAT)
-				except ValueError:
-					dt_value: datetime = datetime.strptime(dict_value, self.SECONDS_TIME_FORMAT)
-
-				new_dt: datetime = dt_value + td
-
-				self.set_attribute(key_path=key_path, key=dict_key, value=new_dt.strftime(self.MILLISECONDS_TIME_FORMAT))
-			else:
-				td: timedelta = timedelta(seconds=prop_value)
-				self.set_attribute(key_path=key_path, key=dict_key, value=str(object=td))
-
-	def set_duration_attribute(self, item: Item):
-		"""Update test duration in hierarchy dict from item.duration
-
-		Args:
-			item (Item): pytest.Item - test to update
+		Parameters
+		----------
+		item : pytest.Item
+			The test item whose ``duration`` attribute to persist.
 		"""
 		if self._set_durations and hasattr(item, TestProperties.DURATION):
 			key_path: list[str] = self.get_key_path(path=item.nodeid)
-			td: timedelta = timedelta(seconds=getattr(item, TestProperties.DURATION))
-			self.set_attribute(key_path=key_path, key=TestProperties.DURATION, value=str(object=td))
+			duration_seconds: float = float(getattr(item, TestProperties.DURATION))
+			self.set_attribute(
+			    key_path=key_path,
+			    key=TestProperties.DURATION,
+			    value=duration_seconds,
+			)
+
+	# ------------------------------------------------------------------
+	# Aggregation
+	# ------------------------------------------------------------------
+
+	def aggregate_counts(self) -> None:
+		"""Recursively aggregate outcome counts and durations through the hierarchy.
+
+		For every non-leaf node (folder, module, class) computes and stores
+		``@counts``, a mapping of outcome label to test count.  When
+		``set_test_dict_durations`` is enabled, also stores ``@total_duration``
+		(float, seconds) at every non-leaf node.
+
+		Leaf nodes are detected structurally: a node is a leaf when it contains
+		no child keys whose values are plain dicts (``@``-prefixed attribute
+		keys are ignored).
+
+		Notes
+		-----
+		The method mutates ``_hierarchy`` in place and is idempotent.  It
+		should be called once, after all individual outcomes and durations have
+		been recorded (i.e. from ``pytest_sessionfinish``).
+
+		Examples
+		--------
+		Given a two-test module hierarchy after the run::
+
+			{
+				"test_mod.py": {
+					"test_pass": {"@outcome": "passed"},
+					"test_fail": {"@outcome": "failed"},
+				}
+			}
+
+		After ``aggregate_counts()``::
+
+			{
+				"@counts": {"passed": 1, "failed": 1, "skipped": 0,
+							"unexecuted": 0, "total": 2},
+				"test_mod.py": {
+					"@counts": {"passed": 1, "failed": 1, "skipped": 0,
+								"unexecuted": 0, "total": 2},
+					"test_pass": {"@outcome": "passed"},
+					"test_fail": {"@outcome": "failed"},
+				}
+			}
+		"""
+		self._aggregate_node(self._hierarchy)
+
+	def _aggregate_node(
+	    self,
+	    node: dict[str, Any],
+	) -> tuple[dict[str, int], float]:
+		"""Recursively aggregate a single hierarchy node.
+
+		Parameters
+		----------
+		node : dict[str, Any]
+			A node from the test-dict hierarchy.  Attribute keys are prefixed
+			with ``"@"``; child nodes are plain keys whose values are ``dict``
+			instances.
+
+		Returns
+		-------
+		tuple[dict[str, int], float]
+			A 2-tuple of:
+
+			counts : dict[str, int]
+				Outcome label → count for all leaf tests in this subtree, plus
+				``"total"`` for the grand total.
+			total_duration : float
+				Sum of all ``@duration`` values (seconds) in this subtree.
+		"""
+		outcome_key: str = f"@{TestProperties.OUTCOME}"
+		duration_key: str = f"@{TestProperties.DURATION}"
+
+		# Structural leaf detection: no non-attribute dict children.
+		child_keys: list[str] = [k for k, v in node.items() if not k.startswith("@") and isinstance(v, dict)]
+
+		if not child_keys:
+			# ── Leaf node ──────────────────────────────────────────────
+			outcome: str = node.get(outcome_key, self.UNEXECUTED)
+			duration: float = float(node.get(duration_key, 0.0))
+			return {outcome: 1, "total": 1}, duration
+
+		# ── Parent node: aggregate children ────────────────────────────
+		counts: defaultdict[str, int] = defaultdict(int)
+		total_duration: float = 0.0
+
+		for key in child_keys:
+			child_counts, child_duration = self._aggregate_node(node[key])
+			for label, count in child_counts.items():
+				counts[label] += count
+			total_duration += child_duration
+
+		# Guarantee all standard outcome keys are present even when zero.
+		for outcome in ("passed", "failed", "skipped", self.UNEXECUTED):
+			counts.setdefault(outcome, 0)
+		counts[self.EXECUTED] = counts["total"] - counts[self.UNEXECUTED]
+
+		if self._set_hierarchy_outcomes:
+			node[f"@{TestProperties.COUNTS}"] = dict(counts)
+		if self._set_hierarchy_durations:
+			node[f"@{TestProperties.TOTAL_DURATION}"] = total_duration
+
+		return dict(counts), total_duration
+
+	# ------------------------------------------------------------------
+	# Session-end runners
+	# ------------------------------------------------------------------
+
+	def run_ini_options(self) -> None:
+		"""Execute all ini-option-driven metric recording for the test run.
+
+		Iterates over :attr:`items` and calls :meth:`set_marker_attribute`
+		and :meth:`set_duration_attribute` for each item when the respective
+		ini options are enabled.
+		"""
+		if self._add_markers or self._set_durations:
+			for item in self.items:
+				self.set_marker_attribute(item=item)
+				self.set_duration_attribute(item=item)
