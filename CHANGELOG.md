@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.3.1 (2026-05-22)
+
+### Bug Fixes
+
+- Count_tests sets @tests on all non-leaf nodes
+  ([`fa2f485`](https://github.com/anogowski/pytest-item-dict/commit/fa2f48502f75468acad9ff12516f62b77acf6a66))
+
+
 ## v1.3.0 (2026-05-18)
 
 
