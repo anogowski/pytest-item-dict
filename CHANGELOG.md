@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.3.2 (2026-05-22)
+
+### Bug Fixes
+
+- Pytester tests
+  ([`ef3b53e`](https://github.com/anogowski/pytest-item-dict/commit/ef3b53e8f4299267915cdb05c004e6ca08c484e7))
+
+
 ## v1.3.1 (2026-05-22)
 
 ### Bug Fixes
