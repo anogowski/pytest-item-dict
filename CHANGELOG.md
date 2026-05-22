@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.3.3 (2026-05-22)
+
+### Bug Fixes
+
+- Update readme and project status
+  ([`32c7638`](https://github.com/anogowski/pytest-item-dict/commit/32c7638de52def6ddc5d6a34488ef399b6b005a6))
+
+
 ## v1.3.2 (2026-05-22)
 
 ### Bug Fixes
