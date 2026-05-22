@@ -935,3 +935,129 @@ class TestSetupTeardown:
 		counts = h["test_fn_inflate.py"]["@counts"]
 		assert counts["total"] == 2
 		assert counts["passed"] == 2
+
+
+# ---------------------------------------------------------------------------
+# count_tests – @tests attribute and _total_tests caching
+# ---------------------------------------------------------------------------
+
+_WRITE_COLLECT_TESTS = """
+import json
+from pathlib import Path
+from pytest_item_dict.plugin import ITEM_DICT_PLUGIN_NAME
+
+def pytest_collection_finish(session):
+	plugin = session.config.pluginmanager.get_plugin(name=ITEM_DICT_PLUGIN_NAME)
+	if plugin:
+		Path("collect.json").write_text(json.dumps(plugin.collect_dict.hierarchy))
+		Path("total_tests.txt").write_text(str(plugin.collect_dict._total_tests))
+"""
+
+
+class TestCountTests:
+	"""Verify that count_tests() sets @tests on all non-leaf nodes and caches _total_tests."""
+
+	def test_total_tests_cached_on_root(self, pytester):
+		"""_total_tests equals the number of collected items."""
+		pytester.makeconftest(_WRITE_COLLECT_TESTS)
+		pytester.makepyfile(test_abc="""
+			def test_one():
+				pass
+			def test_two():
+				pass
+			def test_three():
+				pass
+		""")
+		pytester.runpytest("--collect-only")
+		total = int((pytester.path / "total_tests.txt").read_text())
+		assert total == 3
+
+	def test_tests_attribute_on_root(self, pytester):
+		"""@tests appears at the root of the collect hierarchy."""
+		pytester.makeconftest(_WRITE_COLLECT_TESTS)
+		pytester.makepyfile(test_two="""
+			def test_a():
+				pass
+			def test_b():
+				pass
+		""")
+		pytester.runpytest("--collect-only")
+		h = json.loads((pytester.path / "collect.json").read_text())
+		assert h["@tests"] == 2
+
+	def test_tests_attribute_on_module(self, pytester):
+		"""@tests on a module node equals the number of tests in that file."""
+		pytester.makeconftest(_WRITE_COLLECT_TESTS)
+		pytester.makepyfile(test_mod="""
+			def test_x():
+				pass
+			def test_y():
+				pass
+			def test_z():
+				pass
+		""")
+		pytester.runpytest("--collect-only")
+		h = json.loads((pytester.path / "collect.json").read_text())
+		assert h["test_mod.py"]["@tests"] == 3
+
+	def test_tests_attribute_on_class(self, pytester):
+		"""@tests on a class node equals only the tests inside that class."""
+		pytester.makeconftest(_WRITE_COLLECT_TESTS)
+		pytester.makepyfile(test_cls="""
+			class TestGroup:
+				def test_alpha(self):
+					pass
+				def test_beta(self):
+					pass
+		""")
+		pytester.runpytest("--collect-only")
+		h = json.loads((pytester.path / "collect.json").read_text())
+		assert h["test_cls.py"]["TestGroup"]["@tests"] == 2
+
+	def test_tests_attribute_on_folder(self, pytester):
+		"""@tests on a folder node sums all tests beneath it."""
+		pytester.mkpydir("suite")
+		(pytester.path / "suite" / "test_a.py").write_text("def test_one():\n\tpass\n")
+		(pytester.path / "suite" / "test_b.py").write_text("def test_two():\n\tpass\ndef test_three():\n\tpass\n")
+		pytester.makeconftest(_WRITE_COLLECT_TESTS)
+		pytester.runpytest("--collect-only")
+		h = json.loads((pytester.path / "collect.json").read_text())
+		assert h["suite"]["@tests"] == 3
+
+	def test_tests_absent_on_leaf(self, pytester):
+		"""Leaf (test function) nodes must not have @tests."""
+		pytester.makeconftest(_WRITE_COLLECT_TESTS)
+		pytester.makepyfile(test_leaf="""
+			def test_only():
+				pass
+		""")
+		pytester.runpytest("--collect-only")
+		h = json.loads((pytester.path / "collect.json").read_text())
+		leaf = h["test_leaf.py"]["test_only"]
+		assert "@tests" not in leaf
+
+	def test_tests_counts_are_consistent_across_levels(self, pytester):
+		"""@tests at every ancestor level equals the sum of its children's @tests."""
+		pytester.mkpydir("grp")
+		(pytester.path / "grp" / "test_first.py").write_text("def test_one():\n\tpass\ndef test_two():\n\tpass\n")
+		(pytester.path / "grp" / "test_second.py").write_text("def test_three():\n\tpass\n")
+		pytester.makeconftest(_WRITE_COLLECT_TESTS)
+		pytester.runpytest("--collect-only")
+		h = json.loads((pytester.path / "collect.json").read_text())
+		assert h["grp"]["test_first.py"]["@tests"] == 2
+		assert h["grp"]["test_second.py"]["@tests"] == 1
+		assert h["grp"]["@tests"] == 3
+		assert h["@tests"] == 3
+
+	def test_count_tests_called_automatically(self, pytester):
+		"""count_tests() is invoked by pytest_collection_finish without manual calls."""
+		pytester.makeconftest(_WRITE_COLLECT_TESTS)
+		pytester.makepyfile(test_auto="""
+			def test_one():
+				pass
+		""")
+		# --collect-only ensures we only exercise the collection phase
+		pytester.runpytest("--collect-only")
+		h = json.loads((pytester.path / "collect.json").read_text())
+		# @tests must be present proving count_tests() ran automatically
+		assert "@tests" in h

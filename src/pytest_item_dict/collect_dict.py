@@ -72,6 +72,7 @@ class CollectionDict:
 		self._hierarchy: dict[Any, Any] = {}
 		self._items: list[Item] = []
 		self._total_duration: float = 0.0
+		self._total_tests: int = 0
 		self._add_markers: bool = bool(config.getini(name=INIOptions.SET_COLLECT_MARKERS))
 
 	# ------------------------------------------------------------------
@@ -261,6 +262,48 @@ class CollectionDict:
 				return None
 			current = current[key]
 		return current
+
+	def count_tests(self, node: dict[Any, Any] | None = None) -> int:
+		"""Recursively count test leaf nodes in the hierarchy.
+
+		A node is a test leaf when it is empty or all of its keys are
+		attribute keys (i.e. start with ``"@"``).
+
+		When called on the root (i.e. *node* is ``None``), the result is also
+		cached in :attr:`_total_tests`.
+
+		Parameters
+		----------
+		node : dict[Any, Any] or None, optional
+			The subtree to count from.  Defaults to the root
+			``_hierarchy``.
+
+		Returns
+		-------
+		int
+			Total number of test leaf nodes found in *node*.
+
+		Examples
+		--------
+		>>> cdict.create_hierarchy_dict(items)
+		>>> cdict.count_tests()
+		42
+		>>> cdict.count_tests(node=cdict.hierarchy["suite"]["test_mod.py"])
+		3
+		"""
+		is_root: bool = node is None
+		if is_root:
+			node = self._hierarchy
+		if not node:
+			# Empty root means nothing was collected; empty leaf is a test item.
+			return 0 if is_root else 1
+		if all(k.startswith("@") for k in node):
+			return 1
+		result: int = sum(self.count_tests(node=child) for key, child in node.items() if not key.startswith("@") and isinstance(child, dict))
+		node["@tests"] = result
+		if is_root:
+			self._total_tests = result
+		return result
 
 	# ------------------------------------------------------------------
 	# Attribute / sub-element setters

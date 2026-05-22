@@ -1,4 +1,172 @@
 {
+  "tests": {
+    "test_item_dict.py": {
+      "TestGetKeyPath": {
+        "test_flat_file_and_function": {
+          "@outcome": "unexecuted"
+        },
+        "test_nested_dir": {
+          "@outcome": "unexecuted"
+        },
+        "test_class_nodeid": {
+          "@outcome": "unexecuted"
+        },
+        "test_file_only": {
+          "@outcome": "unexecuted"
+        },
+        "test_deep_class_nodeid": {
+          "@outcome": "unexecuted"
+        }
+      },
+      "test_plugin_registered_by_default": {
+        "@outcome": "unexecuted"
+      },
+      "test_plugin_disabled_by_ini": {
+        "@outcome": "unexecuted"
+      },
+      "test_ini_options_in_help": {
+        "@outcome": "unexecuted"
+      },
+      "test_outcome_passed": {
+        "@outcome": "unexecuted"
+      },
+      "test_outcome_failed": {
+        "@outcome": "unexecuted"
+      },
+      "test_outcome_skipped": {
+        "@outcome": "unexecuted"
+      },
+      "test_unexecuted_outcome_set_on_collection": {
+        "@outcome": "unexecuted"
+      },
+      "test_outcomes_disabled": {
+        "@outcome": "unexecuted"
+      },
+      "test_multiple_outcomes_in_same_file": {
+        "@outcome": "unexecuted"
+      },
+      "test_outcome_class_based_tests": {
+        "@outcome": "unexecuted"
+      },
+      "test_outcome_nested_directory": {
+        "@outcome": "unexecuted"
+      },
+      "test_collect_markers_set": {
+        "@outcome": "unexecuted"
+      },
+      "test_collect_markers_not_set_by_default": {
+        "@outcome": "unexecuted"
+      },
+      "test_test_dict_markers_set": {
+        "@outcome": "unexecuted"
+      },
+      "test_durations_set": {
+        "@outcome": "unexecuted"
+      },
+      "test_durations_not_set_by_default": {
+        "@outcome": "unexecuted"
+      },
+      "TestAggregation": {
+        "test_counts_at_module_level": {
+          "@outcome": "unexecuted"
+        },
+        "test_counts_at_class_level": {
+          "@outcome": "unexecuted"
+        },
+        "test_counts_at_folder_level": {
+          "@outcome": "unexecuted"
+        },
+        "test_counts_bubble_up_through_all_levels": {
+          "@outcome": "unexecuted"
+        },
+        "test_counts_parametrized_each_variant_is_leaf": {
+          "@outcome": "unexecuted"
+        },
+        "test_counts_mixed_classes_and_functions": {
+          "@outcome": "unexecuted"
+        },
+        "test_counts_no_double_counting": {
+          "@outcome": "unexecuted"
+        },
+        "test_duration_aggregated_at_module_level": {
+          "@outcome": "unexecuted"
+        },
+        "test_duration_not_aggregated_when_disabled": {
+          "@outcome": "unexecuted"
+        },
+        "test_hierarchy_counts_absent_by_default": {
+          "@outcome": "unexecuted"
+        },
+        "test_hierarchy_counts_enabled": {
+          "@outcome": "unexecuted"
+        },
+        "test_executed_count_in_hierarchy_counts": {
+          "@outcome": "unexecuted"
+        },
+        "test_hierarchy_durations_absent_by_default": {
+          "@outcome": "unexecuted"
+        },
+        "test_hierarchy_durations_enabled": {
+          "@outcome": "unexecuted"
+        }
+      },
+      "TestSetupTeardown": {
+        "test_not_present_by_default": {
+          "@outcome": "unexecuted"
+        },
+        "test_setup_method_present_for_class_test": {
+          "@outcome": "unexecuted"
+        },
+        "test_setup_function_present_for_module_level_test": {
+          "@outcome": "unexecuted"
+        },
+        "test_setup_class_at_class_node": {
+          "@outcome": "unexecuted"
+        },
+        "test_setup_class_absent_when_class_lacks_it": {
+          "@outcome": "unexecuted"
+        },
+        "test_setup_failure_recorded": {
+          "@outcome": "unexecuted"
+        },
+        "test_teardown_failure_recorded": {
+          "@outcome": "unexecuted"
+        },
+        "test_setup_teardown_not_counted_in_hierarchy": {
+          "@outcome": "unexecuted"
+        },
+        "test_setup_teardown_not_counted_for_functions": {
+          "@outcome": "unexecuted"
+        }
+      },
+      "TestCountTests": {
+        "test_total_tests_cached_on_root": {
+          "@outcome": "unexecuted"
+        },
+        "test_tests_attribute_on_root": {
+          "@outcome": "unexecuted"
+        },
+        "test_tests_attribute_on_module": {
+          "@outcome": "unexecuted"
+        },
+        "test_tests_attribute_on_class": {
+          "@outcome": "unexecuted"
+        },
+        "test_tests_attribute_on_folder": {
+          "@outcome": "unexecuted"
+        },
+        "test_tests_absent_on_leaf": {
+          "@outcome": "unexecuted"
+        },
+        "test_tests_counts_are_consistent_across_levels": {
+          "@outcome": "unexecuted"
+        },
+        "test_count_tests_called_automatically": {
+          "@outcome": "unexecuted"
+        }
+      }
+    }
+  },
   "examples": {
     "suites": {
       "it": {
@@ -7,82 +175,19 @@
             "Test_Linux": {
               "test_i_linux": {
                 "@outcome": "unexecuted"
-              },
-              "@counts": {
-                "unexecuted": 1,
-                "total": 1,
-                "passed": 0,
-                "failed": 0,
-                "skipped": 0,
-                "executed": 0
-              },
-              "@total_duration": 0.0
-            },
-            "@counts": {
-              "unexecuted": 1,
-              "total": 1,
-              "passed": 0,
-              "failed": 0,
-              "skipped": 0,
-              "executed": 0
-            },
-            "@total_duration": 0.0
-          },
-          "@counts": {
-            "unexecuted": 1,
-            "total": 1,
-            "passed": 0,
-            "failed": 0,
-            "skipped": 0,
-            "executed": 0
-          },
-          "@total_duration": 0.0
+              }
+            }
+          }
         },
         "windows": {
           "test_windows.py": {
             "Test_Windows": {
               "test_i_windows": {
                 "@outcome": "unexecuted"
-              },
-              "@counts": {
-                "unexecuted": 1,
-                "total": 1,
-                "passed": 0,
-                "failed": 0,
-                "skipped": 0,
-                "executed": 0
-              },
-              "@total_duration": 0.0
-            },
-            "@counts": {
-              "unexecuted": 1,
-              "total": 1,
-              "passed": 0,
-              "failed": 0,
-              "skipped": 0,
-              "executed": 0
-            },
-            "@total_duration": 0.0
-          },
-          "@counts": {
-            "unexecuted": 1,
-            "total": 1,
-            "passed": 0,
-            "failed": 0,
-            "skipped": 0,
-            "executed": 0
-          },
-          "@total_duration": 0.0
-        },
-        "@counts": {
-          "unexecuted": 2,
-          "total": 2,
-          "passed": 0,
-          "failed": 0,
-          "skipped": 0,
-          "executed": 0
-        },
-        "@total_duration": 0.0
+              }
+            }
+          }
+        }
       },
       "rt": {
         "test_rt_linux.py": {
@@ -92,26 +197,8 @@
             },
             "test_rt_linux_2": {
               "@outcome": "unexecuted"
-            },
-            "@counts": {
-              "unexecuted": 2,
-              "total": 2,
-              "passed": 0,
-              "failed": 0,
-              "skipped": 0,
-              "executed": 0
-            },
-            "@total_duration": 0.0
-          },
-          "@counts": {
-            "unexecuted": 2,
-            "total": 2,
-            "passed": 0,
-            "failed": 0,
-            "skipped": 0,
-            "executed": 0
-          },
-          "@total_duration": 0.0
+            }
+          }
         },
         "test_rt_windows.py": {
           "Test_RT_Windows": {
@@ -120,36 +207,9 @@
             },
             "test_rt_windows_2": {
               "@outcome": "unexecuted"
-            },
-            "@counts": {
-              "unexecuted": 2,
-              "total": 2,
-              "passed": 0,
-              "failed": 0,
-              "skipped": 0,
-              "executed": 0
-            },
-            "@total_duration": 0.0
-          },
-          "@counts": {
-            "unexecuted": 2,
-            "total": 2,
-            "passed": 0,
-            "failed": 0,
-            "skipped": 0,
-            "executed": 0
-          },
-          "@total_duration": 0.0
-        },
-        "@counts": {
-          "unexecuted": 4,
-          "total": 4,
-          "passed": 0,
-          "failed": 0,
-          "skipped": 0,
-          "executed": 0
-        },
-        "@total_duration": 0.0
+            }
+          }
+        }
       },
       "vt": {
         "linux": {
@@ -163,26 +223,8 @@
               },
               "test_v_linux_3": {
                 "@outcome": "unexecuted"
-              },
-              "@counts": {
-                "unexecuted": 3,
-                "total": 3,
-                "passed": 0,
-                "failed": 0,
-                "skipped": 0,
-                "executed": 0
-              },
-              "@total_duration": 0.0
-            },
-            "@counts": {
-              "unexecuted": 3,
-              "total": 3,
-              "passed": 0,
-              "failed": 0,
-              "skipped": 0,
-              "executed": 0
-            },
-            "@total_duration": 0.0
+              }
+            }
           },
           "test_v_posix.py": {
             "Test_Linux": {
@@ -191,36 +233,9 @@
               },
               "test_v_posix_2": {
                 "@outcome": "unexecuted"
-              },
-              "@counts": {
-                "unexecuted": 2,
-                "total": 2,
-                "passed": 0,
-                "failed": 0,
-                "skipped": 0,
-                "executed": 0
-              },
-              "@total_duration": 0.0
-            },
-            "@counts": {
-              "unexecuted": 2,
-              "total": 2,
-              "passed": 0,
-              "failed": 0,
-              "skipped": 0,
-              "executed": 0
-            },
-            "@total_duration": 0.0
-          },
-          "@counts": {
-            "unexecuted": 5,
-            "total": 5,
-            "passed": 0,
-            "failed": 0,
-            "skipped": 0,
-            "executed": 0
-          },
-          "@total_duration": 0.0
+              }
+            }
+          }
         },
         "windows": {
           "test_v_windows.py": {
@@ -230,74 +245,11 @@
               },
               "test_v_windows_11": {
                 "@outcome": "unexecuted"
-              },
-              "@counts": {
-                "unexecuted": 2,
-                "total": 2,
-                "passed": 0,
-                "failed": 0,
-                "skipped": 0,
-                "executed": 0
-              },
-              "@total_duration": 0.0
-            },
-            "@counts": {
-              "unexecuted": 2,
-              "total": 2,
-              "passed": 0,
-              "failed": 0,
-              "skipped": 0,
-              "executed": 0
-            },
-            "@total_duration": 0.0
-          },
-          "@counts": {
-            "unexecuted": 2,
-            "total": 2,
-            "passed": 0,
-            "failed": 0,
-            "skipped": 0,
-            "executed": 0
-          },
-          "@total_duration": 0.0
-        },
-        "@counts": {
-          "unexecuted": 7,
-          "total": 7,
-          "passed": 0,
-          "failed": 0,
-          "skipped": 0,
-          "executed": 0
-        },
-        "@total_duration": 0.0
-      },
-      "@counts": {
-        "unexecuted": 13,
-        "total": 13,
-        "passed": 0,
-        "failed": 0,
-        "skipped": 0,
-        "executed": 0
-      },
-      "@total_duration": 0.0
-    },
-    "@counts": {
-      "unexecuted": 13,
-      "total": 13,
-      "passed": 0,
-      "failed": 0,
-      "skipped": 0,
-      "executed": 0
-    },
-    "@total_duration": 0.0
-  },
-  "@counts": {
-    "unexecuted": 13,
-    "total": 13,
-    "passed": 0,
-    "failed": 0,
-    "skipped": 0,
-    "executed": 0
-  },
-  "@total_duration": 0.0
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

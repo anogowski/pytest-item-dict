@@ -1,4 +1,74 @@
 {
+  "tests": {
+    "test_item_dict.py": {
+      "TestGetKeyPath": {
+        "test_flat_file_and_function": {},
+        "test_nested_dir": {},
+        "test_class_nodeid": {},
+        "test_file_only": {},
+        "test_deep_class_nodeid": {},
+        "@tests": 5
+      },
+      "test_plugin_registered_by_default": {},
+      "test_plugin_disabled_by_ini": {},
+      "test_ini_options_in_help": {},
+      "test_outcome_passed": {},
+      "test_outcome_failed": {},
+      "test_outcome_skipped": {},
+      "test_unexecuted_outcome_set_on_collection": {},
+      "test_outcomes_disabled": {},
+      "test_multiple_outcomes_in_same_file": {},
+      "test_outcome_class_based_tests": {},
+      "test_outcome_nested_directory": {},
+      "test_collect_markers_set": {},
+      "test_collect_markers_not_set_by_default": {},
+      "test_test_dict_markers_set": {},
+      "test_durations_set": {},
+      "test_durations_not_set_by_default": {},
+      "TestAggregation": {
+        "test_counts_at_module_level": {},
+        "test_counts_at_class_level": {},
+        "test_counts_at_folder_level": {},
+        "test_counts_bubble_up_through_all_levels": {},
+        "test_counts_parametrized_each_variant_is_leaf": {},
+        "test_counts_mixed_classes_and_functions": {},
+        "test_counts_no_double_counting": {},
+        "test_duration_aggregated_at_module_level": {},
+        "test_duration_not_aggregated_when_disabled": {},
+        "test_hierarchy_counts_absent_by_default": {},
+        "test_hierarchy_counts_enabled": {},
+        "test_executed_count_in_hierarchy_counts": {},
+        "test_hierarchy_durations_absent_by_default": {},
+        "test_hierarchy_durations_enabled": {},
+        "@tests": 14
+      },
+      "TestSetupTeardown": {
+        "test_not_present_by_default": {},
+        "test_setup_method_present_for_class_test": {},
+        "test_setup_function_present_for_module_level_test": {},
+        "test_setup_class_at_class_node": {},
+        "test_setup_class_absent_when_class_lacks_it": {},
+        "test_setup_failure_recorded": {},
+        "test_teardown_failure_recorded": {},
+        "test_setup_teardown_not_counted_in_hierarchy": {},
+        "test_setup_teardown_not_counted_for_functions": {},
+        "@tests": 9
+      },
+      "TestCountTests": {
+        "test_total_tests_cached_on_root": {},
+        "test_tests_attribute_on_root": {},
+        "test_tests_attribute_on_module": {},
+        "test_tests_attribute_on_class": {},
+        "test_tests_attribute_on_folder": {},
+        "test_tests_absent_on_leaf": {},
+        "test_tests_counts_are_consistent_across_levels": {},
+        "test_count_tests_called_automatically": {},
+        "@tests": 8
+      },
+      "@tests": 52
+    },
+    "@tests": 52
+  },
   "examples": {
     "suites": {
       "it": {
@@ -10,9 +80,12 @@
                   "linux",
                   "it"
                 ]
-              }
-            }
-          }
+              },
+              "@tests": 1
+            },
+            "@tests": 1
+          },
+          "@tests": 1
         },
         "windows": {
           "test_windows.py": {
@@ -22,10 +95,14 @@
                   "windows",
                   "it"
                 ]
-              }
-            }
-          }
-        }
+              },
+              "@tests": 1
+            },
+            "@tests": 1
+          },
+          "@tests": 1
+        },
+        "@tests": 2
       },
       "rt": {
         "test_rt_linux.py": {
@@ -41,8 +118,10 @@
                 "linux",
                 "rt"
               ]
-            }
-          }
+            },
+            "@tests": 2
+          },
+          "@tests": 2
         },
         "test_rt_windows.py": {
           "Test_RT_Windows": {
@@ -57,9 +136,12 @@
                 "windows",
                 "rt"
               ]
-            }
-          }
-        }
+            },
+            "@tests": 2
+          },
+          "@tests": 2
+        },
+        "@tests": 4
       },
       "vt": {
         "linux": {
@@ -82,8 +164,10 @@
                   "linux",
                   "vt"
                 ]
-              }
-            }
+              },
+              "@tests": 3
+            },
+            "@tests": 3
           },
           "test_v_posix.py": {
             "Test_Linux": {
@@ -98,9 +182,12 @@
                   "linux",
                   "vt"
                 ]
-              }
-            }
-          }
+              },
+              "@tests": 2
+            },
+            "@tests": 2
+          },
+          "@tests": 5
         },
         "windows": {
           "test_v_windows.py": {
@@ -116,11 +203,18 @@
                   "windows",
                   "vt"
                 ]
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+              },
+              "@tests": 2
+            },
+            "@tests": 2
+          },
+          "@tests": 2
+        },
+        "@tests": 7
+      },
+      "@tests": 13
+    },
+    "@tests": 13
+  },
+  "@tests": 65
 }

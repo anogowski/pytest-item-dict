@@ -1,4 +1,224 @@
 {
+  "tests": {
+    "test_item_dict.py": {
+      "TestGetKeyPath": {
+        "test_flat_file_and_function": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_nested_dir": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_class_nodeid": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_file_only": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_deep_class_nodeid": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        }
+      },
+      "test_plugin_registered_by_default": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "test_plugin_disabled_by_ini": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "test_ini_options_in_help": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "test_outcome_passed": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "test_outcome_failed": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "test_outcome_skipped": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "test_unexecuted_outcome_set_on_collection": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "test_outcomes_disabled": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "test_multiple_outcomes_in_same_file": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "test_outcome_class_based_tests": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "test_outcome_nested_directory": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "test_collect_markers_set": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "test_collect_markers_not_set_by_default": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "test_test_dict_markers_set": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "test_durations_set": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "test_durations_not_set_by_default": {
+        "@outcome": "unexecuted",
+        "@duration": 0.0
+      },
+      "TestAggregation": {
+        "test_counts_at_module_level": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_counts_at_class_level": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_counts_at_folder_level": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_counts_bubble_up_through_all_levels": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_counts_parametrized_each_variant_is_leaf": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_counts_mixed_classes_and_functions": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_counts_no_double_counting": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_duration_aggregated_at_module_level": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_duration_not_aggregated_when_disabled": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_hierarchy_counts_absent_by_default": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_hierarchy_counts_enabled": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_executed_count_in_hierarchy_counts": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_hierarchy_durations_absent_by_default": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_hierarchy_durations_enabled": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        }
+      },
+      "TestSetupTeardown": {
+        "test_not_present_by_default": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_setup_method_present_for_class_test": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_setup_function_present_for_module_level_test": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_setup_class_at_class_node": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_setup_class_absent_when_class_lacks_it": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_setup_failure_recorded": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_teardown_failure_recorded": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_setup_teardown_not_counted_in_hierarchy": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_setup_teardown_not_counted_for_functions": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        }
+      },
+      "TestCountTests": {
+        "test_total_tests_cached_on_root": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_tests_attribute_on_root": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_tests_attribute_on_module": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_tests_attribute_on_class": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_tests_attribute_on_folder": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_tests_absent_on_leaf": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_tests_counts_are_consistent_across_levels": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        },
+        "test_count_tests_called_automatically": {
+          "@outcome": "unexecuted",
+          "@duration": 0.0
+        }
+      }
+    }
+  },
   "examples": {
     "suites": {
       "it": {
@@ -6,447 +226,95 @@
           "test_linux.py": {
             "Test_Linux": {
               "test_i_linux": {
-                "@outcome": "passed",
-                "setup_method": {
-                  "@outcome": "passed"
-                },
-                "teardown_method": {
-                  "@outcome": "passed"
-                },
-                "@markers": [
-                  "linux",
-                  "it"
-                ],
-                "@duration": 0.0002831000601872802
-              },
-              "@counts": {
-                "passed": 1,
-                "total": 1,
-                "failed": 0,
-                "skipped": 0,
-                "unexecuted": 0,
-                "executed": 1
-              },
-              "@total_duration": 0.0002831000601872802
-            },
-            "@counts": {
-              "passed": 1,
-              "total": 1,
-              "failed": 0,
-              "skipped": 0,
-              "unexecuted": 0,
-              "executed": 1
-            },
-            "@total_duration": 0.0002831000601872802
-          },
-          "@counts": {
-            "passed": 1,
-            "total": 1,
-            "failed": 0,
-            "skipped": 0,
-            "unexecuted": 0,
-            "executed": 1
-          },
-          "@total_duration": 0.0002831000601872802
+                "@outcome": "unexecuted",
+                "@duration": 0.0
+              }
+            }
+          }
         },
         "windows": {
           "test_windows.py": {
             "Test_Windows": {
               "test_i_windows": {
-                "@outcome": "passed",
-                "setup_method": {
-                  "@outcome": "passed"
-                },
-                "teardown_method": {
-                  "@outcome": "passed"
-                },
-                "@markers": [
-                  "windows",
-                  "it"
-                ],
-                "@duration": 0.00019649998284876347
-              },
-              "@counts": {
-                "passed": 1,
-                "total": 1,
-                "failed": 0,
-                "skipped": 0,
-                "unexecuted": 0,
-                "executed": 1
-              },
-              "@total_duration": 0.00019649998284876347
-            },
-            "@counts": {
-              "passed": 1,
-              "total": 1,
-              "failed": 0,
-              "skipped": 0,
-              "unexecuted": 0,
-              "executed": 1
-            },
-            "@total_duration": 0.00019649998284876347
-          },
-          "@counts": {
-            "passed": 1,
-            "total": 1,
-            "failed": 0,
-            "skipped": 0,
-            "unexecuted": 0,
-            "executed": 1
-          },
-          "@total_duration": 0.00019649998284876347
-        },
-        "@counts": {
-          "passed": 2,
-          "total": 2,
-          "failed": 0,
-          "skipped": 0,
-          "unexecuted": 0,
-          "executed": 2
-        },
-        "@total_duration": 0.00047960004303604364
+                "@outcome": "unexecuted",
+                "@duration": 0.0
+              }
+            }
+          }
+        }
       },
       "rt": {
         "test_rt_linux.py": {
           "Test_RT_Linux": {
             "test_rt_linux_1": {
-              "@outcome": "passed",
-              "setup_method": {
-                "@outcome": "passed"
-              },
-              "teardown_method": {
-                "@outcome": "passed"
-              },
-              "@markers": [
-                "linux",
-                "rt"
-              ],
-              "@duration": 0.0004681000718846917
+              "@outcome": "unexecuted",
+              "@duration": 0.0
             },
             "test_rt_linux_2": {
-              "@outcome": "passed",
-              "setup_method": {
-                "@outcome": "passed"
-              },
-              "teardown_method": {
-                "@outcome": "passed"
-              },
-              "@markers": [
-                "linux",
-                "rt"
-              ],
-              "@duration": 0.00026570004411041737
-            },
-            "setup_class": {
-              "@outcome": "passed"
-            },
-            "teardown_class": {
-              "@outcome": "passed"
-            },
-            "@counts": {
-              "passed": 2,
-              "total": 2,
-              "failed": 0,
-              "skipped": 0,
-              "unexecuted": 0,
-              "executed": 2
-            },
-            "@total_duration": 0.0007338001159951091
-          },
-          "@counts": {
-            "passed": 2,
-            "total": 2,
-            "failed": 0,
-            "skipped": 0,
-            "unexecuted": 0,
-            "executed": 2
-          },
-          "@total_duration": 0.0007338001159951091
+              "@outcome": "unexecuted",
+              "@duration": 0.0
+            }
+          }
         },
         "test_rt_windows.py": {
           "Test_RT_Windows": {
             "test_rt_windows_1": {
-              "@outcome": "passed",
-              "setup_method": {
-                "@outcome": "passed"
-              },
-              "teardown_method": {
-                "@outcome": "passed"
-              },
-              "@markers": [
-                "windows",
-                "rt"
-              ],
-              "@duration": 0.0004784999182447791
+              "@outcome": "unexecuted",
+              "@duration": 0.0
             },
             "test_rt_windows_2": {
-              "@outcome": "passed",
-              "setup_method": {
-                "@outcome": "passed"
-              },
-              "teardown_method": {
-                "@outcome": "passed"
-              },
-              "@markers": [
-                "windows",
-                "rt"
-              ],
-              "@duration": 0.000317899975925684
-            },
-            "@counts": {
-              "passed": 2,
-              "total": 2,
-              "failed": 0,
-              "skipped": 0,
-              "unexecuted": 0,
-              "executed": 2
-            },
-            "@total_duration": 0.0007963998941704631
-          },
-          "@counts": {
-            "passed": 2,
-            "total": 2,
-            "failed": 0,
-            "skipped": 0,
-            "unexecuted": 0,
-            "executed": 2
-          },
-          "@total_duration": 0.0007963998941704631
-        },
-        "@counts": {
-          "passed": 4,
-          "total": 4,
-          "failed": 0,
-          "skipped": 0,
-          "unexecuted": 0,
-          "executed": 4
-        },
-        "@total_duration": 0.0015302000101655722
+              "@outcome": "unexecuted",
+              "@duration": 0.0
+            }
+          }
+        }
       },
       "vt": {
         "linux": {
           "test_v_linux.py": {
             "Test_Linux": {
               "test_v_linux": {
-                "@outcome": "passed",
-                "setup_method": {
-                  "@outcome": "passed"
-                },
-                "teardown_method": {
-                  "@outcome": "passed"
-                },
-                "@markers": [
-                  "linux",
-                  "vt"
-                ],
-                "@duration": 0.00014949985779821873
+                "@outcome": "unexecuted",
+                "@duration": 0.0
               },
               "test_v_linux_2": {
-                "@outcome": "passed",
-                "setup_method": {
-                  "@outcome": "passed"
-                },
-                "teardown_method": {
-                  "@outcome": "passed"
-                },
-                "@markers": [
-                  "linux",
-                  "vt"
-                ],
-                "@duration": 0.00014600006397813559
+                "@outcome": "unexecuted",
+                "@duration": 0.0
               },
               "test_v_linux_3": {
-                "@outcome": "passed",
-                "setup_method": {
-                  "@outcome": "passed"
-                },
-                "teardown_method": {
-                  "@outcome": "passed"
-                },
-                "@markers": [
-                  "linux",
-                  "vt"
-                ],
-                "@duration": 0.00016670010518282652
-              },
-              "@counts": {
-                "passed": 3,
-                "total": 3,
-                "failed": 0,
-                "skipped": 0,
-                "unexecuted": 0,
-                "executed": 3
-              },
-              "@total_duration": 0.00046220002695918083
-            },
-            "@counts": {
-              "passed": 3,
-              "total": 3,
-              "failed": 0,
-              "skipped": 0,
-              "unexecuted": 0,
-              "executed": 3
-            },
-            "@total_duration": 0.00046220002695918083
+                "@outcome": "unexecuted",
+                "@duration": 0.0
+              }
+            }
           },
           "test_v_posix.py": {
             "Test_Linux": {
               "test_v_posix": {
-                "@outcome": "passed",
-                "setup_method": {
-                  "@outcome": "passed"
-                },
-                "teardown_method": {
-                  "@outcome": "passed"
-                },
-                "@markers": [
-                  "linux",
-                  "vt"
-                ],
-                "@duration": 0.00012990005780011415
+                "@outcome": "unexecuted",
+                "@duration": 0.0
               },
               "test_v_posix_2": {
-                "@outcome": "passed",
-                "setup_method": {
-                  "@outcome": "passed"
-                },
-                "teardown_method": {
-                  "@outcome": "passed"
-                },
-                "@markers": [
-                  "linux",
-                  "vt"
-                ],
-                "@duration": 0.0001311000669375062
-              },
-              "@counts": {
-                "passed": 2,
-                "total": 2,
-                "failed": 0,
-                "skipped": 0,
-                "unexecuted": 0,
-                "executed": 2
-              },
-              "@total_duration": 0.00026100012473762035
-            },
-            "@counts": {
-              "passed": 2,
-              "total": 2,
-              "failed": 0,
-              "skipped": 0,
-              "unexecuted": 0,
-              "executed": 2
-            },
-            "@total_duration": 0.00026100012473762035
-          },
-          "@counts": {
-            "passed": 5,
-            "total": 5,
-            "failed": 0,
-            "skipped": 0,
-            "unexecuted": 0,
-            "executed": 5
-          },
-          "@total_duration": 0.0007232001516968012
+                "@outcome": "unexecuted",
+                "@duration": 0.0
+              }
+            }
+          }
         },
         "windows": {
           "test_v_windows.py": {
             "Test_Windows": {
               "test_v_windows_10": {
-                "@outcome": "passed",
-                "setup_method": {
-                  "@outcome": "passed"
-                },
-                "teardown_method": {
-                  "@outcome": "passed"
-                },
-                "@markers": [
-                  "windows",
-                  "vt"
-                ],
-                "@duration": 0.0001374998828396201
+                "@outcome": "unexecuted",
+                "@duration": 0.0
               },
               "test_v_windows_11": {
-                "@outcome": "passed",
-                "setup_method": {
-                  "@outcome": "passed"
-                },
-                "teardown_method": {
-                  "@outcome": "passed"
-                },
-                "@markers": [
-                  "windows",
-                  "vt"
-                ],
-                "@duration": 0.00013529998250305653
-              },
-              "@counts": {
-                "passed": 2,
-                "total": 2,
-                "failed": 0,
-                "skipped": 0,
-                "unexecuted": 0,
-                "executed": 2
-              },
-              "@total_duration": 0.00027279986534267664
-            },
-            "@counts": {
-              "passed": 2,
-              "total": 2,
-              "failed": 0,
-              "skipped": 0,
-              "unexecuted": 0,
-              "executed": 2
-            },
-            "@total_duration": 0.00027279986534267664
-          },
-          "@counts": {
-            "passed": 2,
-            "total": 2,
-            "failed": 0,
-            "skipped": 0,
-            "unexecuted": 0,
-            "executed": 2
-          },
-          "@total_duration": 0.00027279986534267664
-        },
-        "@counts": {
-          "passed": 7,
-          "total": 7,
-          "failed": 0,
-          "skipped": 0,
-          "unexecuted": 0,
-          "executed": 7
-        },
-        "@total_duration": 0.0009960000170394778
-      },
-      "@counts": {
-        "passed": 13,
-        "total": 13,
-        "failed": 0,
-        "skipped": 0,
-        "unexecuted": 0,
-        "executed": 13
-      },
-      "@total_duration": 0.0030058000702410936
-    },
-    "@counts": {
-      "passed": 13,
-      "total": 13,
-      "failed": 0,
-      "skipped": 0,
-      "unexecuted": 0,
-      "executed": 13
-    },
-    "@total_duration": 0.0030058000702410936
-  },
-  "@counts": {
-    "passed": 13,
-    "total": 13,
-    "failed": 0,
-    "skipped": 0,
-    "unexecuted": 0,
-    "executed": 13
-  },
-  "@total_duration": 0.0030058000702410936
+                "@outcome": "unexecuted",
+                "@duration": 0.0
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

@@ -241,6 +241,7 @@ class ItemDictPlugin:
 			The root of the collection hierarchy dict.
 		"""
 		self.collect_dict._total_duration = time.time() - self._suite_start_time
+		self.collect_dict.count_tests()
 		# write_json_file(hierarchy=self.collect_dict.hierarchy)
 		# write_xml_file(hierarchy=self.collect_dict.hierarchy)
 		return self.collect_dict.hierarchy

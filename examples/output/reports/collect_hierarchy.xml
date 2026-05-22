@@ -1,56 +1,120 @@
 
-<pytest>
-	<examples>
-		<suites>
-			<it>
-				<linux>
-					<test_linux.py>
-						<Test_Linux>
+<pytest tests="65">
+	<tests tests="52">
+		<test_item_dict.py tests="52">
+			<TestGetKeyPath tests="5">
+				<test_flat_file_and_function />
+				<test_nested_dir />
+				<test_class_nodeid />
+				<test_file_only />
+				<test_deep_class_nodeid />
+			</TestGetKeyPath>
+			<test_plugin_registered_by_default />
+			<test_plugin_disabled_by_ini />
+			<test_ini_options_in_help />
+			<test_outcome_passed />
+			<test_outcome_failed />
+			<test_outcome_skipped />
+			<test_unexecuted_outcome_set_on_collection />
+			<test_outcomes_disabled />
+			<test_multiple_outcomes_in_same_file />
+			<test_outcome_class_based_tests />
+			<test_outcome_nested_directory />
+			<test_collect_markers_set />
+			<test_collect_markers_not_set_by_default />
+			<test_test_dict_markers_set />
+			<test_durations_set />
+			<test_durations_not_set_by_default />
+			<TestAggregation tests="14">
+				<test_counts_at_module_level />
+				<test_counts_at_class_level />
+				<test_counts_at_folder_level />
+				<test_counts_bubble_up_through_all_levels />
+				<test_counts_parametrized_each_variant_is_leaf />
+				<test_counts_mixed_classes_and_functions />
+				<test_counts_no_double_counting />
+				<test_duration_aggregated_at_module_level />
+				<test_duration_not_aggregated_when_disabled />
+				<test_hierarchy_counts_absent_by_default />
+				<test_hierarchy_counts_enabled />
+				<test_executed_count_in_hierarchy_counts />
+				<test_hierarchy_durations_absent_by_default />
+				<test_hierarchy_durations_enabled />
+			</TestAggregation>
+			<TestSetupTeardown tests="9">
+				<test_not_present_by_default />
+				<test_setup_method_present_for_class_test />
+				<test_setup_function_present_for_module_level_test />
+				<test_setup_class_at_class_node />
+				<test_setup_class_absent_when_class_lacks_it />
+				<test_setup_failure_recorded />
+				<test_teardown_failure_recorded />
+				<test_setup_teardown_not_counted_in_hierarchy />
+				<test_setup_teardown_not_counted_for_functions />
+			</TestSetupTeardown>
+			<TestCountTests tests="8">
+				<test_total_tests_cached_on_root />
+				<test_tests_attribute_on_root />
+				<test_tests_attribute_on_module />
+				<test_tests_attribute_on_class />
+				<test_tests_attribute_on_folder />
+				<test_tests_absent_on_leaf />
+				<test_tests_counts_are_consistent_across_levels />
+				<test_count_tests_called_automatically />
+			</TestCountTests>
+		</test_item_dict.py>
+	</tests>
+	<examples tests="13">
+		<suites tests="13">
+			<it tests="2">
+				<linux tests="1">
+					<test_linux.py tests="1">
+						<Test_Linux tests="1">
 							<test_i_linux markers="['linux', 'it']" />
 						</Test_Linux>
 					</test_linux.py>
 				</linux>
-				<windows>
-					<test_windows.py>
-						<Test_Windows>
+				<windows tests="1">
+					<test_windows.py tests="1">
+						<Test_Windows tests="1">
 							<test_i_windows markers="['windows', 'it']" />
 						</Test_Windows>
 					</test_windows.py>
 				</windows>
 			</it>
-			<rt>
-				<test_rt_linux.py>
-					<Test_RT_Linux>
+			<rt tests="4">
+				<test_rt_linux.py tests="2">
+					<Test_RT_Linux tests="2">
 						<test_rt_linux_1 markers="['linux', 'rt']" />
 						<test_rt_linux_2 markers="['linux', 'rt']" />
 					</Test_RT_Linux>
 				</test_rt_linux.py>
-				<test_rt_windows.py>
-					<Test_RT_Windows>
+				<test_rt_windows.py tests="2">
+					<Test_RT_Windows tests="2">
 						<test_rt_windows_1 markers="['windows', 'rt']" />
 						<test_rt_windows_2 markers="['windows', 'rt']" />
 					</Test_RT_Windows>
 				</test_rt_windows.py>
 			</rt>
-			<vt>
-				<linux>
-					<test_v_linux.py>
-						<Test_Linux>
+			<vt tests="7">
+				<linux tests="5">
+					<test_v_linux.py tests="3">
+						<Test_Linux tests="3">
 							<test_v_linux markers="['linux', 'vt']" />
 							<test_v_linux_2 markers="['linux', 'vt']" />
 							<test_v_linux_3 markers="['linux', 'vt']" />
 						</Test_Linux>
 					</test_v_linux.py>
-					<test_v_posix.py>
-						<Test_Linux>
+					<test_v_posix.py tests="2">
+						<Test_Linux tests="2">
 							<test_v_posix markers="['linux', 'vt']" />
 							<test_v_posix_2 markers="['linux', 'vt']" />
 						</Test_Linux>
 					</test_v_posix.py>
 				</linux>
-				<windows>
-					<test_v_windows.py>
-						<Test_Windows>
+				<windows tests="2">
+					<test_v_windows.py tests="2">
+						<Test_Windows tests="2">
 							<test_v_windows_10 markers="['windows', 'vt']" />
 							<test_v_windows_11 markers="['windows', 'vt']" />
 						</Test_Windows>
