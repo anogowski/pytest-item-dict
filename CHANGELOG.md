@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.3.6 (2026-05-22)
+
+### Bug Fixes
+
+- Add more experimental versions, support python 3.14 and 3.15
+  ([`c011605`](https://github.com/anogowski/pytest-item-dict/commit/c011605edc15cd947a36f51fa9dbc4d7e6f64a36))
+
+
 ## v1.3.5 (2026-05-22)
 
 
