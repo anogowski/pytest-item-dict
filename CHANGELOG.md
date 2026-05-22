@@ -1,12 +1,18 @@
 # CHANGELOG
 
 
+## v1.3.5 (2026-05-22)
+
+
 ## v1.3.4 (2026-05-22)
 
 ### Bug Fixes
 
 - Add documentation and changelog links
   ([`b650990`](https://github.com/anogowski/pytest-item-dict/commit/b6509903d88eeccb8068921c6290dfc4fbf47f41))
+
+- Add experimental python versions
+  ([`46fee61`](https://github.com/anogowski/pytest-item-dict/commit/46fee6198b890d78a80bb2a83bfcc535fd5df650))
 
 
 ## v1.3.3 (2026-05-22)
