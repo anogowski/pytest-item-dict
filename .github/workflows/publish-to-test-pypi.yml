@@ -1,4 +1,4 @@
-name: Release and Publish Python 🐍 distribution 📦
+name: Release, Test, Build, and Publish to PyPI - 🏷️->🧪->📦->🚀->🏛️
 
 on:
   push:
@@ -35,16 +35,29 @@ jobs:
     needs: semantic-release
     if: needs.semantic-release.outputs.released == 'true'
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         include:
           - python-version: "3.11"
             toxenv: "py311"
+            experimental: false
           - python-version: "3.12"
             toxenv: "py312"
+            experimental: false
           - python-version: "3.13"
             toxenv: "py313"
+            experimental: false
+          - python-version: "3.14"
+            toxenv: "py314"
+            experimental: true
+          - python-version: "3.15"
+            toxenv: "py315"
+            experimental: true
+          - python-version: "3.16"
+            toxenv: "py316"
+            experimental: true
 
     steps:
       - uses: actions/checkout@main
@@ -55,6 +68,7 @@ jobs:
         uses: actions/setup-python@main
         with:
           python-version: ${{ matrix.python-version }}
+          allow-prereleases: ${{ matrix.experimental }}
       - name: Install tox
         run: python -m pip install tox
       - name: Run tests
@@ -111,7 +125,7 @@ jobs:
           path: dist/
 
   publish-to-testpypi:
-    name: Publish Python 🐍 distribution 📦 to TestPyPI
+    name: Publish 🚀 Python 🐍 distribution 📦 to TestPyPI
     needs:
       - test
       - build
@@ -135,7 +149,7 @@ jobs:
           verbose: true
 
   publish-to-pypi:
-    name: Publish Python 🐍 distribution 📦 to PyPI
+    name: Publish 🚀 Python 🐍 distribution 📦 to PyPI
     needs:
       - build
       - publish-to-testpypi
