@@ -1038,7 +1038,7 @@ class TestCountTests:
 
 	def test_tests_counts_are_consistent_across_levels(self, pytester):
 		"""@tests at every ancestor level equals the sum of its children's @tests."""
-		pytester.mkpydir("grp")
+		(pytester.path / "grp").mkdir()
 		(pytester.path / "grp" / "test_first.py").write_text("def test_one():\n\tpass\ndef test_two():\n\tpass\n")
 		(pytester.path / "grp" / "test_second.py").write_text("def test_three():\n\tpass\n")
 		pytester.makeconftest(_WRITE_COLLECT_TESTS)
