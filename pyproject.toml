@@ -58,6 +58,8 @@ classifiers = [
 dependencies = ["pytest>=8.3.0"]
 [project.urls]
 Repository = "https://github.com/anogowski/pytest-item-dict"
+Documentation = "https://anogowski.github.io/pytest-item-dict/"
+Changelog = "https://github.com/anogowski/pytest-item-dict/blob/main/CHANGELOG.md"
 [project.entry-points.pytest11]
 item-dict = "pytest_item_dict.plugin"
 
