@@ -8,7 +8,8 @@ All three JSON files are produced by a single `pytest` invocation from the
 ## collect_hierarchy.json
 
 Captured at `pytest_collection_finish`.  Pure structure with marker annotations
-(`set_collect_dict_markers = true`) — no `@outcome`, `@duration`, or `@counts`.
+(`set_collect_dict_markers = true`) and `@tests` counts at every non-leaf node —
+no `@outcome`, `@duration`, or `@counts`.
 
 ```json
 {
@@ -23,9 +24,12 @@ Captured at `pytest_collection_finish`.  Pure structure with marker annotations
                   "linux",
                   "it"
                 ]
-              }
-            }
-          }
+              },
+              "@tests": 1
+            },
+            "@tests": 1
+          },
+          "@tests": 1
         },
         "windows": {
           "test_windows.py": {
@@ -35,10 +39,14 @@ Captured at `pytest_collection_finish`.  Pure structure with marker annotations
                   "windows",
                   "it"
                 ]
-              }
-            }
-          }
-        }
+              },
+              "@tests": 1
+            },
+            "@tests": 1
+          },
+          "@tests": 1
+        },
+        "@tests": 2
       },
       "rt": {
         "test_rt_linux.py": {
@@ -54,8 +62,10 @@ Captured at `pytest_collection_finish`.  Pure structure with marker annotations
                 "linux",
                 "rt"
               ]
-            }
-          }
+            },
+            "@tests": 2
+          },
+          "@tests": 2
         },
         "test_rt_windows.py": {
           "Test_RT_Windows": {
@@ -70,9 +80,12 @@ Captured at `pytest_collection_finish`.  Pure structure with marker annotations
                 "windows",
                 "rt"
               ]
-            }
-          }
-        }
+            },
+            "@tests": 2
+          },
+          "@tests": 2
+        },
+        "@tests": 4
       },
       "vt": {
         "linux": {
@@ -95,8 +108,10 @@ Captured at `pytest_collection_finish`.  Pure structure with marker annotations
                   "linux",
                   "vt"
                 ]
-              }
-            }
+              },
+              "@tests": 3
+            },
+            "@tests": 3
           },
           "test_v_posix.py": {
             "Test_Linux": {
@@ -111,9 +126,12 @@ Captured at `pytest_collection_finish`.  Pure structure with marker annotations
                   "linux",
                   "vt"
                 ]
-              }
-            }
-          }
+              },
+              "@tests": 2
+            },
+            "@tests": 2
+          },
+          "@tests": 5
         },
         "windows": {
           "test_v_windows.py": {
@@ -129,12 +147,18 @@ Captured at `pytest_collection_finish`.  Pure structure with marker annotations
                   "windows",
                   "vt"
                 ]
-              }
-            }
-          }
-        }
-      }
-    }
+              },
+              "@tests": 2
+            },
+            "@tests": 2
+          },
+          "@tests": 2
+        },
+        "@tests": 7
+      },
+      "@tests": 13
+    },
+    "@tests": 13
   }
 }
 ```

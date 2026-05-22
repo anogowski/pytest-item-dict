@@ -40,18 +40,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - python-version: "3.8"
-            toxenv: "py38"
-            experimental: true
-            emoji: "⚗️"
-          - python-version: "3.9"
-            toxenv: "py39"
-            experimental: true
-            emoji: "⚗️"
-          - python-version: "3.10"
-            toxenv: "py310"
-            experimental: true
-            emoji: "⚗️"
           - python-version: "3.11"
             toxenv: "py311"
             experimental: false
@@ -70,8 +58,8 @@ jobs:
             emoji: "🧪"
           - python-version: "3.15"
             toxenv: "py315"
-            experimental: false
-            emoji: "🧪"
+            experimental: true
+            emoji: "⚗️"
           - python-version: "3.16"
             toxenv: "py316"
             experimental: true

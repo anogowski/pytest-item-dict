@@ -11,61 +11,62 @@ attributes on parent elements.
 ## collect_hierarchy.xml
 
 Captured at `pytest_collection_finish`.  Pure structure with `markers` attributes
+and `tests` counts at every non-leaf node
 (`set_collect_dict_markers = true`) — no `outcome`, `duration`, or `counts`.
 
 ```xml
-<pytest>
-	<examples>
-		<suites>
-			<it>
-				<linux>
-					<test_linux.py>
-						<Test_Linux>
+<pytest tests="13">
+	<examples tests="13">
+		<suites tests="13">
+			<it tests="2">
+				<linux tests="1">
+					<test_linux.py tests="1">
+						<Test_Linux tests="1">
 							<test_i_linux markers="['linux', 'it']" />
 						</Test_Linux>
 					</test_linux.py>
 				</linux>
-				<windows>
-					<test_windows.py>
-						<Test_Windows>
+				<windows tests="1">
+					<test_windows.py tests="1">
+						<Test_Windows tests="1">
 							<test_i_windows markers="['windows', 'it']" />
 						</Test_Windows>
 					</test_windows.py>
 				</windows>
 			</it>
-			<rt>
-				<test_rt_linux.py>
-					<Test_RT_Linux>
+			<rt tests="4">
+				<test_rt_linux.py tests="2">
+					<Test_RT_Linux tests="2">
 						<test_rt_linux_1 markers="['linux', 'rt']" />
 						<test_rt_linux_2 markers="['linux', 'rt']" />
 					</Test_RT_Linux>
 				</test_rt_linux.py>
-				<test_rt_windows.py>
-					<Test_RT_Windows>
+				<test_rt_windows.py tests="2">
+					<Test_RT_Windows tests="2">
 						<test_rt_windows_1 markers="['windows', 'rt']" />
 						<test_rt_windows_2 markers="['windows', 'rt']" />
 					</Test_RT_Windows>
 				</test_rt_windows.py>
 			</rt>
-			<vt>
-				<linux>
-					<test_v_linux.py>
-						<Test_Linux>
+			<vt tests="7">
+				<linux tests="5">
+					<test_v_linux.py tests="3">
+						<Test_Linux tests="3">
 							<test_v_linux markers="['linux', 'vt']" />
 							<test_v_linux_2 markers="['linux', 'vt']" />
 							<test_v_linux_3 markers="['linux', 'vt']" />
 						</Test_Linux>
 					</test_v_linux.py>
-					<test_v_posix.py>
-						<Test_Linux>
+					<test_v_posix.py tests="2">
+						<Test_Linux tests="2">
 							<test_v_posix markers="['linux', 'vt']" />
 							<test_v_posix_2 markers="['linux', 'vt']" />
 						</Test_Linux>
 					</test_v_posix.py>
 				</linux>
-				<windows>
-					<test_v_windows.py>
-						<Test_Windows>
+				<windows tests="2">
+					<test_v_windows.py tests="2">
+						<Test_Windows tests="2">
 							<test_v_windows_10 markers="['windows', 'vt']" />
 							<test_v_windows_11 markers="['windows', 'vt']" />
 						</Test_Windows>
