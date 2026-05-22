@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.3.4 (2026-05-22)
+
+### Bug Fixes
+
+- Add documentation and changelog links
+  ([`b650990`](https://github.com/anogowski/pytest-item-dict/commit/b6509903d88eeccb8068921c6290dfc4fbf47f41))
+
+
 ## v1.3.3 (2026-05-22)
 
 ### Bug Fixes
