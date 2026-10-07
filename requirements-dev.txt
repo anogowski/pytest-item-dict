@@ -25,5 +25,5 @@ pyyaml_env_tag==1.1
 six==1.17.0
 tomli_w==1.2.0
 tox==4.54.0
-virtualenv==21.3.3
+virtualenv==21.7.13
 watchdog==6.0.0
